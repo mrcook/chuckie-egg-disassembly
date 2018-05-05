@@ -1,0 +1,28 @@
+; tap2sna.py file for Chuckie Egg.
+;
+; Run:
+;
+;   $ tap2sna.py @chuckie-egg.t2s
+;
+; to create a Z80 snapshot.
+
+http://www.worldofspectrum.org/pub/sinclair/games/c/ChuckieEgg.tzx.zip
+chuckie-egg.z80
+
+; Because the game uses a machine code loader, and not BASIC,
+; we need to do the loading manually.
+--ram load=3,$5CCB  # Machine code loader, plus loading screen data.
+; ram load=4,xxxxx  # load two 2-bytes ($01,$00) - which address?
+--ram load=5,$8214  # now load the game itself
+
+; The machine code loader initialises SYSVAR_STKBOT and SYSVAR_STKEND
+; with the address `$5DC0`, so let's do that now.
+; Remember: these are stored in little-endian format.
+--ram poke=$5C63,$C0
+--ram poke=$5C64,$5D
+--ram poke=$5C65,$C0
+--ram poke=$5C66,$5D
+
+; The machine code loader starts at $5EF3, but as we're loading manually,
+; let's start straight at the game start address, $A410.
+--start 42000
