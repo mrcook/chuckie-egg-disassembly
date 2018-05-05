@@ -151,7 +151,7 @@ D $849B 'objective- to collect eggs from the hen-house.'
 s $84CF Unused
 t $84DA Instructions screen heading
 D $84DA 'INSTRUCTIONS'
-@ $84DA label=MSG_KEYS_HEADING
+@ $84DA label=MSG_INSTRUCTIONS_HEADING
 b $84E6
 b $84F0 Blank tile graphic
 D $84F0 address from which the following graphics are accessed.
@@ -732,8 +732,8 @@ b $C610 Level 8 layout data - see LEVEL_BUFFER for byte map
   $C610,672,32
 t $C8B0 Source code remnants
 D $C8B0 The source code here corresponds to the code at ????.
-c $C8C9 This seems to be a jump table...where does it end?
-@ $C8C9 label=JUMP_TABLE
+c $C8C9 This seems to be a return table...where does it end?
+@ $C8C9 label=RETURN_TABLE
 b $C8DC Does this contain code, data, or is just unused?
 s $CBC4 Unused
 s $FF18 NOTE: snapshot from FUSE has data here.

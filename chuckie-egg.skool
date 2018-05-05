@@ -532,7 +532,7 @@ s$84CF DEFS $0B
 ; Instructions screen heading
 ;
 ; 'INSTRUCTIONS'
-@label=MSG_KEYS_HEADING
+@label=MSG_INSTRUCTIONS_HEADING
 t$84DA DEFM "INSTRUCTIONS"
 
 ; Data block at 84E6
@@ -5811,8 +5811,8 @@ t$C8B0 DEFM "ALL CONV1"
  $C8BB DEFB $60
  $C8BC DEFM "  LD A,(2948,"
 
-; This seems to be a jump table...where does it end?
-@label=JUMP_TABLE
+; This seems to be a return table...where does it end?
+@label=RETURN_TABLE
 c$C8C9 RET           ;
  $C8CA JR C,$C895    ;
  $C8CC LD C,H        ;
