@@ -1,0 +1,5937 @@
+; SkoolKit disassembly for Chuckie Egg
+; (https://github.com/mrcook/chuckie-egg-disassembly/)
+;
+; Copyright (c) 2018 Michael R. Cook (this disassembly)
+; Copyright (c) 1984 A&F Software (Chuckie Egg)
+; Chuckie Egg was designed and developed by Nigel Alderton
+@start
+@org=$A410
+; Level Buffer
+;
+; Screen map data is copied to this buffer at the start of each new level. Each
+; byte represents a tile ID, with 20 tile GFX in total.
+; #TABLE(default,centre,:w)
+; { =h Byte | =h Tile }
+; { 00 | Blank Tile }
+; { 01 | Ladder #1 (left) }
+; { 02 | Ladder #2 (right) }
+; { 03 | Egg }
+; { 04 | Corn }
+; { 05 | Floor }
+; { A8 | Birdcage: handle #1 }
+; { A9 | Birdcage: handle #2 }
+; { AA | Birdcage: #01 (top) }
+; { AB | Birdcage: #02 (top) }
+; { AC | Birdcage: #03 (top) }
+; { AD | Birdcage: #04 (top) }
+; { AE | Birdcage: #05 (middle) }
+; { AF | Birdcage: #06 (middle) }
+; { B0 | Birdcage: #07 (middle) }
+; { B1 | Birdcage: #08 (middle) }
+; { B2 | Birdcage: #09 (bottom) }
+; { B3 | Birdcage: #10 (bottom) }
+; { B4 | Birdcage: #11 (bottom) }
+; { B5 | Birdcage: #12 (bottom) }
+; TABLE#
+@label=LEVEL_BUFFER
+b$61A8 DEFB $45,$43,$54,$20,$41,$20,$44,$4F,$5A,$45,$4E,$20,$45,$47,$47,$53,$20,$20,$20,$20,$20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
+ $61C8 DEFB $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20,$20,$20,$59,$4F,$55,$20,$4D,$41,$59,$20,$43,$48
+ $61E8 DEFB $41,$4E,$47,$45,$20,$54,$48,$45,$20,$44,$49,$52,$45,$43,$54,$49,$4F,$4E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
+ $6208 DEFB $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$41,$4E,$44,$20,$4A,$55,$4D,$50,$20,$4B,$45
+ $6228 DEFB $59,$53,$2E,$20,$20,$54,$48,$45,$52,$45,$20,$41,$52,$45,$20,$41,$4C,$53,$4F,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
+ $6248 DEFB $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$54,$48,$45,$20,$46,$4F,$4C,$4C
+ $6268 DEFB $4F,$57,$49,$4E,$47,$20,$46,$49,$58,$45,$44,$20,$4B,$45,$59,$53,$20,$20,$20,$20,$20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
+ $6288 DEFB $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20,$20,$20,$20,$43,$41,$50,$53,$20,$53,$48,$49,$46
+ $62A8 DEFB $54,$20,$26,$20,$48,$2E,$2E,$2E,$2E,$2E,$2E,$2E,$2E,$48,$4F,$4C,$44,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
+ $62C8 DEFB $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$43,$41,$50,$53,$20,$53,$48,$49,$46
+ $62E8 DEFB $54,$20,$26,$20,$41,$2E,$2E,$2E,$2E,$2E,$2E,$2E,$41,$42,$4F,$52,$54,$20,$20,$20,$20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
+ $6308 DEFB $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20,$20,$20,$20,$20,$20,$20,$20,$00,$00,$00,$00,$00
+ $6328 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $6348 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $6368 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $6388 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $63A8 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $63C8 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $63E8 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $6408 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $6428 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+; This area is unused for gameplay, although it was used during game loading.
+s$6448 DEFS $0A80
+
+; Buffer releated to ANIMBUF1?
+b$6EC8 DEFB $00
+
+; Data block at 6EC9
+b$6EC9 DEFB $00
+
+; Data block at 6ECA
+b$6ECA DEFB $00
+
+; Data block at 6ECB
+b$6ECB DEFB $00
+
+; Data block at 6ECC
+b$6ECC DEFB $00
+
+; Data block at 6ECD
+b$6ECD DEFB $00
+
+; Animation Buffer #1
+;
+; Buffer used for animating a sprite (?)
+@label=ANIMBUF1
+b$6ECE DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $6ED6 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $6EDE DEFB $00,$00,$00,$00,$00,$00,$00,$00
+
+; Current player cleared eggs counter
+;
+; Copied from the current player variable on level start, saved to the player
+; variable on dying.
+@label=CUR_EGG_COUNT
+b$6EE6 DEFB $00
+
+; Save cleared eggs count for player 1.
+@label=P1_EGG_COUNT
+b$6EE7 DEFB $00
+
+; Save cleared eggs count for player 2.
+@label=P2_EGG_COUNT
+b$6EE8 DEFB $00
+
+; Save cleared eggs count for player 3.
+@label=P3_EGG_COUNT
+b$6EE9 DEFB $00
+
+; Save cleared eggs count for player 4.
+@label=P4_EGG_COUNT
+b$6EEA DEFB $00
+
+; Current player cleared levels counter
+;
+; Copied from the current player variable on level start, saved to the player
+; variable on dying.
+@label=CUR_LEVEL_COUNT
+b$6EEB DEFB $00
+
+; Save levels cleared count for player 1.
+@label=P1_LEVEL_COUNT
+b$6EEC DEFB $00
+
+; Save levels cleared count for player 2.
+@label=P2_LEVEL_COUNT
+b$6EED DEFB $00
+
+; Save levels cleared count for player 3.
+@label=P3_LEVEL_COUNT
+b$6EEE DEFB $00
+
+; Save levels cleared count for player 4.
+@label=P4_LEVEL_COUNT
+b$6EEF DEFB $00
+
+; Remaining lives for player 1.
+@label=P1_LIVES
+b$6EF0 DEFB $00
+
+; Remaining lives for player 2.
+@label=P2_LIVES
+b$6EF1 DEFB $00
+
+; Remaining lives for player 3.
+@label=P3_LIVES
+b$6EF2 DEFB $00
+
+; Remaining lives for player 4.
+@label=P4_LIVES
+b$6EF3 DEFB $00
+
+; Unused by game.
+s$6EF4 DEFS $03AC
+
+; Animation Buffer #2
+;
+; Buffer used for animating a sprite (?)
+@label=ANIMBUF2
+b$72A0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72A8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72B0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72B8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72C0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72C8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72D0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+
+; Farmer's current X,Y position
+@label=POSITION
+b$72D8 DEFB $00,$00
+
+; Possibly unused data block.
+b$72DA DEFB $00,$00,$00
+
+; Animation Buffer #3
+;
+; Buffer used for animating a sprite?
+@label=ANIMBUF3
+b$72DD DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72E5 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72ED DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72F5 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $72FD DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $7305 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $730D DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $7315 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $731D DEFB $00,$00,$00,$00,$00,$00,$00,$00
+
+; Data block at 7325
+b$7325 DEFB $00
+
+; Data block at 7326
+b$7326 DEFB $00
+
+; Data block at 7327
+b$7327 DEFB $00
+
+; Data block at 7328
+b$7328 DEFB $00
+
+; Data block at 7329
+b$7329 DEFB $00
+
+; Data block at 732A
+b$732A DEFB $00
+
+; Data block at 732B
+b$732B DEFB $00
+
+; A variable possibly releated to SCR_STATE below
+;
+; Some possible values (guesses) are given in the table below:
+; #TABLE(default,centre,:w)
+; { =h Byte | =h meaning }
+; { 00 | ?? }
+; { 03 | ?? }
+; { 04 | ?? }
+; { 09 | ?? }
+; { 4E | ?? }
+; { 57 | ?? }
+; { nn+09 | ?? }
+; TABLE#
+b$732C DEFB $00
+
+; Current game/screen state (maybe)
+;
+; Some possible values (guesses) are given in the table below:
+; #TABLE(default,centre,:w)
+; { =h Byte | =h state }
+; { 03 | Redefine keys screen/input type selected }
+; { 06 | Play Music }
+; { 0A | Instructions screen }
+; TABLE#
+@label=SCR_STATE
+b$732D DEFB $00
+
+; Keyboard address for the UP key: row address+1
+@label=KEY_UP
+b$732E DEFB $00,$00
+
+; Keyboard address for the DOWN key: row address+1
+@label=KEY_DOWN
+b$7330 DEFB $00,$00
+
+; Keyboard address for the LEFT key: row address+1
+@label=KEY_LEFT
+b$7332 DEFB $00,$00
+
+; Keyboard address for the RIGHT key: row address+1
+@label=KEY_RIGHT
+b$7334 DEFB $00,$00
+
+; Keyboard address for the JUMP key: row address+1.
+@label=KEY_JUMP
+b$7336 DEFB $00,$00
+
+; Another keyboard address??
+b$7338 DEFB $00,$00
+
+; Total number of players for the current game?
+;
+; Possible values are 1, 2, 3, and 4.
+@label=NUMBER_OF_PLAYERS
+b$733A DEFB $00
+
+; Current active player.
+;
+; Possible values are 1, 2, 3, and 4.
+@label=CURRENT_PLAYER
+b$733B DEFB $00
+
+; Data block at 733C
+b$733C DEFB $00,$00
+
+; Data block at 733E
+b$733E DEFB $00
+
+; Data block at 733F
+b$733F DEFB $00,$00,$00,$00
+
+; Data block at 7343
+b$7343 DEFB $00,$00
+
+; Time remaining for level
+;
+; This may not be correct!
+@label=TIME_REMAINING
+b$7345 DEFB $00
+
+; Bonus remaining for level
+;
+; This may not be correct!
+@label=BONUS_REMAINING
+b$7346 DEFB $00
+
+; Data block at 7347
+b$7347 DEFB $00
+
+; Data block at 7348
+b$7348 DEFB $00
+
+; Data block at 7349
+b$7349 DEFB $00
+
+; Data block at 734A
+b$734A DEFB $00
+
+; Data block at 734B
+b$734B DEFB $00
+
+; Data block at 734C
+b$734C DEFB $00,$00
+
+; Data block at 734E
+b$734E DEFB $00,$00,$00,$00
+
+; Data block at 7352
+b$7352 DEFB $00
+
+; Data block at 7353
+b$7353 DEFB $00
+
+; Data block at 7354
+b$7354 DEFB $00
+
+; Data block at 7355
+b$7355 DEFB $00,$00
+
+; Possibly 20 bytes from this address are used
+b$7357 DEFB $00,$00
+
+; These are probably used.
+s$7359 DEFS $12
+
+; Data block at 736B
+b$736B DEFB $00
+
+; stores a 2 byte value
+b$736C DEFB $00,$00
+
+; Data block at 736E
+b$736E DEFB $00
+
+; Music play state
+;
+; Strange that 00 means "play music" - probably need a more appropriate label.
+; #TABLE(default,centre,:w)
+; { =h Byte | =h state }
+; { 00 | play }
+; { 01 | stopped }
+; TABLE#
+@label=MUSIC_PLAY_STATE
+b$736F DEFB $00
+
+; Data block at 7370
+b$7370 DEFB $00
+
+; Data block at 7371
+b$7371 DEFB $00,$00
+
+; Data block at 7373
+b$7373 DEFB $00
+
+; Data block at 7374
+b$7374 DEFB $00
+
+; Unused
+s$7375 DEFS $0EAE
+
+; Data block at 8223
+b$8223 DEFB $01,$02
+
+; Really unused?
+s$8225 DEFS $0C
+
+; Data block at 8231
+b$8231 DEFB $A8,$A9
+
+; Really unused?
+s$8233 DEFS $1D
+
+; These bytes are copied to @732E
+b$8250 DEFB $1D,$F7,$1D,$FB,$1D,$EF,$1E,$EF
+ $8258 DEFB $1D,$FE,$1B,$7F
+
+; These bytes are copied to @732E
+b$825C DEFB $17,$EF,$0F,$EF,$0F,$F7,$1B,$EF
+ $8264 DEFB $17,$F7,$1D,$EF
+
+; These bytes are copied to @732E
+b$8268 DEFB $1E,$FB,$1E,$FD,$1D,$DF,$1E,$DF
+ $8270 DEFB $1B,$7F,$1E,$F7
+
+; Really unused?
+s$8274 DEFS $C2
+
+; Ticker text
+;
+; 'press R to redefine keys * press S to start game * press 1, 2 or 3 to select
+; key type'
+@label=MSG_TICKER
+t$8336 DEFM "press"
+ $833B DEFB $00
+ $833C DEFM "R"
+ $833D DEFB $00
+ $833E DEFM "to"
+ $8340 DEFB $00
+ $8341 DEFM "redefine"
+ $8349 DEFB $00
+ $834A DEFM "keys"
+ $834E DEFB $00
+ $834F DEFB $00
+ $8350 DEFM "press"
+ $8355 DEFB $00
+ $8356 DEFM "S"
+ $8357 DEFB $00
+ $8358 DEFM "to"
+ $835A DEFB $00
+ $835B DEFM "start"
+ $8360 DEFB $00
+ $8361 DEFM "game"
+ $8365 DEFB $00
+ $8366 DEFB $00
+ $8367 DEFM "press"
+ $836C DEFB $00
+ $836D DEFM "1,2"
+ $8370 DEFB $00
+ $8371 DEFM "or"
+ $8373 DEFB $00
+ $8374 DEFM "3"
+ $8375 DEFB $00
+ $8376 DEFM "to"
+ $8378 DEFB $00
+ $8379 DEFM "select"
+ $837F DEFB $00
+ $8380 DEFM "key"
+ $8383 DEFB $00
+ $8384 DEFM "type"
+ $8388 DEFB $00
+ $8389 DEFB $00
+ $838A DEFB $00
+ $838B DEFB $00
+ $838C DEFB $00
+ $838D DEFB $00
+ $838E DEFB $00
+ $838F DEFB $00
+
+; Instructions screen redefine keys text
+;
+; 'key types 1 & 2 are present and' 'cannot be changed but the type 3' 'keys
+; are user defineable.      '
+@label=MSG_REDEFINE_TEXT
+t$8390 DEFM "keys are user defineable.      "
+ $83AF DEFB $00
+ $83B0 DEFM "cannot"
+ $83B6 DEFB $00
+ $83B7 DEFM "be"
+ $83B9 DEFB $00
+ $83BA DEFM "changed"
+ $83C1 DEFB $00
+ $83C2 DEFM "but"
+ $83C5 DEFB $00
+ $83C6 DEFM "the"
+ $83C9 DEFB $00
+ $83CA DEFM "type"
+ $83CE DEFB $00
+ $83CF DEFM "3key"
+ $83D3 DEFB $00
+ $83D4 DEFM "types"
+ $83D9 DEFB $00
+ $83DA DEFM "1"
+ $83DB DEFB $00
+ $83DC DEFM "&"
+ $83DD DEFB $00
+ $83DE DEFM "2"
+ $83DF DEFB $00
+ $83E0 DEFM "are"
+ $83E3 DEFB $00
+ $83E4 DEFM "preset"
+ $83EA DEFB $00
+ $83EB DEFM "and"
+ $83EE DEFB $00
+ $83EF DEFB $00
+
+; Instructions screen key types table
+@label=MSG_KEY_TYPES
+t$83F0 DEFM "3     q    a    o    p    m or 1"
+ $8410 DEFM "2     --cursor--keys--    4 or 9"
+ $8430 DEFM "1     2    w    9    0    z or m"
+
+; Unused data block?
+b$8450 DEFB $C8,$C9,$CA,$CB,$20,$B8,$B9,$BA
+ $8458 DEFB $20,$20,$BB,$BC,$BD,$20,$20,$BE
+ $8460 DEFB $BF,$C0,$20,$20,$C1,$C2,$C3,$20
+ $8468 DEFB $20,$20,$20,$C4,$C5,$C6,$C7,$20
+ $8470 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $8478 DEFB $00,$00,$00,$00,$00,$00
+
+; Instructions screen KEYS heading
+;
+; 'KEYS'
+@label=MSG_KEYS_HEADING
+t$847E DEFM "KEYS"
+
+; Unused
+s$8482 DEFS $19
+
+; Instructions screen objective text
+;
+; 'objective- to collect eggs from the hen-house.'
+@label=MSG_INSTRUCTIONS_OBJECTIVE
+t$849B DEFM "the"
+ $849E DEFB $00
+ $849F DEFM "hen-house."
+ $84A9 DEFB $00
+ $84AA DEFB $00
+ $84AB DEFB $00
+ $84AC DEFB $00
+ $84AD DEFB $00
+ $84AE DEFB $00
+ $84AF DEFB $00
+ $84B0 DEFM "objective-"
+ $84BA DEFB $00
+ $84BB DEFM "to"
+ $84BD DEFB $00
+ $84BE DEFM "collect"
+ $84C5 DEFB $00
+ $84C6 DEFM "eggs"
+ $84CA DEFB $00
+ $84CB DEFM "from"
+
+; Unused
+s$84CF DEFS $0B
+
+; Instructions screen heading
+;
+; 'INSTRUCTIONS'
+@label=MSG_KEYS_HEADING
+t$84DA DEFM "INSTRUCTIONS"
+
+; Data block at 84E6
+b$84E6 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $84EE DEFB $00,$00
+
+; Blank tile graphic
+;
+; address from which the following graphics are accessed.
+@label=GFX_TILE_BLANK
+b$84F0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+
+; Ladder tile graphic (16x8)
+;
+; #HTML[#UDGARRAY2;$84F8-$8507-8(gfx_tile_ladder)]
+@label=GFX_TILE_LADDER
+b$84F8 DEFB $30,$30,$30,$3F,$3F,$30,$30,$30
+ $8500 DEFB $0C,$0C,$0C,$FC,$FC,$0C,$0C,$0C
+
+; Egg item graphic
+;
+; #HTML[#UDG$8508(gfx_item_egg)]
+@label=GFX_ITEM_EGG
+b$8508 DEFB $38,$7E,$FF,$FF,$FF,$7E,$38,$00
+
+; Corn item graphic
+;
+; #HTML[#UDG$8510(gfx_item_corn)]
+@label=GFX_ITEM_CORN
+b$8510 DEFB $00,$00,$00,$10,$28,$54,$AA,$00
+
+; Floor tile graphic
+;
+; #HTML[#UDG$8518(gfx_tile_floor)]
+@label=GFX_TILE_FLOOR
+b$8518 DEFB $FB,$00,$BF,$00,$EF,$00,$00,$00
+
+; Unknown ad unused?
+b$8520 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $8528 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $8530 DEFB $00,$00,$00,$00,$FE,$00,$00,$00
+ $8538 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $8540 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+
+; "SCORE" label graphic (24x8)
+;
+; #HTML[#UDGARRAY3;$8548-$855F-8(labels_score)]
+@label=GFX_LABEL_SCORE
+b$8548 DEFB $63,$94,$84,$64,$14,$14,$94,$63
+ $8550 DEFB $19,$A5,$25,$25,$25,$25,$A5,$19
+ $8558 DEFB $CF,$28,$28,$CE,$48,$48,$28,$2F
+
+; "PLAYER" label graphic (32x8)
+;
+; #HTML[#UDGARRAY4;$8560-$857F-8(labels_player)]
+@label=GFX_LABEL_PLAYER
+b$8560 DEFB $00,$F2,$8A,$8A,$F2,$82,$82,$83
+ $8568 DEFB $00,$0E,$11,$11,$1F,$11,$11,$D1
+ $8570 DEFB $00,$45,$45,$29,$11,$11,$11,$11
+ $8578 DEFB $00,$EE,$09,$09,$EE,$09,$09,$E9
+
+; "TIME" label graphic (24x8)
+;
+; #HTML[#UDGARRAY3;$8580-$8597-8(labels_time)]
+@label=GFX_LABEL_TIME
+b$8580 DEFB $00,$FB,$20,$20,$20,$20,$20,$23
+ $8588 DEFB $00,$E8,$8C,$8B,$88,$88,$88,$E8
+ $8590 DEFB $00,$5E,$D0,$50,$5E,$50,$50,$5E
+
+; "A+F SOFTWARE" logo text (48x8)
+;
+; #HTML[#UDGARRAY6;$8598-$85C7-8(labels_af_software)]
+@label=GFX_TEXT_AFSOFTWARE
+b$8598 DEFB $00,$00,$00,$E0,$A4,$EE,$A4,$A0
+ $85A0 DEFB $00,$00,$00,$E1,$81,$E1,$80,$81
+ $85A8 DEFB $00,$00,$00,$DD,$15,$D5,$55,$DD
+ $85B0 DEFB $00,$00,$00,$DD,$09,$C9,$09,$08
+ $85B8 DEFB $00,$00,$00,$17,$15,$17,$55,$A5
+ $85C0 DEFB $00,$00,$00,$77,$54,$67,$54,$57
+
+; "BONUS" label graphic (24x8)
+;
+; #HTML[#UDGARRAY3;$85C8-$85DF-8(labels_bonus)]
+@label=GFX_LABEL_BONUS
+b$85C8 DEFB $00,$E3,$94,$94,$E4,$94,$94,$E3
+ $85D0 DEFB $00,$25,$A5,$B5,$AD,$A5,$A5,$24
+ $85D8 DEFB $00,$26,$29,$28,$26,$21,$29,$C6
+
+; "LE" text (8x8) - unknown usage
+;
+; #HTML[#UDGARRAY3;$85E0-$85E7-8(labels_le)]
+@label=GFX_TEXT_LE
+b$85E0 DEFB $00,$87,$84,$84,$87,$84,$84,$F7
+
+; Unused?
+b$85E8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+
+; Font: A-Z, numbers, punctuation, and other symbols.
+;
+; #HTML[#FONT:(
+; !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ)$85F0(font_complete)]
+@label=FONT_ALL
+b$85F0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $85F8 DEFB $08,$08,$08,$08,$08,$08,$00,$08
+ $8600 DEFB $24,$24,$00,$00,$00,$00,$00,$00
+ $8608 DEFB $00,$24,$7E,$24,$24,$7E,$24,$00
+ $8610 DEFB $00,$10,$7C,$50,$7C,$14,$7C,$10
+ $8618 DEFB $00,$62,$64,$08,$10,$26,$46,$00
+ $8620 DEFB $00,$10,$28,$10,$2A,$44,$3A,$00
+ $8628 DEFB $00,$08,$10,$00,$00,$00,$00,$00
+ $8630 DEFB $08,$10,$10,$10,$10,$10,$10,$08
+ $8638 DEFB $10,$08,$08,$08,$08,$08,$08,$10
+ $8640 DEFB $00,$00,$14,$08,$3E,$08,$14,$00
+ $8648 DEFB $08,$08,$08,$7F,$08,$08,$08,$00
+ $8650 DEFB $00,$00,$00,$00,$00,$08,$08,$10
+ $8658 DEFB $00,$00,$00,$00,$7E,$00,$00,$00
+ $8660 DEFB $00,$00,$00,$00,$00,$00,$18,$18
+ $8668 DEFB $01,$02,$04,$08,$10,$20,$40,$00
+ $8670 DEFB $3E,$43,$45,$49,$51,$61,$41,$3E
+ $8678 DEFB $08,$18,$28,$08,$08,$08,$08,$3E
+ $8680 DEFB $3E,$41,$01,$0E,$30,$40,$40,$7F
+ $8688 DEFB $3E,$41,$01,$1E,$01,$01,$41,$3E
+ $8690 DEFB $40,$48,$48,$48,$7F,$08,$08,$08
+ $8698 DEFB $7F,$40,$40,$7E,$01,$01,$41,$3E
+ $86A0 DEFB $3E,$40,$40,$7E,$41,$41,$41,$3E
+ $86A8 DEFB $7F,$01,$02,$04,$08,$10,$10,$10
+ $86B0 DEFB $3E,$41,$41,$3E,$41,$41,$41,$3E
+ $86B8 DEFB $3E,$41,$41,$3F,$01,$01,$41,$3E
+ $86C0 DEFB $00,$18,$18,$00,$00,$18,$18,$00
+ $86C8 DEFB $00,$18,$18,$00,$00,$18,$18,$30
+ $86D0 DEFB $04,$08,$10,$20,$10,$08,$04,$00
+ $86D8 DEFB $00,$00,$3E,$00,$00,$3E,$00,$00
+ $86E0 DEFB $20,$10,$08,$04,$08,$10,$20,$00
+ $86E8 DEFB $3E,$41,$01,$02,$04,$08,$00,$08
+ $86F0 DEFB $1E,$21,$4D,$55,$55,$4F,$20,$1E
+ $86F8 DEFB $3E,$41,$41,$41,$7F,$41,$41,$41
+ $8700 DEFB $7E,$41,$41,$7E,$41,$41,$41,$7E
+ $8708 DEFB $3E,$41,$40,$40,$40,$40,$41,$3E
+ $8710 DEFB $7E,$41,$41,$41,$41,$41,$41,$7E
+ $8718 DEFB $7F,$41,$40,$7C,$40,$40,$41,$7F
+ $8720 DEFB $7F,$41,$40,$7C,$40,$40,$40,$40
+ $8728 DEFB $3E,$41,$40,$40,$47,$41,$41,$3E
+ $8730 DEFB $41,$41,$41,$7F,$41,$41,$41,$41
+ $8738 DEFB $7F,$08,$08,$08,$08,$08,$08,$7F
+ $8740 DEFB $7F,$08,$08,$08,$08,$08,$48,$30
+ $8748 DEFB $42,$44,$48,$70,$48,$44,$42,$42
+ $8750 DEFB $40,$40,$40,$40,$40,$40,$40,$7F
+ $8758 DEFB $41,$63,$55,$49,$41,$41,$41,$41
+ $8760 DEFB $41,$61,$51,$49,$45,$43,$41,$41
+ $8768 DEFB $3E,$41,$41,$41,$41,$41,$41,$3E
+ $8770 DEFB $7E,$41,$41,$41,$7E,$40,$40,$40
+ $8778 DEFB $3E,$41,$41,$41,$49,$45,$43,$3E
+ $8780 DEFB $7E,$41,$41,$41,$7E,$44,$42,$41
+ $8788 DEFB $3E,$41,$40,$3E,$01,$01,$41,$3E
+ $8790 DEFB $7F,$08,$08,$08,$08,$08,$08,$08
+ $8798 DEFB $41,$41,$41,$41,$41,$41,$41,$3E
+ $87A0 DEFB $41,$41,$41,$41,$41,$22,$14,$08
+ $87A8 DEFB $41,$41,$41,$41,$41,$49,$55,$22
+ $87B0 DEFB $41,$22,$14,$08,$08,$14,$22,$41
+ $87B8 DEFB $41,$22,$14,$08,$08,$08,$08,$08
+ $87C0 DEFB $7F,$02,$04,$08,$10,$20,$40,$7F
+
+; Unused font space?
+s$87C8 DEFS $30
+
+; Font: A-Z bold
+;
+; #HTML[#FONT:(ABCDEFGHIJKLMNOPQRSTUVWXYZ)$87F8(font_az_bold)]
+@label=FONT_AZ_BOLD
+b$87F8 DEFB $00,$3C,$66,$66,$7E,$66,$66,$66
+ $8800 DEFB $00,$7C,$66,$66,$78,$66,$66,$7C
+ $8808 DEFB $00,$3C,$66,$60,$60,$60,$66,$3C
+ $8810 DEFB $00,$7C,$66,$66,$66,$66,$66,$7C
+ $8818 DEFB $00,$7E,$62,$60,$7C,$60,$62,$7E
+ $8820 DEFB $00,$7E,$62,$60,$7C,$60,$60,$60
+ $8828 DEFB $00,$3C,$66,$60,$6E,$62,$62,$3C
+ $8830 DEFB $00,$66,$66,$66,$7E,$66,$66,$66
+ $8838 DEFB $00,$7E,$18,$18,$18,$18,$18,$7E
+ $8840 DEFB $00,$7F,$0C,$0C,$0C,$4C,$4C,$38
+ $8848 DEFB $00,$66,$66,$6C,$78,$6C,$66,$66
+ $8850 DEFB $00,$60,$60,$60,$60,$60,$62,$7E
+ $8858 DEFB $00,$C6,$EE,$D6,$C6,$C6,$C6,$C6
+ $8860 DEFB $00,$66,$66,$76,$7E,$6E,$66,$66
+ $8868 DEFB $00,$3C,$66,$66,$66,$66,$66,$3C
+ $8870 DEFB $00,$7C,$66,$66,$7C,$60,$60,$60
+ $8878 DEFB $00,$3C,$66,$66,$66,$76,$6C,$3A
+ $8880 DEFB $00,$7C,$66,$66,$78,$66,$66,$66
+ $8888 DEFB $00,$3C,$66,$60,$3C,$06,$66,$3C
+ $8890 DEFB $00,$7E,$18,$18,$18,$18,$18,$18
+ $8898 DEFB $00,$66,$66,$66,$66,$66,$66,$3C
+ $88A0 DEFB $00,$66,$66,$66,$66,$66,$3C,$18
+ $88A8 DEFB $00,$C6,$C6,$C6,$C6,$D6,$EE,$C6
+ $88B0 DEFB $00,$66,$66,$3C,$18,$3C,$66,$66
+ $88B8 DEFB $00,$66,$66,$3C,$18,$18,$18,$18
+ $88C0 DEFB $00,$7E,$06,$0C,$18,$30,$60,$7E
+
+; Font: Bullet point graphic
+;
+; Used to separate the scrolling ticker text: Start, Redefine, Insturctions.
+; #HTML[#UDG$88C8(font_gfx_bullet)]
+@label=FONT_BULLET_POINT
+b$88C8 DEFB $00,$08,$1C,$3E,$7F,$3E,$1C,$08
+
+; Unused font space?
+s$88D0 DEFS $10
+
+; Font: Registered symbol graphic
+;
+; #HTML[#UDG$88E0(font_gfx_registered_symbol)]
+@label=FONT_REGISTERED_SYMBOL
+b$88E0 DEFB $3C,$42,$B9,$A5,$B9,$A5,$42,$3C
+
+; Font: Copyright symbol graphic
+;
+; #HTML[#UDG$88E8(font_gfx_copyright_symbol)]
+@label=FONT_COPYRIGHT_SYMBOL
+b$88E8 DEFB $3C,$42,$99,$A1,$A1,$99,$42,$3C
+
+; Unknown graphics/data
+b$88F0 DEFB $F0,$F0,$F0,$F0,$00,$00,$00,$00
+ $88F8 DEFB $0F,$0F,$0F,$0F,$00,$00,$00,$00
+ $8900 DEFB $FF,$FF,$FF,$FF,$00,$00,$00,$00
+ $8908 DEFB $00,$00,$00,$00,$F0,$F0,$F0,$F0
+ $8910 DEFB $F0,$F0,$F0,$F0,$F0,$F0,$F0,$F0
+ $8918 DEFB $0F,$0F,$0F,$0F,$F0,$F0,$F0,$F0
+ $8920 DEFB $FF,$FF,$FF,$FF,$F0,$F0,$F0,$F0
+ $8928 DEFB $00,$00,$00,$00,$0F,$0F,$0F,$0F
+ $8930 DEFB $F0,$F0,$F0,$F0,$0F,$0F,$0F,$0F
+ $8938 DEFB $0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F
+ $8940 DEFB $FF,$FF,$FF,$FF,$0F,$0F,$0F,$0F
+ $8948 DEFB $00,$00,$00,$00,$FF,$FF,$FF,$FF
+ $8950 DEFB $F0,$F0,$F0,$F0,$FF,$FF,$FF,$FF
+ $8958 DEFB $0F,$0F,$0F,$0F,$FF,$FF,$FF,$FF
+ $8960 DEFB $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+
+; "A+F CHUCKIE EGG" text graphic
+;
+; Use as the default name in the high score table.
+; #HTML[#UDGARRAY8;$8968-$89A7-8(text_highscore_default_name)]
+@label=GFX_TEXT_HIGHSCORE_DEFAULT_NAME
+b$8968 DEFB $00,$00,$F0,$92,$F7,$92,$90,$00
+ $8970 DEFB $00,$00,$70,$40,$70,$40,$40,$00
+ $8978 DEFB $00,$00,$E9,$89,$8F,$89,$E9,$00
+ $8980 DEFB $00,$00,$4B,$4A,$4A,$4A,$7B,$00
+ $8988 DEFB $00,$00,$A5,$28,$30,$28,$A5,$00
+ $8990 DEFB $00,$00,$DC,$90,$9C,$90,$DC,$00
+ $8998 DEFB $00,$00,$3B,$22,$3A,$22,$3B,$00
+ $89A0 DEFB $00,$00,$DE,$10,$D6,$52,$DE,$00
+
+; Font: Abbreviations for SP, CS, SS, EN (32x8)
+;
+; #HTML[#UDGARRAY4;$89A8-$89C7-8(font_gfx_abbreviations)]
+@label=FONT_ABBREVIATION_SYMBOLS
+b$89A8 DEFB $00,$4E,$A9,$89,$4E,$28,$A8,$48
+ $89B0 DEFB $00,$42,$A5,$84,$82,$81,$A5,$42
+ $89B8 DEFB $00,$42,$A5,$84,$42,$21,$A5,$42
+ $89C0 DEFB $00,$E9,$89,$8D,$EB,$89,$89,$E9
+
+; "LEVEL" label graphic (24x8)
+;
+; #HTML[#UDGARRAY3;$89C8-$89DF-8(labels_level)]
+@label=GFX_LABEL_LEVEL
+b$89C8 DEFB $00,$87,$84,$84,$87,$84,$84,$F7
+ $89D0 DEFB $00,$A2,$22,$22,$A2,$22,$14,$88
+ $89D8 DEFB $00,$F4,$84,$84,$F4,$84,$84,$F7
+
+; Font: Numbers bold (used in the scores, level, etc.)
+;
+; #HTML[#FONT:(0123456789)$89E0(font_numbers_bold)]
+@label=FONT_NUMBERS_BOLD
+b$89E0 DEFB $00,$1E,$21,$23,$25,$29,$31,$1E
+ $89E8 DEFB $00,$04,$0C,$14,$04,$04,$04,$1F
+ $89F0 DEFB $00,$1E,$21,$01,$1E,$20,$20,$3F
+ $89F8 DEFB $00,$1E,$21,$01,$0E,$01,$21,$1E
+ $8A00 DEFB $00,$06,$0A,$12,$22,$3F,$02,$02
+ $8A08 DEFB $00,$3F,$20,$3E,$01,$01,$21,$1E
+ $8A10 DEFB $00,$1E,$21,$20,$3E,$21,$21,$1E
+ $8A18 DEFB $00,$3F,$01,$02,$04,$08,$08,$08
+ $8A20 DEFB $00,$1E,$21,$21,$1E,$21,$21,$1E
+ $8A28 DEFB $00,$1E,$21,$21,$1F,$01,$21,$1E
+
+; Birdcage handle graphic tiles (16x8)
+;
+; #HTML[#UDGARRAY2;$8A30-$8A3F-8(level_gfx_birdcage_handle)]
+@label=GFX_TILE_BIRDCAGE_HANDLE
+b$8A30 DEFB $00,$00,$07,$0C,$08,$0C,$07,$01
+ $8A38 DEFB $00,$00,$C0,$60,$20,$60,$C0,$00
+
+; Birdcage graphic tiles (32x24)
+;
+; #HTML[#UDGARRAY4;$8A40-$8A9F-8(level_gfx_birdcage)]
+@label=GFX_TILE_BIRDCAGE
+b$8A40 DEFB $00,$00,$03,$05,$0A,$15,$29,$2A
+ $8A48 DEFB $1F,$E0,$18,$67,$89,$11,$11,$21
+ $8A50 DEFB $F0,$0E,$31,$CC,$22,$11,$11,$08
+ $8A58 DEFB $00,$00,$80,$40,$A0,$50,$28,$A8
+ $8A60 DEFB $52,$52,$52,$52,$72,$5A,$57,$52
+ $8A68 DEFB $21,$21,$21,$21,$21,$21,$21,$DF
+ $8A70 DEFB $08,$08,$08,$08,$08,$08,$09,$FE
+ $8A78 DEFB $94,$94,$94,$94,$9C,$B4,$D4,$94
+ $8A80 DEFB $52,$52,$52,$52,$32,$0A,$07,$00
+ $8A88 DEFB $21,$21,$21,$21,$21,$21,$21,$FF
+ $8A90 DEFB $08,$08,$08,$08,$08,$08,$09,$FE
+ $8A98 DEFB $94,$94,$94,$94,$98,$B0,$C0,$00
+
+; Player "lives" icon graphic
+;
+; #HTML[#UDG$8AA0(level_gfx_lives_counter)]
+@label=GFX_ICON_LIVES
+b$8AA0 DEFB $00,$00,$1C,$1C,$7F,$00,$00,$00
+
+; High score table "cursor" icon graphic
+;
+; #HTML[#UDG$8AA8(level_gfx_highscore_cursor)]
+@label=GFX_ICON_HIGHSCORE_CURSOR
+b$8AA8 DEFB $18,$3C,$3C,$7E,$7E,$7E,$7E,$3C
+
+; "UP" heading graphic for instructions screen (24x8)
+;
+; #HTML[#UDGARRAY3;$8AB0-$8AC7-8(instructions_heading_up)]
+@label=INSTRUCTIONS_HEADING_UP
+b$8AB0 DEFB $00,$02,$02,$02,$02,$03,$00,$03
+ $8AB8 DEFB $00,$27,$24,$27,$24,$E4,$00,$FF
+ $8AC0 DEFB $00,$C0,$40,$C0,$00,$00,$00,$C0
+
+; "DOWN" heading graphic for instructions screen (24x8)
+;
+; #HTML[#UDGARRAY3;$8AC8-$8ADF-8(instructions_heading_down)]
+@label=INSTRUCTIONS_HEADING_DOWN
+b$8AC8 DEFB $00,$FD,$45,$45,$45,$FD,$00,$FF
+ $8AD0 DEFB $00,$F4,$14,$15,$15,$F7,$00,$FF
+ $8AD8 DEFB $00,$51,$59,$55,$53,$D1,$00,$FF
+
+; "LEFT" heading graphic for instructions screen (24x8)
+;
+; #HTML[#UDGARRAY3;$8AE0-$8AF7-8(instructions_heading_left)]
+@label=INSTRUCTIONS_HEADING_LEFT
+b$8AE0 DEFB $00,$83,$82,$83,$82,$FB,$00,$FF
+ $8AE8 DEFB $00,$E7,$04,$C7,$04,$E4,$00,$FF
+ $8AF0 DEFB $00,$DF,$04,$84,$04,$04,$00,$FF
+
+; "RIGHT" heading graphic for instructions screen (24x8)
+;
+; #HTML[#UDGARRAY3;$8AF8-$8B0F-8(instructions_heading_right)]
+@label=INSTRUCTIONS_HEADING_RIGHT
+b$8AF8 DEFB $00,$F2,$92,$F2,$A2,$92,$00,$FF
+ $8B00 DEFB $00,$7A,$42,$5B,$4A,$7A,$00,$FF
+ $8B08 DEFB $00,$5F,$44,$C4,$44,$44,$00,$FF
+
+; "JUMP" heading graphic for instructions screen (24x8)
+;
+; #HTML[#UDGARRAY4;$8B10-$8B2F-8(instructions_heading_jump)]
+@label=INSTRUCTIONS_HEADING_JUMP
+b$8B10 DEFB $00,$7E,$08,$08,$48,$78,$00,$FF
+ $8B18 DEFB $00,$42,$42,$42,$42,$7E,$00,$FF
+ $8B20 DEFB $00,$7F,$49,$49,$41,$41,$00,$FF
+ $8B28 DEFB $00,$3F,$21,$3F,$20,$20,$00,$FF
+
+; "TYPE" heading graphic for instructions screen (32x8)
+;
+; #HTML[#UDGARRAY4;$8B30-$8B4F-8(instructions_heading_type)]
+@label=INSTRUCTIONS_HEADING_TYPE
+b$8B30 DEFB $00,$FE,$10,$10,$10,$10,$00,$FF
+ $8B38 DEFB $00,$41,$22,$1C,$08,$08,$00,$FF
+ $8B40 DEFB $00,$3F,$21,$3F,$20,$20,$00,$FF
+ $8B48 DEFB $00,$3F,$20,$3C,$20,$3F,$00,$FF
+
+; Unknown, unused?
+s$8B50 DEFS $02A0
+
+; Farmer sprites graphic data (but things are not quite right)
+;
+; #HTML[#UDGARRAY1;$8DF0-$8EEF-8(farmer_sprites)]
+@label=SPRITES_FARMER
+b$8DF0 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
+ $8DF8 DEFB $3F,$FC,$03,$40,$03,$C0,$01,$80
+ $8E00 DEFB $03,$E0,$06,$F0,$06,$F0,$06,$E0
+ $8E08 DEFB $03,$C0,$01,$00,$01,$C0,$00,$00
+ $8E10 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
+ $8E18 DEFB $3F,$FC,$03,$40,$03,$C0,$01,$80
+ $8E20 DEFB $03,$E0,$06,$F0,$05,$F0,$05,$E0
+ $8E28 DEFB $03,$C0,$04,$50,$02,$20,$00,$00
+ $8E30 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
+ $8E38 DEFB $3F,$FC,$03,$40,$03,$C0,$01,$80
+ $8E40 DEFB $03,$E0,$06,$F0,$06,$F0,$06,$E0
+ $8E48 DEFB $03,$C0,$01,$00,$01,$C0,$00,$00
+ $8E50 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
+ $8E58 DEFB $3F,$FC,$03,$40,$03,$C0,$01,$80
+ $8E60 DEFB $03,$E0,$06,$F0,$07,$30,$07,$E0
+ $8E68 DEFB $03,$C0,$04,$50,$02,$20,$00,$00
+ $8E70 DEFB $00,$00,$01,$C0,$03,$C0,$03,$C0
+ $8E78 DEFB $3F,$FC,$02,$C0,$03,$C0,$01,$80
+ $8E80 DEFB $07,$C0,$0F,$60,$0F,$60,$07,$60
+ $8E88 DEFB $03,$C0,$00,$80,$03,$80,$00,$00
+ $8E90 DEFB $00,$00,$01,$C0,$03,$C0,$03,$C0
+ $8E98 DEFB $3F,$FC,$02,$C0,$03,$C0,$01,$80
+ $8EA0 DEFB $07,$C0,$0F,$60,$0F,$A0,$07,$A0
+ $8EA8 DEFB $03,$C0,$0A,$20,$04,$40,$00,$00
+ $8EB0 DEFB $00,$00,$01,$C0,$03,$C0,$03,$C0
+ $8EB8 DEFB $3F,$FC,$02,$C0,$03,$C0,$01,$80
+ $8EC0 DEFB $07,$C0,$0F,$60,$0F,$60,$07,$60
+ $8EC8 DEFB $03,$C0,$00,$80,$03,$80,$00,$00
+ $8ED0 DEFB $00,$00,$01,$C0,$03,$C0,$03,$C0
+ $8ED8 DEFB $3F,$FC,$02,$C0,$03,$C0,$01,$80
+ $8EE0 DEFB $07,$C0,$0F,$60,$0C,$E0,$07,$E0
+ $8EE8 DEFB $03,$C0,$0A,$20,$04,$40,$00,$00
+
+; Hen sprites graphic data: right with mouth open (8x32)
+;
+; #HTML[#UDGARRAY1;$8EF0-$8F0F-8(hen_sprites_right_mouth)]
+@label=SPRITES_HEN_RIGHT_MOUTH
+b$8EF0 DEFB $00,$79,$00,$EE,$00,$FC,$00,$FA
+ $8EF8 DEFB $00,$71,$00,$70,$00,$30,$00,$38
+ $8F00 DEFB $1E,$1C,$7F,$9C,$FF,$FC,$BF,$7C
+ $8F08 DEFB $4F,$78,$70,$F0,$3F,$E0,$0F,$80
+
+; Hen sprites graphic data: right (8x32)
+;
+; #HTML[#UDGARRAY1;$8F10-$8F2F-8(hen_sprites_right)]
+@label=SPRITES_HEN_RIGHT
+b$8F10 DEFB $00,$78,$00,$EC,$00,$FF,$00,$F8
+ $8F18 DEFB $00,$70,$00,$70,$00,$30,$00,$38
+ $8F20 DEFB $1E,$1C,$70,$9C,$CF,$7C,$BF,$7C
+ $8F28 DEFB $7F,$F8,$7F,$F0,$3F,$E0,$0F,$80
+
+; Hen sprites graphic data: left with mouth open (8x32)
+;
+; #HTML[#UDGARRAY1;$8F30-$8F4F-8(hen_sprites_left_mouth)]
+@label=SPRITES_HEN_LEFT_MOUTH
+b$8F30 DEFB $9E,$00,$77,$00,$3F,$00,$5F,$00
+ $8F38 DEFB $8E,$00,$0E,$00,$0C,$00,$1C,$00
+ $8F40 DEFB $38,$78,$39,$FE,$3F,$FF,$3E,$FD
+ $8F48 DEFB $1E,$F2,$0F,$0E,$07,$FC,$01,$F0
+
+; Hen sprites graphic data: left (8x32)
+;
+; #HTML[#UDGARRAY1;$8F50-$8F6F-8(hen_sprites_left)]
+@label=SPRITES_HEN_LEFT
+b$8F50 DEFB $1E,$00,$37,$00,$FF,$00,$1F,$00
+ $8F58 DEFB $0E,$00,$0E,$00,$0C,$00,$1C,$00
+ $8F60 DEFB $38,$78,$39,$0E,$3E,$F3,$3E,$FD
+ $8F68 DEFB $1F,$FE,$0F,$FE,$07,$FC,$01,$F0
+
+; Unused space?
+s$8F70 DEFS $20
+
+; Farmer sprites graphic data: climbing stairs (but things are not quite right)
+;
+; #HTML[#UDGARRAY1;$8F90-$900F-8(farmer_sprites_climbing)]
+@label=SPRITES_FARMER_WALK
+b$8F90 DEFB $00,$00,$02,$40,$03,$C0,$03,$C0
+ $8F98 DEFB $3F,$FC,$03,$C0,$09,$80,$17,$E0
+ $8FA0 DEFB $1F,$F0,$0F,$F8,$07,$E8,$07,$E8
+ $8FA8 DEFB $02,$70,$02,$00,$0E,$00,$00,$00
+ $8FB0 DEFB $00,$00,$02,$40,$03,$C0,$03,$C0
+ $8FB8 DEFB $3F,$FC,$03,$C0,$01,$80,$07,$E0
+ $8FC0 DEFB $1F,$F8,$0F,$F0,$07,$E0,$07,$E0
+ $8FC8 DEFB $02,$40,$0E,$70,$00,$00,$00,$00
+ $8FD0 DEFB $00,$00,$02,$40,$03,$C0,$03,$C0
+ $8FD8 DEFB $3F,$FC,$03,$C0,$01,$90,$07,$E8
+ $8FE0 DEFB $0F,$F8,$1F,$F0,$17,$E0,$17,$E0
+ $8FE8 DEFB $0E,$40,$00,$40,$00,$70,$00,$00
+ $8FF0 DEFB $00,$00,$02,$40,$03,$C0,$03,$C0
+ $8FF8 DEFB $3F,$FC,$03,$C0,$01,$80,$07,$E0
+ $9000 DEFB $1F,$F8,$0F,$F0,$07,$E0,$07,$E0
+ $9008 DEFB $02,$40,$0E,$70,$00,$00,$00,$00
+
+; Robot Hen sprites graphic data: facing left (8x32)
+;
+; #HTML[#UDGARRAY1;$9010-$902F-8(emu_sprites_left)]
+@label=SPRITES_ROBOT_HEN_LEFT
+b$9010 DEFB $30,$00,$D0,$00,$30,$00,$20,$00
+ $9018 DEFB $40,$00,$40,$00,$C0,$00,$CE,$00
+ $9020 DEFB $FF,$00,$FF,$00,$7F,$00,$3E,$00
+ $9028 DEFB $08,$00,$08,$00,$08,$00,$18,$00
+
+; Robot Hen sprites graphic data: facing right (8x32)
+;
+; #HTML[#UDGARRAY1;$9030-$904F-8(emu_sprites_right)]
+@label=SPRITES_ROBOT_HEN_RIGHT
+b$9030 DEFB $0C,$00,$0B,$00,$0C,$00,$04,$00
+ $9038 DEFB $02,$00,$02,$00,$03,$00,$73,$00
+ $9040 DEFB $FF,$00,$FF,$00,$FE,$00,$7C,$00
+ $9048 DEFB $10,$00,$10,$00,$10,$00,$18,$00
+
+; Robot Hen sprites graphic data: climbing (8x32 x2)
+;
+; #HTML[#UDGARRAY1;$9050-$908F-8(emu_sprites_climbing)]
+@label=SPRITES_ROBOT_HEN_CLIMBING
+b$9050 DEFB $01,$80,$03,$C0,$03,$C0,$01,$80
+ $9058 DEFB $01,$80,$01,$80,$07,$E0,$0F,$F0
+ $9060 DEFB $0F,$F0,$0F,$F0,$07,$E0,$02,$40
+ $9068 DEFB $02,$60,$02,$00,$02,$00,$06,$00
+ $9070 DEFB $01,$80,$03,$C0,$03,$C0,$01,$80
+ $9078 DEFB $01,$80,$01,$80,$07,$E0,$0F,$F0
+ $9080 DEFB $0F,$F0,$0F,$F0,$07,$E0,$02,$40
+ $9088 DEFB $06,$40,$00,$40,$00,$40,$00,$60
+
+; Robot Hen sprites graphic data: walking left (8x32)
+;
+; #HTML[#UDGARRAY1;$9090-$90AF-8(emu_sprites_left_walk)]
+@label=SPRITES_ROBOT_HEN_LEFT_WALK
+b$9090 DEFB $0B,$00,$05,$00,$0B,$00,$02,$00
+ $9098 DEFB $04,$00,$04,$00,$0C,$00,$0C,$E0
+ $90A0 DEFB $0F,$F0,$0F,$F0,$07,$F0,$03,$E0
+ $90A8 DEFB $01,$80,$0A,$40,$04,$20,$00,$40
+
+; Robot Hen sprites graphic data: walking walk (8x32)
+;
+; #HTML[#UDGARRAY1;$90B0-$90CF-8(emu_sprites_right_walk)]
+@label=SPRITES_ROBOT_HEN_RIGHT_WALK
+b$90B0 DEFB $00,$D0,$00,$A0,$00,$D0,$00,$40
+ $90B8 DEFB $00,$20,$00,$20,$00,$30,$07,$30
+ $90C0 DEFB $0F,$F0,$0F,$F0,$0F,$E0,$07,$C0
+ $90C8 DEFB $01,$80,$02,$50,$04,$20,$02,$00
+
+; Some odd graphics/data...unusued?
+b$90D0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $90D8 DEFB $00,$00,$00,$00,$70,$00,$58,$1E
+ $90E0 DEFB $27,$FF,$51,$FF,$00,$7F,$10,$3E
+ $90E8 DEFB $28,$08,$54,$08,$AA,$08,$00,$18
+ $90F0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $90F8 DEFB $00,$00,$00,$00,$00,$0E,$78,$1A
+ $9100 DEFB $FF,$E4,$FF,$8A,$FE,$00,$7C,$08
+ $9108 DEFB $10,$14,$10,$2A,$10,$55,$18,$00
+ $9110 DEFB $00,$00,$00,$00,$00,$00,$0C,$00
+ $9118 DEFB $0F,$00,$0F,$80,$1F,$C0
+
+; Runs from start of level, after everything has been rendered.
+;
+; Used by the routine at #R$98E6.
+c$911E LD A,($6EEB)  ;
+ $9121 CP $08        ;
+ $9123 JR C,$9128    ;
+ $9125 CP $10        ;
+ $9127 RET C         ;
+*$9128 LD HL,($736C) ; {Increment value stored @736C, then set its MSB(?) to
+ $912B INC HL        ; $00
+ $912C LD H,$00      ;
+ $912E LD ($736C),HL ; }
+ $9131 LD C,$01      ;
+ $9133 BIT 0,(HL)    ; {Jump if BIT 0 of the byte stored at address #REGhl is
+ $9135 JR Z,$9138    ; set.}
+ $9137 DEC C         ;
+*$9138 LD HL,$7356   ;
+ $913B LD A,(HL)     ;
+ $913C INC A         ;
+ $913D CP $05        ;
+ $913F JR NZ,$9142   ;
+ $9141 XOR A         ;
+*$9142 LD (HL),A     ;
+ $9143 SLA A         ;
+ $9145 SLA A         ;
+ $9147 ADD A,$57     ;
+ $9149 LD H,$73      ;
+ $914B LD L,A        ;
+ $914C LD E,(HL)     ;
+ $914D LD A,E        ;
+ $914E XOR $FF       ;
+ $9150 RET Z         ;
+ $9151 INC HL        ;
+ $9152 LD D,(HL)     ;
+ $9153 INC HL        ;
+ $9154 LD A,(HL)     ;
+ $9155 EX DE,HL      ;
+ $9156 XOR A         ;
+ $9157 CALL $929C    ;
+ $915A EX DE,HL      ;
+ $915B LD A,(HL)     ;
+ $915C CP $07        ;
+ $915E JR C,$9178    ;
+ $9160 LD C,E        ;
+ $9161 SUB $06       ;
+ $9163 LD (HL),A     ;
+ $9164 LD B,A        ;
+ $9165 CP $02        ;
+ $9167 JR Z,$916D    ;
+ $9169 LD A,E        ;
+ $916A SUB $08       ;
+ $916C LD E,A        ;
+*$916D EX DE,HL      ;
+ $916E XOR A         ;
+ $916F CALL $929C    ;
+ $9172 LD A,B        ;
+ $9173 LD L,C        ;
+ $9174 CALL $929C    ;
+ $9177 RET           ;
+
+; Seems to run every loop
+;
+; Used by the routine at #R$911E.
+c$9178 CP $03        ;
+ $917A JR NC,$91F3   ;
+ $917C BIT 2,E       ;
+ $917E JR NZ,$91A5   ;
+ $9180 LD B,A        ;
+ $9181 CALL $9265    ;
+ $9184 LD A,E        ;
+ $9185 ADD A,$08     ;
+ $9187 JR C,$91A1    ;
+ $9189 DJNZ $918F    ;
+ $918B SUB $10       ;
+ $918D JR C,$91A1    ;
+*$918F LD E,A        ;
+ $9190 DEC D         ;
+ $9191 EX DE,HL      ;
+ $9192 CALL $9438    ;
+ $9195 EX DE,HL      ;
+ $9196 AND A         ;
+ $9197 JR Z,$91A1    ;
+ $9199 CP $03        ;
+ $919B JR C,$91A5    ;
+ $919D CP $05        ;
+ $919F JR Z,$91A5    ;
+*$91A1 LD A,$03      ;
+ $91A3 SUB (HL)      ;
+ $91A4 LD (HL),A     ;
+*$91A5 LD B,(HL)     ;
+ $91A6 DEC HL        ;
+ $91A7 LD D,(HL)     ;
+ $91A8 DEC HL        ;
+ $91A9 LD A,(HL)     ;
+ $91AA ADD A,$04     ;
+ $91AC DJNZ $91B0    ;
+ $91AE SUB $08       ;
+*$91B0 LD (HL),A     ;
+ $91B1 INC B         ;
+ $91B2 LD E,A        ;
+ $91B3 EX DE,HL      ;
+ $91B4 LD A,B        ;
+ $91B5 CALL $929C    ;
+ $91B8 INC DE        ;
+ $91B9 INC DE        ;
+ $91BA BIT 2,L       ;
+ $91BC RET Z         ;
+ $91BD DEC C         ;
+ $91BE RET NZ        ;
+ $91BF PUSH HL       ;
+ $91C0 LD HL,($736C) ;
+ $91C3 LD A,(HL)     ;
+ $91C4 POP HL        ;
+ $91C5 LD C,$02      ;
+ $91C7 BIT 1,A       ; {If bit 1 of the value stored @736C is set, do not jump
+ $91C9 JR Z,$91DF    ; to @91DF}
+
+; An alt routine @91DF ?
+;
+; Used by the routine at #R$91DF.
+c$91CB PUSH HL       ;
+ $91CC LD A,H        ;
+ $91CD SUB $08       ;
+ $91CF LD H,A        ;
+ $91D0 CALL $9438    ;
+ $91D3 POP HL        ;
+ $91D4 DEC A         ;
+ $91D5 JR Z,$91DB    ;
+ $91D7 DEC C         ;
+ $91D8 JR NZ,$91DF   ;
+ $91DA RET           ;
+*$91DB LD A,$03      ;
+ $91DD LD (DE),A     ;
+ $91DE RET           ;
+
+; An alt routine @91CB ?
+;
+; Used by the routines at #R$9178 and #R$91CB.
+c$91DF PUSH HL       ;
+ $91E0 LD A,H        ;
+ $91E1 ADD A,$10     ;
+ $91E3 LD H,A        ;
+ $91E4 CALL $9438    ;
+ $91E7 POP HL        ;
+ $91E8 DEC A         ;
+ $91E9 JR Z,$91EF    ;
+ $91EB DEC C         ;
+ $91EC JR NZ,$91CB   ;
+ $91EE RET           ;
+*$91EF LD A,$04      ;
+ $91F1 LD (DE),A     ;
+ $91F2 RET           ;
+
+; Seems to run every loop
+;
+; Used by the routine at #R$9178.
+c$91F3 BIT 2,D       ;
+ $91F5 JR NZ,$920E   ;
+ $91F7 SUB $02       ;
+ $91F9 LD B,A        ;
+ $91FA LD A,D        ;
+ $91FB ADD A,$10     ;
+ $91FD DJNZ $9201    ;
+ $91FF SUB $18       ;
+*$9201 LD D,A        ;
+ $9202 EX DE,HL      ;
+ $9203 CALL $9438    ;
+ $9206 EX DE,HL      ;
+ $9207 DEC A         ;
+ $9208 JR Z,$920E    ;
+ $920A LD A,$07      ;
+ $920C SUB (HL)      ;
+ $920D LD (HL),A     ;
+*$920E LD B,(HL)     ;
+ $920F DEC HL        ;
+ $9210 LD A,(HL)     ;
+ $9211 DEC HL        ;
+ $9212 LD E,(HL)     ;
+ $9213 ADD A,$04     ;
+ $9215 DEC B         ;
+ $9216 DEC B         ;
+ $9217 DJNZ $921B    ;
+ $9219 SUB $08       ;
+*$921B INC HL        ;
+ $921C LD (HL),A     ;
+ $921D LD D,A        ;
+ $921E EX DE,HL      ;
+ $921F LD A,B        ;
+ $9220 ADD A,$03     ;
+ $9222 CALL $929C    ;
+ $9225 BIT 2,H       ;
+ $9227 RET NZ        ;
+ $9228 DEC C         ;
+ $9229 RET NZ        ;
+ $922A INC DE        ;
+ $922B LD A,H        ;
+ $922C SUB $08       ;
+ $922E LD H,A        ;
+ $922F PUSH HL       ;
+ $9230 LD HL,($736C) ;
+ $9233 LD A,(HL)     ;
+ $9234 POP HL        ;
+ $9235 LD C,$02      ;
+ $9237 BIT 1,A       ; {If bit 1 of the value stored @736C is set, do not jump
+ $9239 JR Z,$9250    ; to @9250}
+
+; An alt routine to @9250 ?
+;
+; Used by the routine at #R$9250.
+c$923B PUSH HL       ;
+ $923C LD A,L        ;
+ $923D SUB $08       ;
+ $923F LD L,A        ;
+ $9240 CALL $9438    ;
+ $9243 POP HL        ;
+ $9244 CP $05        ;
+ $9246 JR Z,$924C    ;
+ $9248 DEC C         ;
+ $9249 RET Z         ;
+ $924A JR $9250      ;
+*$924C LD A,$01      ;
+ $924E LD (DE),A     ;
+ $924F RET           ;
+
+; An alt routine to @923B ?
+;
+; Used by the routines at #R$91F3 and #R$923B.
+c$9250 PUSH HL       ;
+ $9251 LD A,L        ;
+ $9252 ADD A,$10     ;
+ $9254 LD L,A        ;
+ $9255 CALL $9438    ;
+ $9258 POP HL        ;
+ $9259 CP $05        ;
+ $925B JR Z,$9261    ;
+ $925D DEC C         ;
+ $925E RET Z         ;
+ $925F JR $923B      ;
+*$9261 LD A,$02      ;
+ $9263 LD (DE),A     ;
+ $9264 RET           ;
+
+; Routine at 9265
+;
+; Used by the routine at #R$9178.
+c$9265 PUSH BC       ; {Backup registers
+ $9266 PUSH HL       ;
+ $9267 PUSH DE       ; }
+ $9268 LD A,E        ;
+ $9269 ADD A,$08     ;
+ $926B JR C,$9298    ;
+ $926D LD E,A        ;
+ $926E LD A,(HL)     ;
+ $926F CP $02        ;
+ $9271 JR Z,$9279    ;
+ $9273 LD A,E        ;
+ $9274 SUB $10       ;
+ $9276 JR C,$9298    ;
+ $9278 LD E,A        ;
+*$9279 EX DE,HL      ;
+ $927A CALL $9E34    ;
+ $927D CP $04        ;
+ $927F JR NZ,$9298   ;
+ $9281 LD (HL),$00   ;
+ $9283 LD A,(DE)     ;
+ $9284 ADD A,$06     ;
+ $9286 LD (DE),A     ;
+ $9287 POP HL        ;
+ $9288 CP $08        ;
+ $928A JR Z,$9290    ;
+ $928C LD A,L        ;
+ $928D SUB $08       ;
+ $928F LD L,A        ;
+*$9290 LD A,(DE)     ;
+ $9291 CALL $929C    ;
+ $9294 POP HL        ; {Pop all to #REGhl rather than #REGde, #REGhl, #REGbc.
+ $9295 POP HL        ;
+ $9296 POP HL        ; }
+ $9297 RET           ;
+
+; Routine to restore (POP) all #REGde, #REGhl, #REGbc registers
+;
+; Used by the routine at #R$9265.
+@label=RESTORE_16BIT_REGISTERS
+c$9298 POP DE        ;
+ $9299 POP HL        ;
+ $929A POP BC        ;
+ $929B RET           ;
+
+; Update Robot Hens?
+;
+; Used by the routines at #R$911E, #R$9178, #R$91F3 and #R$9265.
+c$929C PUSH BC       ; POKE to 201 (`RET`) to vaniquish Robot Hens
+ $929D PUSH DE       ;
+ $929E PUSH AF       ;
+ $929F PUSH HL       ;
+ $92A0 EX DE,HL      ;
+ $92A1 LD HL,$72D8   ;
+ $92A4 LD A,E        ;
+ $92A5 ADD A,$05     ;
+ $92A7 CP (HL)       ;
+ $92A8 JR C,$92C2    ;
+ $92AA SUB $0D       ;
+ $92AC JR NC,$92AF   ;
+ $92AE XOR A         ;
+*$92AF CP (HL)       ;
+ $92B0 JR NC,$92C2   ;
+ $92B2 INC HL        ;
+ $92B3 LD A,D        ;
+ $92B4 CP (HL)       ;
+ $92B5 JR NC,$92C2   ;
+ $92B7 ADD A,$1C     ;
+ $92B9 CP (HL)       ;
+ $92BA JR C,$92C2    ;
+ $92BC LD B,$06      ;
+*$92BE POP HL        ;
+ $92BF DJNZ $92BE    ;
+ $92C1 RET           ;
+
+; Routine at 92C2
+;
+; Used by the routine at #R$929C.
+c$92C2 POP HL        ;
+ $92C3 POP AF        ;
+ $92C4 PUSH AF       ;
+ $92C5 PUSH HL       ;
+ $92C6 AND A         ;
+ $92C7 JP Z,$935F    ;
+ $92CA LD IXh,A      ;
+ $92CC CP $04        ;
+ $92CE JR NZ,$92D1   ;
+ $92D0 DEC A         ;
+*$92D1 EX DE,HL      ;
+ $92D2 CP $07        ;
+ $92D4 JR NC,$92E7   ;
+ $92D6 CP $03        ;
+ $92D8 JR NZ,$92E1   ;
+ $92DA BIT 2,D       ;
+ $92DC JR Z,$92E7    ;
+ $92DE INC A         ;
+ $92DF JR $92E7      ;
+*$92E1 BIT 2,E       ;
+ $92E3 JR Z,$92E7    ;
+ $92E5 ADD A,$04     ;
+*$92E7 LD B,$00      ;
+ $92E9 LD C,A        ;
+ $92EA SLA C         ;
+ $92EC SLA C         ;
+ $92EE SLA C         ;
+ $92F0 SLA C         ;
+ $92F2 SLA C         ;
+ $92F4 RL B          ;
+ $92F6 LD HL,$900E   ;
+ $92F9 ADD HL,BC     ;
+ $92FA EX DE,HL      ;
+ $92FB LD C,$02      ;
+ $92FD LD A,L        ;
+ $92FE CP $F9        ;
+ $9300 JR C,$9303    ;
+ $9302 DEC C         ;
+*$9303 CALL $9404    ;
+ $9306 LD B,$10      ;
+*$9308 LD A,(DE)     ;
+ $9309 DEC C         ;
+ $930A JR Z,$9317    ;
+ $930C INC DE        ;
+ $930D OR (HL)       ;
+ $930E LD (HL),A     ;
+ $930F INC HL        ;
+ $9310 LD A,(DE)     ;
+ $9311 OR (HL)       ;
+ $9312 DEC DE        ;
+ $9313 DEC DE        ;
+ $9314 DEC DE        ;
+ $9315 LD (HL),A     ;
+ $9316 DEC HL        ;
+*$9317 INC C         ;
+ $9318 DEC H         ;
+ $9319 LD A,H        ;
+ $931A AND $07       ;
+ $931C CP $07        ;
+ $931E JR NZ,$932E   ;
+ $9320 LD A,H        ;
+ $9321 ADD A,$08     ;
+ $9323 LD H,A        ;
+ $9324 LD A,L        ;
+ $9325 SUB $20       ;
+ $9327 LD L,A        ;
+ $9328 JR NC,$932E   ;
+ $932A LD A,H        ;
+ $932B SUB $08       ;
+ $932D LD H,A        ;
+*$932E DJNZ $9308    ;
+ $9330 POP HL        ;
+ $9331 PUSH HL       ;
+ $9332 LD D,$02      ;
+ $9334 LD A,IXh      ;
+ $9336 CP $07        ;
+ $9338 JR NC,$933F   ;
+ $933A BIT 2,L       ;
+ $933C JR NZ,$933F   ;
+ $933E DEC D         ;
+*$933F LD E,$03      ;
+ $9341 BIT 2,H       ;
+ $9343 JR NZ,$9346   ;
+ $9345 DEC E         ;
+*$9346 CALL $93DD    ;
+*$9349 LD B,D        ;
+ $934A PUSH HL       ;
+*$934B LD (HL),$05   ;
+ $934D INC HL        ;
+ $934E DJNZ $934B    ;
+ $9350 POP HL        ;
+ $9351 LD BC,$0020   ;
+ $9354 AND A         ;
+ $9355 SBC HL,BC     ;
+ $9357 DEC E         ;
+ $9358 JR NZ,$9349   ;
+ $935A POP HL        ;
+ $935B POP AF        ;
+ $935C POP DE        ;
+ $935D POP BC        ;
+ $935E RET           ;
+
+; Routine at 935F
+;
+; Used by the routine at #R$92C2.
+c$935F LD IXl,$02    ;
+ $9362 LD A,L        ;
+ $9363 CP $F8        ;
+ $9365 JR C,$9369    ;
+ $9367 DEC IXl       ;
+*$9369 LD A,H        ;
+ $936A AND $F8       ;
+ $936C LD H,A        ;
+ $936D CALL $9404    ;
+ $9370 EX DE,HL      ;
+ $9371 POP HL        ;
+ $9372 PUSH HL       ;
+ $9373 CALL $93FE    ;
+ $9376 PUSH HL       ;
+ $9377 POP BC        ;
+ $9378 POP HL        ;
+ $9379 PUSH HL       ;
+ $937A CALL $93DD    ;
+ $937D LD IXh,$03    ;
+*$9380 PUSH IX       ;
+ $9382 PUSH HL       ;
+ $9383 PUSH BC       ;
+ $9384 PUSH DE       ;
+*$9385 PUSH HL       ;
+ $9386 LD A,(BC)     ;
+ $9387 ADD A,$4F     ;
+ $9389 LD H,$98      ;
+ $938B LD L,A        ;
+ $938C LD A,(HL)     ;
+ $938D POP HL        ;
+ $938E LD (HL),A     ;
+ $938F PUSH HL       ;
+ $9390 PUSH BC       ;
+ $9391 LD A,(BC)     ;
+ $9392 SLA A         ;
+ $9394 SLA A         ;
+ $9396 SLA A         ;
+ $9398 LD HL,$84F7   ; set #REGhl to last byte of GFX_TILE_BLANK
+ $939B LD B,$00      ;
+ $939D LD C,A        ;
+ $939E ADD HL,BC     ;
+ $939F PUSH DE       ;
+ $93A0 LD B,$08      ;
+*$93A2 LD A,(HL)     ;
+ $93A3 LD (DE),A     ;
+ $93A4 DEC D         ;
+ $93A5 DEC HL        ;
+ $93A6 DJNZ $93A2    ;
+ $93A8 POP DE        ;
+ $93A9 INC DE        ;
+ $93AA POP BC        ;
+ $93AB INC BC        ;
+ $93AC POP HL        ;
+ $93AD INC HL        ;
+ $93AE DEC IXl       ;
+ $93B0 JR NZ,$9385   ;
+ $93B2 POP DE        ;
+ $93B3 POP BC        ;
+ $93B4 POP HL        ;
+ $93B5 LD A,E        ;
+ $93B6 SUB $20       ;
+ $93B8 LD E,A        ;
+ $93B9 JR NC,$93BF   ;
+ $93BB LD A,D        ;
+ $93BC SUB $08       ;
+ $93BE LD D,A        ;
+*$93BF PUSH DE       ;
+ $93C0 LD DE,$0020   ;
+ $93C3 AND A         ;
+ $93C4 SBC HL,DE     ;
+ $93C6 PUSH HL       ;
+ $93C7 PUSH BC       ;
+ $93C8 POP HL        ;
+ $93C9 ADD HL,DE     ;
+ $93CA PUSH HL       ;
+ $93CB POP BC        ;
+ $93CC POP HL        ;
+ $93CD POP DE        ;
+ $93CE POP IX        ;
+ $93D0 DEC IXh       ;
+ $93D2 JR NZ,$9380   ;
+ $93D4 POP HL        ;
+ $93D5 POP AF        ;
+ $93D6 POP DE        ;
+ $93D7 POP BC        ;
+ $93D8 LD IX,$72D8   ;
+ $93DC RET           ;
+
+; Routine at 93DD
+;
+; Used by the routines at #R$92C2 and #R$935F.
+c$93DD PUSH AF       ;
+ $93DE PUSH DE       ;
+ $93DF LD A,$BF      ;
+ $93E1 SUB H         ;
+ $93E2 LD H,$00      ;
+ $93E4 EX DE,HL      ;
+ $93E5 LD HL,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
+ $93E8 SRL E         ;
+ $93EA SRL E         ;
+ $93EC SRL E         ;
+ $93EE ADD HL,DE     ;
+ $93EF AND $F8       ;
+ $93F1 SLA A         ;
+ $93F3 RL D          ;
+ $93F5 SLA A         ;
+ $93F7 RL D          ;
+ $93F9 LD E,A        ;
+ $93FA ADD HL,DE     ;
+ $93FB POP DE        ;
+ $93FC POP AF        ;
+ $93FD RET           ;
+
+; Backup/restore #REGaf, so routine can be called safely.
+;
+; Used by the routine at #R$935F.
+c$93FE PUSH AF       ;
+ $93FF CALL $9E34    ;
+ $9402 POP AF        ;
+ $9403 RET           ;
+
+; Routine at 9404
+;
+; Used by the routines at #R$92C2 and #R$935F.
+c$9404 PUSH AF       ; {Backup #REGaf, #REGde, #REGbc registers
+ $9405 PUSH DE       ;
+ $9406 PUSH BC       ; }
+ $9407 EX DE,HL      ;
+ $9408 LD HL,$4000   ; Load #REGhl with start of DISPLAY_FILE.
+ $940B LD BC,$0800   ; Load #REGbc with value of 2048 (1/3 of screen)
+ $940E LD A,D        ;
+ $940F CP $80        ;
+ $9411 JR NC,$9419   ;
+ $9413 CP $40        ;
+ $9415 JR NC,$9418   ;
+ $9417 ADD HL,BC     ;
+*$9418 ADD HL,BC     ;
+*$9419 AND $38       ;
+ $941B LD C,A        ;
+ $941C LD A,$38      ;
+ $941E SUB C         ;
+ $941F SLA A         ;
+ $9421 SLA A         ;
+ $9423 LD B,$00      ;
+ $9425 LD C,A        ;
+ $9426 ADD HL,BC     ;
+ $9427 LD A,D        ;
+ $9428 AND $07       ;
+ $942A XOR $07       ;
+ $942C LD D,A        ;
+ $942D SRL E         ;
+ $942F SRL E         ;
+ $9431 SRL E         ;
+ $9433 ADD HL,DE     ;
+ $9434 POP BC        ; {Restore #REGaf, #REGde, #REGbc registers
+ $9435 POP DE        ;
+ $9436 POP AF        ; }
+ $9437 RET           ;
+
+; Save/restore #REGhl so routine can be called safely
+;
+; Used by the routines at #R$9178, #R$91CB, #R$91DF, #R$91F3, #R$923B and
+; #R$9250.
+c$9438 PUSH HL       ;
+ $9439 CALL $9E34    ;
+ $943C POP HL        ;
+ $943D RET           ;
+
+; Data block at 943E
+b$943E DEFB $F1,$C9,$E5,$CD,$34,$9E,$E1,$C9
+ $9446 DEFB $00,$08,$7A,$FE,$80,$30,$06,$FE
+ $944E DEFB $40,$30,$01,$09,$09,$E6,$38,$4F
+ $9456 DEFB $3E,$38,$91,$CB,$27
+
+; Some of these byte are copied to $7357.
+b$945B DEFB $CB,$27,$06,$00,$4F,$09,$7A,$E6
+ $9463 DEFB $07,$EE,$07,$57,$CB,$3B,$CB,$3B
+ $946B DEFB $CB,$3B,$19,$C1,$D1,$08,$68,$88
+ $9473 DEFB $02,$00,$48,$68,$01,$00,$40,$48
+ $947B DEFB $01,$00,$98,$08,$02,$00,$48,$28
+ $9483 DEFB $01,$00,$0C,$10,$08,$02,$00,$48
+ $948B DEFB $88,$02,$00,$E0,$48,$02,$00,$90
+ $9493 DEFB $48,$01,$00,$A8,$88,$01,$00,$0C
+ $949B DEFB $10,$68,$01,$00,$E8,$20,$01,$00
+ $94A3 DEFB $70,$80,$02,$00,$64,$50,$03,$00
+ $94AB DEFB $0C,$28,$04,$00,$10,$28,$08,$01
+ $94B3 DEFB $00,$D8,$08,$02,$00,$D8,$88,$02
+ $94BB DEFB $00,$78,$88,$02,$00,$58,$08,$01
+ $94C3 DEFB $00,$10,$10,$28,$01,$00,$28,$48
+ $94CB DEFB $02,$00,$28,$68,$01,$00,$A8,$48
+ $94D3 DEFB $02,$00,$E0,$08,$02,$00,$10,$18
+ $94DB DEFB $08,$01,$00,$18,$68,$01,$00,$C0
+ $94E3 DEFB $28,$02,$00,$E8,$68,$02,$00,$A0
+ $94EB DEFB $48,$02,$00,$0C,$C8,$88,$01,$00
+ $94F3 DEFB $0C,$58,$04,$00,$BC,$40,$03,$00
+ $94FB DEFB $28,$68,$02,$00,$0C,$18,$04,$00
+ $9503 DEFB $0C,$7C,$70,$04,$00,$7C,$30,$04
+ $950B DEFB $00,$A0,$08,$01,$00,$38,$48,$01
+ $9513 DEFB $00,$C0,$48,$02,$00,$00,$00,$00
+ $951B DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $9523 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $952B DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $9533 DEFB $00,$00,$00,$00,$00
+
+; Routine at 9538
+;
+; Used by the routines at #R$98E6, #R$A0C8, #R$A22A and #R$A2B5.
+c$9538 PUSH AF       ;
+ $9539 PUSH BC       ;
+ $953A PUSH DE       ;
+ $953B PUSH HL       ;
+ $953C LD B,$03      ;
+ $953E LD A,L        ;
+ $953F CP $F1        ;
+ $9541 JR C,$9544    ;
+ $9543 DEC B         ;
+*$9544 LD C,$03      ;
+ $9546 LD A,H        ;
+ $9547 CP $11        ;
+ $9549 JR NC,$954C   ;
+ $954B DEC C         ;
+*$954C CALL $9584    ;
+ $954F CALL $95A6    ;
+*$9552 PUSH BC       ;
+ $9553 PUSH DE       ;
+ $9554 PUSH HL       ;
+*$9555 LD A,(HL)     ;
+ $9556 CP $09        ;
+ $9558 JR C,$955E    ;
+ $955A LD A,$06      ;
+ $955C JR $9566      ;
+*$955E ADD A,$4F     ;
+ $9560 PUSH BC       ;
+ $9561 LD B,$98      ;
+ $9563 LD C,A        ;
+ $9564 LD A,(BC)     ;
+ $9565 POP BC        ;
+*$9566 LD (DE),A     ;
+ $9567 INC DE        ;
+ $9568 INC HL        ;
+ $9569 DJNZ $9555    ;
+ $956B POP HL        ;
+ $956C LD DE,$0020   ;
+ $956F AND A         ;
+ $9570 SBC HL,DE     ;
+ $9572 POP DE        ;
+ $9573 PUSH HL       ;
+ $9574 EX DE,HL      ;
+ $9575 LD DE,$0020   ;
+ $9578 ADD HL,DE     ;
+ $9579 EX DE,HL      ;
+ $957A POP HL        ;
+ $957B POP BC        ;
+ $957C DEC C         ;
+ $957D JR NZ,$9552   ;
+ $957F POP HL        ;
+ $9580 POP DE        ;
+ $9581 POP BC        ;
+ $9582 POP AF        ;
+ $9583 RET           ;
+
+; Routine at 9584
+;
+; Used by the routine at #R$9538.
+c$9584 PUSH AF       ;
+ $9585 PUSH HL       ;
+ $9586 LD A,$BF      ;
+ $9588 SUB H         ;
+ $9589 LD H,$00      ;
+ $958B EX DE,HL      ;
+ $958C LD HL,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
+ $958F SRL E         ;
+ $9591 SRL E         ;
+ $9593 SRL E         ;
+ $9595 ADD HL,DE     ;
+ $9596 AND $F8       ;
+ $9598 SLA A         ;
+ $959A RL D          ;
+ $959C SLA A         ;
+ $959E RL D          ;
+ $95A0 LD E,A        ;
+ $95A1 ADD HL,DE     ;
+ $95A2 EX DE,HL      ;
+ $95A3 POP HL        ;
+ $95A4 POP AF        ;
+ $95A5 RET           ;
+
+; Routine at 95A6
+;
+; Used by the routine at #R$9538.
+c$95A6 PUSH AF       ;
+ $95A7 PUSH DE       ;
+ $95A8 EX DE,HL      ;
+ $95A9 LD HL,$61A8   ;
+ $95AC LD A,D        ;
+ $95AD LD D,$00      ;
+ $95AF SRL E         ;
+ $95B1 SRL E         ;
+ $95B3 SRL E         ;
+ $95B5 ADD HL,DE     ;
+ $95B6 AND $F8       ;
+ $95B8 LD E,A        ;
+ $95B9 SLA E         ;
+ $95BB RL D          ;
+ $95BD SLA E         ;
+ $95BF RL D          ;
+ $95C1 ADD HL,DE     ;
+ $95C2 POP DE        ;
+ $95C3 POP AF        ;
+ $95C4 RET           ;
+
+; Unused?
+s$95C5 DEFS $6B
+
+; Home screen/high score table text data
+;
+; As displayed after game load, and game over. Note: the screen is loaded
+; bottom to top.
+@label=HOME_SCREEN
+b$9630 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $9638 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $9640 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $9648 DEFB $00,$00,$00,$00
+ $964C DEFM "by"                            ; {"by n.alderton"
+ $964E DEFB $00
+ $964F DEFB $00
+ $9650 DEFM "n.alderton"                    ; }
+ $965A DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $9662 DEFB $00,$00,$00,$00,$00,$00
+ $9668 DEFM "1"                             ; {"1 to 4 players"
+ $9669 DEFB $00
+ $966A DEFM "to"
+ $966C DEFB $00
+ $966D DEFM "4"
+ $966E DEFB $00
+ $966F DEFM "players"                       ; }
+ $9676 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $967E DEFB $00,$00,$00,$00,$00,$00,$00
+ $9685 DEFM "of"                            ; {"of skill for"
+ $9687 DEFB $00
+ $9688 DEFM "skill"
+ $968D DEFB $00
+ $968E DEFM "for"                           ; }
+ $9691 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $9699 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $96A1 DEFB $00,$00,$00
+ $96A4 DEFM "a"                             ; {"a game"
+ $96A5 DEFB $00
+ $96A6 DEFM "game"                          ; }
+ $96AA DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $96B2 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $96BA DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $96C2 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $96CA DEFB $00,$00,$00,$00,$82,$80,$81,$82
+ $96D2 DEFB $00,$82,$80,$00,$00,$00,$00,$00
+ $96DA DEFB $00,$00,$86,$00,$84,$8A,$89,$81
+ $96E2 DEFB $84,$00,$00,$00,$00,$00,$00,$00
+ $96EA DEFB $86,$80,$85,$82,$87,$82,$80,$7F
+ $96F2 DEFB $00,$00,$82,$80,$80,$80,$82,$80
+ $96FA DEFB $82,$80,$80,$81,$81,$82,$81,$82
+ $9702 DEFB $84,$00,$86,$84,$84,$84,$84,$00
+ $970A DEFB $86,$83,$00,$84,$89,$82,$86,$80
+ $9712 DEFB $84,$84,$84,$84,$86,$80,$84,$85
+ $971A DEFB $81,$86,$89,$82,$00,$00,$00,$00
+ $9722 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $972A DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $9732 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $973A DEFB $00,$00,$00
+ $973D DEFM "presents"                      ; "presents"
+ $9745 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $974D DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $9755 DEFB $00
+ $9756 DEFM "A"                             ; {"A & F SOFTWARE"
+ $9757 DEFB $00
+ $9758 DEFM "&"
+ $9759 DEFB $00
+ $975A DEFM "F"
+ $975B DEFB $00
+ $975C DEFM "SOFTWARE"                      ; }
+
+; Data block at 9764
+b$9764 DEFB $0B,$0C,$0D,$0E,$0F,$10,$11
+
+; Data block at 976B
+b$976B DEFB $9F
+
+; Data block at 976C
+b$976C DEFB $00,$00,$9B,$9C,$9D,$00
+
+; Data block at 9772
+b$9772 DEFB $9E
+
+; Data block at 9773
+b$9773 DEFB $9F
+
+; Data block at 9774
+b$9774 DEFB $00,$00,$1B,$1C,$1D,$00
+
+; Data block at 977A
+b$977A DEFB $9F
+
+; Data block at 977B
+b$977B DEFB $9E
+
+; Data block at 977C
+b$977C DEFB $9E,$9E,$00,$00,$12,$13,$14,$00
+
+; Data block at 9784
+b$9784 DEFB $A7
+
+; Data block at 9785
+b$9785 DEFB $9E,$9E
+
+; Data block at 9787
+b$9787 DEFB $05,$05,$FF,$00,$05,$05,$FF,$00
+ $978F DEFB $05,$05,$FF,$00,$E8,$54,$40,$03
+ $9797 DEFB $F2,$54,$90,$03,$F9,$54,$C8,$03
+ $979F DEFB $EF,$54,$78,$03,$FE,$54,$F0,$03
+ $97A7 DEFB $05,$05,$FF,$00,$6E,$73,$00,$00
+
+; High score table with name/score columns
+;
+; Probably ranked here 1-10.
+@label=SCOREBOARD
+t$97AF DEFM " "        ; start byte?
+ $97B0 DEFB $8F
+ $97B1 DEFB $90
+ $97B2 DEFB $91
+ $97B3 DEFB $92
+ $97B4 DEFB $93
+ $97B5 DEFB $94
+ $97B6 DEFB $95
+ $97B7 DEFB $96
+ $97B8 DEFM " 001000 "
+ $97C0 DEFB $8F
+ $97C1 DEFB $90
+ $97C2 DEFB $91
+ $97C3 DEFB $92
+ $97C4 DEFB $93
+ $97C5 DEFB $94
+ $97C6 DEFB $95
+ $97C7 DEFB $96
+ $97C8 DEFM " 001000 "
+ $97D0 DEFB $8F
+ $97D1 DEFB $90
+ $97D2 DEFB $91
+ $97D3 DEFB $92
+ $97D4 DEFB $93
+ $97D5 DEFB $94
+ $97D6 DEFB $95
+ $97D7 DEFB $96
+ $97D8 DEFM " 001000 "
+ $97E0 DEFB $8F
+ $97E1 DEFB $90
+ $97E2 DEFB $91
+ $97E3 DEFB $92
+ $97E4 DEFB $93
+ $97E5 DEFB $94
+ $97E6 DEFB $95
+ $97E7 DEFB $96
+ $97E8 DEFM " 001000 "
+ $97F0 DEFB $8F
+ $97F1 DEFB $90
+ $97F2 DEFB $91
+ $97F3 DEFB $92
+ $97F4 DEFB $93
+ $97F5 DEFB $94
+ $97F6 DEFB $95
+ $97F7 DEFB $96
+ $97F8 DEFM " 001000 "
+ $9800 DEFB $8F
+ $9801 DEFB $90
+ $9802 DEFB $91
+ $9803 DEFB $92
+ $9804 DEFB $93
+ $9805 DEFB $94
+ $9806 DEFB $95
+ $9807 DEFB $96
+
+; Bottom five of scoreboard
+t$9808 DEFM " 001000 "
+ $9810 DEFB $8F
+ $9811 DEFB $90
+ $9812 DEFB $91
+ $9813 DEFB $92
+ $9814 DEFB $93
+ $9815 DEFB $94
+ $9816 DEFB $95
+ $9817 DEFB $96
+ $9818 DEFM " 001000 "
+ $9820 DEFB $8F
+ $9821 DEFB $90
+ $9822 DEFB $91
+ $9823 DEFB $92
+ $9824 DEFB $93
+ $9825 DEFB $94
+ $9826 DEFB $95
+ $9827 DEFB $96
+ $9828 DEFM " 001000 "
+ $9830 DEFB $8F
+ $9831 DEFB $90
+ $9832 DEFB $91
+ $9833 DEFB $92
+ $9834 DEFB $93
+ $9835 DEFB $94
+ $9836 DEFB $95
+ $9837 DEFB $96
+ $9838 DEFM " 001000 "
+ $9840 DEFB $8F
+ $9841 DEFB $90
+ $9842 DEFB $91
+ $9843 DEFB $92
+ $9844 DEFB $93
+ $9845 DEFB $94
+ $9846 DEFB $95
+ $9847 DEFB $96
+ $9848 DEFM " 001000"
+
+; Unknown/unused bytes.
+b$984F DEFB $06,$03,$03,$07,$03,$04,$06,$07
+ $9857 DEFB $07
+
+; Routine at 9858
+;
+; Used by the routines at #R$99DC and #R$AE9C.
+c$9858 LD HL,($5C3D) ; reads SYSVAR_ERR_SP
+ $985B DEC HL        ;
+ $985C LD A,H        ;
+ $985D OR L          ;
+*$985E JR NZ,$985E   ;
+ $9860 LD HL,$7370   ;
+ $9863 LD A,($72DC)  ;
+ $9866 AND $0F       ;
+ $9868 JR NZ,$987E   ;
+ $986A LD A,(HL)     ;
+ $986B AND A         ;
+ $986C JR Z,$987E    ;
+ $986E DEC (HL)      ;
+ $986F AND $03       ;
+ $9871 JR NZ,$987E   ;
+ $9873 LD A,(HL)     ;
+ $9874 AND $1F       ;
+ $9876 ADD A,$06     ;
+ $9878 LD H,A        ;
+ $9879 LD L,$02      ;
+ $987B CALL $9CA4    ;
+*$987E LD A,($7325)  ;
+ $9881 AND A         ;
+ $9882 JR Z,$98B7    ;
+ $9884 LD A,($72DC)  ;
+ $9887 DEC A         ;
+ $9888 JR NZ,$9895   ;
+ $988A LD L,$01      ;
+ $988C LD A,($72D9)  ;
+ $988F XOR $FF       ;
+ $9891 LD H,A        ;
+ $9892 CALL $9CA4    ;
+*$9895 LD A,($7328)  ;
+ $9898 PUSH AF       ;
+ $9899 CALL $A21C    ;
+ $989C POP AF        ;
+ $989D DEC A         ;
+ $989E JR NZ,$98B7   ;
+ $98A0 LD HL,$7357   ;
+ $98A3 LD B,$05      ;
+*$98A5 LD E,(HL)     ;
+ $98A6 LD A,E        ;
+ $98A7 XOR $FF       ;
+ $98A9 JR Z,$98B7    ;
+ $98AB INC HL        ;
+ $98AC LD D,(HL)     ;
+ $98AD INC HL        ;
+ $98AE INC HL        ;
+ $98AF INC HL        ;
+ $98B0 CALL $9E66    ;
+ $98B3 AND A         ;
+ $98B4 RET NZ        ;
+ $98B5 DJNZ $98A5    ;
+*$98B7 LD HL,$72DC   ;
+ $98BA DEC (HL)      ;
+ $98BB JP NZ,$99DC   ;
+ $98BE LD (HL),$82   ;
+ $98C0 LD A,$FE      ;
+ $98C2 IN A,($FE)    ;
+ $98C4 BIT 0,A       ;
+ $98C6 JR NZ,$98E6   ;
+ $98C8 LD A,$BF      ;
+ $98CA IN A,($FE)    ;
+ $98CC BIT 4,A       ;
+ $98CE JR NZ,$98DA   ;
+*$98D0 LD A,$FD      ;
+ $98D2 IN A,($FE)    ;
+ $98D4 BIT 1,A       ;
+ $98D6 JR NZ,$98D0   ;
+ $98D8 JR $98E6      ;
+*$98DA LD A,$FD      ;
+ $98DC IN A,($FE)    ; {Called after pressing `CAPSHIFT`, and waiting for
+ $98DE BIT 0,A       ; keyboard A or H.
+ $98E0 JR NZ,$98E6   ;
+ $98E2 POP HL        ;
+ $98E3 JP $A410      ; }
+
+; Routine at 98E6
+;
+; Used by the routine at #R$9858.
+c$98E6 LD A,($7347)    ;
+ $98E9 AND A           ;
+ $98EA JR Z,$98F9      ;
+ $98EC LD HL,$7345     ;
+ $98EF DEC (HL)        ; POKE to 0 (`NOP`) to get infinite TIME
+ $98F0 JR NZ,$98F9     ;
+ $98F2 LD (HL),$32     ;
+ $98F4 LD B,$00        ;
+ $98F6 CALL $A1B8      ;
+*$98F9 LD HL,$734C     ;
+ $98FC DEC (HL)        ; POKE to 0 (`NOP`) to make giant duck very slow
+ $98FD JR NZ,$9904     ; POKE to 24 (`JR nnnn`) to vaniquish giant duck
+ $98FF LD (HL),$0C     ;
+ $9901 CALL $A0C8      ;
+*$9904 LD HL,$733C     ;
+ $9907 DEC (HL)        ;
+ $9908 JR NZ,$991F     ;
+ $990A LD (HL),$02     ;
+ $990C CALL $A014      ;
+ $990F LD A,($7355)    ;
+ $9912 AND A           ;
+ $9913 JR Z,$991F      ;
+ $9915 LD A,($72D9)    ;
+ $9918 INC A           ;
+ $9919 LD ($72D9),A    ;
+ $991C CP $A5          ;
+ $991E RET NC          ;
+*$991F CALL $99DF      ;
+ $9922 LD HL,$7346     ;
+ $9925 DEC (HL)        ; POKE to 0 (`NOP`) to get infinite BONUS
+ $9926 JR NZ,$9935     ;
+ $9928 LD (HL),$0A     ;
+ $992A LD B,$01        ;
+ $992C CALL $A1B8      ;
+ $992F LD HL,$0402     ;
+ $9932 CALL $9CA4      ;
+*$9935 LD HL,$736B     ;
+ $9938 DEC (HL)        ; POKE to `0` (NOP) to slow Robot Hens
+ $9939 JR NZ,$9949     ;
+ $993B LD C,$03        ;
+ $993D LD A,($6EEB)    ;
+ $9940 CP $20          ;
+ $9942 JR C,$9945      ;
+ $9944 DEC C           ;
+*$9945 LD (HL),C       ;
+ $9946 CALL $911E      ;
+*$9949 LD HL,($72D8)   ;
+ $994C CALL $9538      ;
+ $994F LD A,($7325)    ;
+ $9952 AND A           ;
+ $9953 JR NZ,$99C1     ;
+ $9955 LD A,($7337)    ;
+ $9958 IN A,($FE)      ; JUMP keypress
+ $995A AND $1F         ;
+ $995C LD C,A          ;
+ $995D LD A,($7336)    ;
+ $9960 OR C            ;
+ $9961 CP $1F          ;
+ $9963 JR NZ,$9975     ;
+ $9965 LD A,($7339)    ;
+ $9968 IN A,($FE)      ;
+ $996A AND $1F         ;
+ $996C LD C,A          ;
+ $996D LD A,($7338)    ;
+ $9970 OR C            ;
+ $9971 CP $1F          ;
+ $9973 JR Z,$99C1      ;
+*$9975 LD IX,$72D8     ; {Load bytes into @72D8 + 77, 78, 79, 80, 82, and 125.
+ $9979 LD (IX+$4D),$02 ;
+ $997D LD (IX+$4F),$8C ;
+ $9981 LD (IX+$50),$00 ;
+ $9985 LD (IX+$52),$01 ;
+ $9989 LD (IX+$7D),$00 ; }
+ $998D LD D,$01        ;
+ $998F LD E,$00        ;
+ $9991 LD A,($7335)    ;
+ $9994 IN A,($FE)      ;
+ $9996 AND $1F         ;
+ $9998 LD C,A          ;
+ $9999 LD A,($7334)    ;
+ $999C OR C            ;
+ $999D CP $1F          ;
+ $999F JR NZ,$99B9     ;
+ $99A1 LD D,$FF        ;
+ $99A3 LD E,$04        ;
+ $99A5 LD A,($7333)    ;
+ $99A8 IN A,($FE)      ;
+ $99AA AND $1F         ;
+ $99AC LD C,A          ;
+ $99AD LD A,($7332)    ;
+ $99B0 OR C            ;
+ $99B1 CP $1F          ;
+ $99B3 JR NZ,$99B9     ;
+ $99B5 INC D           ;
+ $99B6 LD E,(IX+$03)   ;
+*$99B9 LD (IX+$4E),D   ;
+ $99BC LD (IX+$03),E   ;
+ $99BF JR $99DC        ;
+*$99C1 LD A,($7325)    ;
+ $99C4 AND A           ;
+ $99C5 JR NZ,$99D9     ;
+ $99C7 CALL $9F60      ;
+ $99CA LD A,($72DB)    ;
+ $99CD CP $0D          ;
+ $99CF CALL NZ,$9D08   ;
+ $99D2 LD A,($7355)    ;
+ $99D5 AND A           ;
+ $99D6 CALL Z,$B34C    ;
+*$99D9 CALL $9E98      ;
+
+; Jump point
+;
+; Used by the routines at #R$9858 and #R$98E6.
+c$99DC JP $9858      ;
+
+; Routine at 99DF
+;
+; Used by the routine at #R$98E6.
+c$99DF LD HL,($72D8) ;
+ $99E2 LD A,H        ;
+ $99E3 SUB $08       ;
+ $99E5 LD H,A        ;
+ $99E6 LD A,L        ;
+ $99E7 ADD A,$08     ;
+ $99E9 LD L,A        ;
+ $99EA CALL $9E34    ;
+ $99ED CP $03        ;
+ $99EF JR NZ,$9A17   ;
+ $99F1 LD (HL),$00   ;
+ $99F3 LD A,($6EEB)  ;
+ $99F6 SRL A         ;
+ $99F8 SRL A         ;
+ $99FA CP $09        ;
+ $99FC JR C,$9A00    ;
+ $99FE LD A,$09      ;
+*$9A00 LD B,A        ;
+ $9A01 INC B         ;
+ $9A02 XOR A         ;
+*$9A03 ADD A,$0A     ;
+ $9A05 DJNZ $9A03    ;
+ $9A07 LD B,A        ;
+ $9A08 CALL $A3A7    ;
+ $9A0B LD A,$FF      ;
+ $9A0D LD ($7370),A  ;
+ $9A10 LD HL,$6EE6   ;
+ $9A13 DEC (HL)      ;
+ $9A14 RET NZ        ;
+ $9A15 POP HL        ;
+ $9A16 RET           ;
+
+; Routine at 9A17
+;
+; Used by the routine at #R$99DF.
+c$9A17 CP $04        ;
+ $9A19 RET NZ        ;
+ $9A1A LD (HL),$00   ;
+ $9A1C LD B,$05      ;
+ $9A1E CALL $A3A7    ;
+ $9A21 LD HL,$FFFF   ;
+ $9A24 LD ($7345),HL ;
+ $9A27 LD A,L        ;
+ $9A28 LD ($7370),A  ;
+ $9A2B RET           ;
+
+; Unused code?
+c$9A2C AND E         ;
+ $9A2D LD HL,$FFFF   ;
+ $9A30 LD ($7345),HL ;
+ $9A33 LD A,L        ;
+ $9A34 LD ($7370),A  ;
+ $9A37 RET           ;
+
+; Unused code?
+c$9A38 DEC B         ;
+ $9A39 CALL $A3A7    ;
+ $9A3C LD HL,$FFFF   ;
+ $9A3F LD ($7345),HL ;
+ $9A42 LD A,L        ;
+ $9A43 LD ($7370),A  ;
+ $9A46 RET           ;
+
+; Unused?
+b$9A47 DEFB $00,$00,$00,$00,$00
+
+; Routine at 9A4C
+;
+; Used by the routines at #R$9D08, #R$9E98, #R$A0C8, #R$A278 and #R$A37F.
+c$9A4C PUSH AF       ;
+ $9A4D PUSH BC       ;
+ $9A4E PUSH DE       ;
+ $9A4F PUSH IX       ;
+ $9A51 PUSH HL       ;
+ $9A52 LD C,L        ;
+ $9A53 LD HL,$8DF0   ; set #REGhl=SPRITES_FARMER
+ $9A56 LD E,A        ;
+ $9A57 XOR A         ;
+ $9A58 RL E          ;
+ $9A5A RLA           ;
+ $9A5B RL E          ;
+ $9A5D RLA           ;
+ $9A5E RL E          ;
+ $9A60 RLA           ;
+ $9A61 RL E          ;
+ $9A63 RLA           ;
+ $9A64 RL E          ;
+ $9A66 RLA           ;
+ $9A67 LD D,A        ;
+ $9A68 ADD HL,DE     ;
+ $9A69 LD DE,$72A0   ; {draw SPRITES_FARMER in ANIMBUF2?
+ $9A6C LD B,$10      ;
+ $9A6E XOR A         ;
+*$9A6F LDI           ;
+ $9A71 LDI           ;
+ $9A73 INC BC        ;
+ $9A74 INC BC        ;
+ $9A75 LD (DE),A     ;
+ $9A76 INC DE        ;
+ $9A77 DJNZ $9A6F    ; }
+ $9A79 LD A,$07      ;
+ $9A7B AND C         ;
+ $9A7C CP $00        ;
+ $9A7E JR Z,$9A93    ;
+*$9A80 LD B,$10      ;
+ $9A82 LD HL,$72A0   ;
+*$9A85 SRL (HL)      ;
+ $9A87 INC HL        ;
+ $9A88 RR (HL)       ;
+ $9A8A INC HL        ;
+ $9A8B RR (HL)       ;
+ $9A8D INC HL        ;
+ $9A8E DJNZ $9A85    ;
+ $9A90 DEC A         ;
+ $9A91 JR NZ,$9A80   ;
+*$9A93 POP HL        ;
+ $9A94 PUSH HL       ;
+ $9A95 LD IX,$72DD   ;
+ $9A99 EX DE,HL      ;
+ $9A9A LD HL,$61A8   ;
+ $9A9D LD A,D        ;
+ $9A9E AND $F8       ;
+ $9AA0 LD B,$00      ;
+ $9AA2 SLA A         ;
+ $9AA4 RL B          ;
+ $9AA6 SLA A         ;
+ $9AA8 RL B          ;
+ $9AAA LD C,A        ;
+ $9AAB ADD HL,BC     ;
+ $9AAC LD B,$00      ;
+ $9AAE LD C,E        ;
+ $9AAF SRL C         ;
+ $9AB1 SRL C         ;
+ $9AB3 SRL C         ;
+ $9AB5 ADD HL,BC     ;
+ $9AB6 EX DE,HL      ;
+ $9AB7 LD BC,$0303   ;
+*$9ABA PUSH BC       ;
+ $9ABB LD HL,$84F0   ; set #REGhl=GFX_TILE_BLANK
+ $9ABE LD A,(DE)     ;
+ $9ABF LD B,$00      ;
+ $9AC1 SLA A         ;
+ $9AC3 RL B          ;
+ $9AC5 SLA A         ;
+ $9AC7 RL B          ;
+ $9AC9 SLA A         ;
+ $9ACB RL B          ;
+ $9ACD LD C,A        ;
+ $9ACE ADD HL,BC     ;
+ $9ACF LD B,$08      ;
+*$9AD1 LD A,(HL)     ;
+ $9AD2 LD (IX+$00),A ;
+ $9AD5 INC IX        ;
+ $9AD7 INC IX        ;
+ $9AD9 INC IX        ;
+ $9ADB INC HL        ;
+ $9ADC DJNZ $9AD1    ;
+ $9ADE LD B,$17      ;
+*$9AE0 DEC IX        ;
+ $9AE2 DJNZ $9AE0    ;
+ $9AE4 POP BC        ;
+ $9AE5 INC DE        ;
+ $9AE6 DJNZ $9ABA    ;
+ $9AE8 EX DE,HL      ;
+ $9AE9 LD DE,$0023   ;
+ $9AEC AND A         ;
+ $9AED SBC HL,DE     ;
+ $9AEF LD DE,$0015   ;
+ $9AF2 ADD IX,DE     ;
+ $9AF4 EX DE,HL      ;
+ $9AF5 LD B,$03      ;
+ $9AF7 DEC C         ;
+ $9AF8 JR NZ,$9ABA   ;
+ $9AFA POP HL        ;
+ $9AFB PUSH HL       ;
+ $9AFC LD A,H        ;
+ $9AFD AND $07       ;
+ $9AFF XOR $07       ;
+ $9B01 LD H,A        ;
+ $9B02 SLA A         ;
+ $9B04 ADD A,H       ;
+ $9B05 LD C,A        ;
+ $9B06 LD B,$00      ;
+ $9B08 LD HL,$72DD   ;
+ $9B0B LD DE,$72A0   ;
+ $9B0E ADD HL,BC     ;
+ $9B0F LD B,$30      ;
+*$9B11 LD A,(DE)     ;
+ $9B12 OR (HL)       ;
+ $9B13 LD (DE),A     ;
+ $9B14 INC DE        ;
+ $9B15 INC HL        ;
+ $9B16 DJNZ $9B11    ;
+ $9B18 POP DE        ;
+ $9B19 PUSH DE       ;
+ $9B1A LD HL,$4000   ; Load #REGhl with start of DISPLAY_FILE.
+ $9B1D LD BC,$0800   ; Load #REGbc with value of 2048 (1/3 of screen)
+ $9B20 LD A,D        ;
+ $9B21 CP $80        ;
+ $9B23 JR NC,$9B2B   ;
+ $9B25 CP $40        ;
+ $9B27 JR NC,$9B2A   ;
+ $9B29 ADD HL,BC     ;
+*$9B2A ADD HL,BC     ;
+*$9B2B AND $38       ;
+ $9B2D LD C,A        ;
+ $9B2E LD A,$38      ;
+ $9B30 SUB C         ;
+ $9B31 SLA A         ;
+ $9B33 SLA A         ;
+ $9B35 LD C,A        ;
+ $9B36 LD B,$00      ;
+ $9B38 ADD HL,BC     ;
+ $9B39 LD A,D        ;
+ $9B3A AND $07       ;
+ $9B3C LD C,A        ;
+ $9B3D LD A,$07      ;
+ $9B3F SUB C         ;
+ $9B40 LD D,A        ;
+ $9B41 SRL E         ;
+ $9B43 SRL E         ;
+ $9B45 SRL E         ;
+ $9B47 ADD HL,DE     ;
+ $9B48 EX DE,HL      ;
+ $9B49 LD B,$10      ;
+ $9B4B LD HL,$72A0   ;
+*$9B4E LD A,(HL)     ;
+ $9B4F LD (DE),A     ;
+ $9B50 INC HL        ;
+ $9B51 INC E         ;
+ $9B52 LD A,(HL)     ;
+ $9B53 LD (DE),A     ;
+ $9B54 INC HL        ;
+ $9B55 INC E         ;
+ $9B56 LD A,(HL)     ;
+ $9B57 LD (DE),A     ;
+ $9B58 INC HL        ;
+ $9B59 DEC E         ;
+ $9B5A DEC E         ;
+ $9B5B INC D         ;
+ $9B5C LD A,D        ;
+ $9B5D AND $07       ;
+ $9B5F JR NZ,$9B6F   ;
+ $9B61 LD A,D        ;
+ $9B62 SUB $08       ;
+ $9B64 LD D,A        ;
+ $9B65 LD A,E        ;
+ $9B66 ADD A,$20     ;
+ $9B68 LD E,A        ;
+ $9B69 JR NC,$9B6F   ;
+ $9B6B LD A,D        ;
+ $9B6C ADD A,$08     ;
+ $9B6E LD D,A        ;
+*$9B6F DJNZ $9B4E    ;
+ $9B71 POP HL        ;
+ $9B72 PUSH HL       ;
+ $9B73 LD C,$03      ;
+ $9B75 LD A,L        ;
+ $9B76 CP $F1        ;
+ $9B78 JR C,$9B7B    ;
+ $9B7A DEC C         ;
+*$9B7B LD B,$03      ;
+ $9B7D LD A,H        ;
+ $9B7E AND $07       ;
+ $9B80 XOR $07       ;
+ $9B82 JR Z,$9B89    ;
+ $9B84 LD A,H        ;
+ $9B85 CP $11        ;
+ $9B87 JR NC,$9B8A   ;
+*$9B89 DEC B         ;
+*$9B8A CALL $9BDE    ;
+ $9B8D LD DE,$0020   ;
+*$9B90 LD IXl,C      ;
+ $9B92 PUSH HL       ;
+*$9B93 LD (HL),$06   ;
+ $9B95 INC HL        ;
+ $9B96 DEC IXl       ;
+ $9B98 JR NZ,$9B93   ;
+ $9B9A POP HL        ;
+ $9B9B ADD HL,DE     ;
+ $9B9C DJNZ $9B90    ;
+ $9B9E LD HL,$7348   ;
+ $9BA1 LD A,($72D8)  ;
+ $9BA4 ADD A,$08     ;
+ $9BA6 JR NC,$9BAA   ;
+ $9BA8 LD A,$FF      ;
+*$9BAA CP (HL)       ;
+ $9BAB JR C,$9BD7    ;
+ $9BAD SUB $10       ;
+ $9BAF JR NC,$9BB2   ;
+ $9BB1 XOR A         ;
+*$9BB2 CP (HL)       ;
+ $9BB3 JR NC,$9BD7   ;
+ $9BB5 INC HL        ;
+ $9BB6 LD A,($72D9)  ;
+ $9BB9 ADD A,$09     ;
+ $9BBB CP (HL)       ;
+ $9BBC JR C,$9BD7    ;
+ $9BBE SUB $12       ;
+ $9BC0 JR NC,$9BC3   ;
+ $9BC2 XOR A         ;
+*$9BC3 CP (HL)       ;
+ $9BC4 JR NC,$9BD7   ;
+ $9BC6 LD B,$05      ;
+*$9BC8 POP HL        ;
+ $9BC9 DJNZ $9BC8    ;
+ $9BCB LD BC,$A410   ;
+*$9BCE POP HL        ;
+ $9BCF PUSH HL       ;
+ $9BD0 AND A         ;
+ $9BD1 SBC HL,BC     ;
+ $9BD3 RET NC        ;
+ $9BD4 POP HL        ;
+ $9BD5 JR $9BCE      ;
+*$9BD7 POP HL        ;
+ $9BD8 POP IX        ;
+ $9BDA POP DE        ;
+ $9BDB POP BC        ;
+ $9BDC POP AF        ;
+ $9BDD RET           ;
+
+; Something to do with updatng colours?
+;
+; Used by the routine at #R$9A4C.
+c$9BDE PUSH AF       ;
+ $9BDF PUSH DE       ;
+ $9BE0 LD A,$BF      ;
+ $9BE2 SUB H         ;
+ $9BE3 LD H,$00      ;
+ $9BE5 EX DE,HL      ;
+ $9BE6 LD HL,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
+ $9BE9 SRL E         ;
+ $9BEB SRL E         ;
+ $9BED SRL E         ;
+ $9BEF ADD HL,DE     ;
+ $9BF0 AND $F8       ;
+ $9BF2 SLA A         ;
+ $9BF4 RL D          ;
+ $9BF6 SLA A         ;
+ $9BF8 RL D          ;
+ $9BFA LD E,A        ;
+ $9BFB ADD HL,DE     ;
+ $9BFC POP DE        ;
+ $9BFD POP AF        ;
+ $9BFE RET           ;
+
+; Unused
+s$9BFF DEFS $41
+
+; Called when needing to draw a level...works on 1/3 of screen at a time?
+;
+; Used by the routines at #R$A3A7, #R$A420, #R$A47D, #R$A4C8, #R$A515, #R$A59D,
+; #R$A828, #R$A9CE, #R$AA49, #R$AB19, #R$ABAD and #R$AE9C.
+@label=UPDATE_SCREEN_GFX
+c$9C40 NOP           ; {Why are these NOPs? Are they ever changed?
+ $9C41 NOP           ;
+ $9C42 NOP           ;
+ $9C43 NOP           ; }
+ $9C44 PUSH HL       ; {Backup 16-bit registers.
+ $9C45 PUSH BC       ;
+ $9C46 PUSH DE       ;
+ $9C47 PUSH AF       ; }
+ $9C48 LD A,H        ; #REGa=screen section: $08=2/3, $10=3/3, else 1/3.
+ $9C49 EX DE,HL      ; Backup #REGhl to #REGde#REGhl
+ $9C4A LD HL,$4000   ; point #REGhl to start of DISPLAY
+ $9C4D LD BC,$0800   ; load #REGbc with 2048 - one third of a screen
+ $9C50 CP $10        ; {Update 1/3 of screen?
+ $9C52 JR NC,$9C5A   ; }
+ $9C54 CP $08        ; {Update 2/3 of screen?
+ $9C56 JR NC,$9C59   ; }
+ $9C58 ADD HL,BC     ; Update 3/3 of screen.
+*$9C59 ADD HL,BC     ;
+*$9C5A AND $07       ;
+ $9C5C XOR $07       ;
+ $9C5E SLA A         ;
+ $9C60 SLA A         ;
+ $9C62 SLA A         ;
+ $9C64 SLA A         ;
+ $9C66 SLA A         ;
+ $9C68 LD C,A        ;
+ $9C69 LD B,$00      ;
+ $9C6B ADD HL,BC     ;
+ $9C6C LD C,E        ;
+ $9C6D ADD HL,BC     ;
+ $9C6E POP AF        ;
+ $9C6F PUSH AF       ;
+ $9C70 LD C,A        ;
+ $9C71 XOR A         ;
+ $9C72 SLA C         ;
+ $9C74 RLA           ;
+ $9C75 SLA C         ;
+ $9C77 RLA           ;
+ $9C78 SLA C         ;
+ $9C7A RLA           ;
+ $9C7B LD B,A        ;
+ $9C7C EX DE,HL      ; Restore #REGhl with value in #REGde
+ $9C7D LD HL,$84F0   ; {set #REGhl to GFX_TILE_BLANK, then update this section
+ $9C80 ADD HL,BC     ; of the screen (address of #REGde) with all GFX tiles.
+ $9C81 LD B,$08      ;
+*$9C83 LD A,(HL)     ;
+ $9C84 LD (DE),A     ;
+ $9C85 INC HL        ;
+ $9C86 INC D         ;
+ $9C87 DJNZ $9C83    ; }
+ $9C89 POP AF        ; {Restore 16-bit registers and RETurn
+ $9C8A POP DE        ;
+ $9C8B POP BC        ;
+ $9C8C POP HL        ; }
+ $9C8D RET           ;
+
+; Unused code? Same as last 3 instructions of previous routine, at #R$9C8B.
+c$9C8E POP BC        ;
+ $9C8F POP HL        ;
+ $9C90 RET           ;
+
+; Unused
+s$9C91 DEFS $0B
+
+; INTERUPT jump point
+c$9C9C JP $9CC2      ;
+
+; Unused
+s$9C9F DEFS 5
+
+; This routine produces a sound, formed of a square wave.
+;
+; Used by the routines at #R$9858, #R$98E6, #R$9D08, #R$9E98 and #R$A62C.
+@label=MAKE_SOUND
+c$9CA4 LD A,$10      ;
+ $9CA6 OUT ($FE),A   ;
+ $9CA8 LD B,H        ;
+*$9CA9 DJNZ $9CA9    ;
+ $9CAB XOR A         ;
+ $9CAC OUT ($FE),A   ;
+ $9CAE LD B,H        ;
+*$9CAF DJNZ $9CAF    ;
+ $9CB1 DEC L         ;
+ $9CB2 JR NZ,$9CA4   ;
+ $9CB4 RET           ;
+
+; Unused
+s$9CB5 DEFS $0D
+
+; Called from an INTERUPT, and basically every game loop?
+;
+; Used by the routine at #R$9C9C.
+c$9CC2 PUSH AF       ;
+ $9CC3 PUSH HL       ;
+ $9CC4 LD A,($7373)  ;
+ $9CC7 CP $FF        ;
+ $9CC9 JR Z,$9CE6    ;
+ $9CCB DEC A         ;
+ $9CCC JR Z,$9CD3    ;
+ $9CCE LD ($7373),A  ;
+ $9CD1 JR $9CE6      ;
+*$9CD3 LD HL,($7374) ;
+ $9CD6 LD A,(HL)     ;
+ $9CD7 LD ($7373),A  ;
+ $9CDA CP $FF        ;
+ $9CDC JR Z,$9CE6    ;
+ $9CDE INC HL        ;
+ $9CDF LD A,(HL)     ;
+ $9CE0 OUT ($9F),A   ;
+ $9CE2 INC HL        ;
+ $9CE3 LD ($7374),HL ;
+*$9CE6 POP HL        ;
+ $9CE7 EI            ;
+ $9CE8 POP AF        ;
+ $9CE9 RETI          ;
+
+; Called during level draw/clear.
+;
+; Used by the routines at #R$A389, #R$A420, #R$A4C8, #R$A62C, #R$A828, #R$AAE4
+; and #R$B14F.
+c$9CEB LD B,A        ;
+ $9CEC LD A,($7373)  ;
+ $9CEF CP $FF        ;
+ $9CF1 RET NZ        ;
+ $9CF2 LD HL,$C8C6   ;
+*$9CF5 INC HL        ;
+ $9CF6 INC HL        ;
+ $9CF7 DJNZ $9CF5    ;
+ $9CF9 LD E,(HL)     ;
+ $9CFA INC HL        ;
+ $9CFB LD D,(HL)     ;
+ $9CFC LD ($7374),DE ;
+ $9D00 LD A,$01      ;
+ $9D02 LD ($7373),A  ;
+ $9D05 RET           ;
+
+; Unused
+s$9D06 DEFS 2
+
+; Routine at 9D08
+;
+; Used by the routine at #R$98E6.
+c$9D08 LD IX,$72D8     ;
+ $9D0C LD HL,($72D8)   ;
+ $9D0F LD A,($72DB)    ;
+ $9D12 AND A           ;
+ $9D13 JR NZ,$9D16     ;
+ $9D15 DEC L           ;
+*$9D16 EX DE,HL        ;
+ $9D17 LD HL,$61A8     ;
+ $9D1A LD A,D          ;
+ $9D1B AND $F8         ;
+ $9D1D LD B,$00        ;
+ $9D1F SLA A           ;
+ $9D21 RL B            ;
+ $9D23 SLA A           ;
+ $9D25 RL B            ;
+ $9D27 LD C,A          ;
+ $9D28 ADD HL,BC       ;
+ $9D29 LD B,$00        ;
+ $9D2B LD C,E          ;
+ $9D2C SRL C           ;
+ $9D2E SRL C           ;
+ $9D30 SRL C           ;
+ $9D32 ADD HL,BC       ;
+ $9D33 LD BC,$0020     ;
+ $9D36 LD A,($7333)    ;
+ $9D39 IN A,($FE)      ;
+ $9D3B AND $1F         ;
+ $9D3D LD D,A          ;
+ $9D3E LD A,($7332)    ;
+ $9D41 OR D            ;
+ $9D42 CP $1F          ;
+ $9D44 JR Z,$9D6F      ;
+ $9D46 LD A,($72D8)    ;
+ $9D49 DEC A           ;
+ $9D4A JR Z,$9DAB      ;
+ $9D4C LD A,(HL)       ;
+ $9D4D CP $05          ;
+ $9D4F JR NC,$9DAB     ;
+ $9D51 AND A           ;
+ $9D52 SBC HL,BC       ;
+ $9D54 LD A,(HL)       ;
+ $9D55 CP $05          ;
+ $9D57 JR NC,$9DAB     ;
+ $9D59 DEC (IX+$00)    ;
+ $9D5C LD (IX+$03),$04 ;
+ $9D60 LD A,($72D8)    ;
+ $9D63 AND $03         ;
+ $9D65 JR NZ,$9D6D     ;
+ $9D67 LD HL,$2805     ;
+ $9D6A CALL $9CA4      ;
+*$9D6D JR $9DAF        ;
+*$9D6F LD A,($7335)    ;
+ $9D72 IN A,($FE)      ;
+ $9D74 AND $1F         ;
+ $9D76 LD D,A          ;
+ $9D77 LD A,($7334)    ;
+ $9D7A OR D            ;
+ $9D7B CP $1F          ;
+ $9D7D JR Z,$9DAB      ;
+ $9D7F LD A,($72D8)    ;
+ $9D82 CP $EE          ;
+ $9D84 JR NC,$9DAB     ;
+ $9D86 INC HL          ;
+ $9D87 INC HL          ;
+ $9D88 LD A,(HL)       ;
+ $9D89 CP $05          ;
+ $9D8B JR NC,$9DAB     ;
+ $9D8D AND A           ;
+ $9D8E SBC HL,BC       ;
+ $9D90 LD A,(HL)       ;
+ $9D91 CP $05          ;
+ $9D93 JR NC,$9DAB     ;
+ $9D95 INC (IX+$00)    ;
+ $9D98 LD (IX+$03),$00 ;
+ $9D9C LD A,($72D8)    ;
+ $9D9F AND $03         ;
+ $9DA1 JR NZ,$9DA9     ;
+ $9DA3 LD HL,$2806     ;
+ $9DA6 CALL $9CA4      ;
+*$9DA9 JR $9DAF        ;
+*$9DAB LD (IX+$02),$03 ;
+*$9DAF LD HL,($72D8)   ;
+ $9DB2 LD A,($72DA)    ;
+ $9DB5 INC A           ;
+ $9DB6 AND $03         ;
+ $9DB8 LD ($72DA),A    ;
+ $9DBB ADD A,(IX+$03)  ;
+ $9DBE CALL $9A4C      ;
+ $9DC1 LD A,($7355)    ;
+ $9DC4 AND A           ;
+ $9DC5 RET Z           ;
+ $9DC6 LD A,($7350)    ;
+ $9DC9 XOR $FF         ;
+ $9DCB RET Z           ;
+ $9DCC XOR $FF         ;
+ $9DCE SUB $09         ;
+ $9DD0 LD B,A          ;
+ $9DD1 LD A,($72D8)    ;
+ $9DD4 CP B            ;
+ $9DD5 JR C,$9DDB      ;
+ $9DD7 SUB $13         ;
+ $9DD9 CP B            ;
+ $9DDA RET C           ;
+*$9DDB LD (IX+$4D),$01 ;
+ $9DDF LD D,$FF        ;
+ $9DE1 LD A,($72DB)    ;
+ $9DE4 AND A           ;
+ $9DE5 JR NZ,$9DE9     ;
+ $9DE7 LD D,$01        ;
+*$9DE9 LD (IX+$4E),D   ;
+ $9DEC LD (IX+$4F),$04 ;
+ $9DF0 RET             ;
+
+; Unused
+s$9DF1 DEFS $43
+
+; Routine at 9E34
+;
+; Used by the routines at #R$9265, #R$93FE, #R$9438, #R$99DF, #R$A30C and
+; #R$B34C.
+c$9E34 PUSH DE       ;
+ $9E35 PUSH BC       ;
+ $9E36 EX DE,HL      ;
+ $9E37 LD HL,$61A8   ;
+ $9E3A LD A,D        ;
+ $9E3B AND $F8       ;
+ $9E3D LD B,$00      ;
+ $9E3F SLA A         ;
+ $9E41 RL B          ;
+ $9E43 SLA A         ;
+ $9E45 RL B          ;
+ $9E47 LD C,A        ;
+ $9E48 ADD HL,BC     ;
+ $9E49 LD B,$00      ;
+ $9E4B LD C,E        ;
+ $9E4C SRL C         ;
+ $9E4E SRL C         ;
+ $9E50 SRL C         ;
+ $9E52 ADD HL,BC     ;
+ $9E53 LD A,(HL)     ;
+ $9E54 POP BC        ;
+ $9E55 POP DE        ;
+ $9E56 RET           ;
+
+; Unused code?
+c$9E57 POP HL        ;
+ $9E58 RET           ;
+
+; Unused
+s$9E59 DEFS $0D
+
+; Farmer jumping/falling routine
+;
+; Used by the routine at #R$9858.
+@label=FARMER_VERTICAL_MOVEMENT
+c$9E66 PUSH HL       ;
+ $9E67 LD HL,$72D8   ;
+ $9E6A LD A,E        ;
+ $9E6B ADD A,$01     ;
+ $9E6D JR C,$9E8A    ;
+ $9E6F ADD A,$04     ;
+ $9E71 CP (HL)       ;
+ $9E72 JR C,$9E8A    ;
+ $9E74 SUB $0D       ;
+ $9E76 JR NC,$9E79   ;
+ $9E78 XOR A         ;
+*$9E79 CP (HL)       ;
+ $9E7A JR NC,$9E8A   ;
+ $9E7C INC HL        ;
+ $9E7D LD A,D        ;
+ $9E7E CP (HL)       ;
+ $9E7F JR NC,$9E8A   ;
+ $9E81 ADD A,$1C     ;
+ $9E83 CP (HL)       ;
+ $9E84 JR C,$9E8A    ;
+ $9E86 LD A,$01      ;
+ $9E88 POP HL        ;
+ $9E89 RET           ;
+
+; Reset mid-air farmer routine
+;
+; Used by the routine at #R$9E66.
+c$9E8A XOR A         ;
+ $9E8B POP HL        ;
+ $9E8C RET           ;
+
+; Unused
+s$9E8D DEFS $0B
+
+; Routine at 9E98
+;
+; Used by the routine at #R$98E6.
+c$9E98 LD IX,$72D8     ;
+ $9E9C LD A,(IX+$00)   ;
+ $9E9F AND $07         ;
+ $9EA1 RET NZ          ;
+ $9EA2 LD HL,($72D8)   ;
+ $9EA5 INC H           ;
+ $9EA6 EX DE,HL        ;
+ $9EA7 LD HL,$61A8     ;
+ $9EAA LD B,$00        ;
+ $9EAC LD A,D          ;
+ $9EAD AND $F8         ;
+ $9EAF SLA A           ;
+ $9EB1 RL B            ;
+ $9EB3 SLA A           ;
+ $9EB5 RL B            ;
+ $9EB7 LD C,A          ;
+ $9EB8 ADD HL,BC       ;
+ $9EB9 LD B,$00        ;
+ $9EBB LD C,E          ;
+ $9EBC SRL C           ;
+ $9EBE SRL C           ;
+ $9EC0 SRL C           ;
+ $9EC2 ADD HL,BC       ;
+ $9EC3 LD A,(HL)       ;
+ $9EC4 DEC A           ;
+ $9EC5 JR NZ,$9EED     ;
+ $9EC7 LD A,($732F)    ;
+ $9ECA IN A,($FE)      ; {UP keypress
+ $9ECC AND $1F         ;
+ $9ECE LD C,A          ;
+ $9ECF LD A,($732E)    ;
+ $9ED2 OR C            ;
+ $9ED3 CP $1F          ;
+ $9ED5 JR Z,$9EED      ;
+ $9ED7 LD (IX+$03),$0D ;
+ $9EDB INC (IX+$01)    ;
+ $9EDE LD A,($72D9)    ;
+ $9EE1 AND $03         ;
+ $9EE3 JR NZ,$9EEB     ;
+ $9EE5 LD HL,$1E14     ;
+ $9EE8 CALL $9CA4      ;
+*$9EEB JR $9F25        ;
+*$9EED LD BC,$0040     ;
+ $9EF0 AND A           ;
+ $9EF1 SBC HL,BC       ;
+ $9EF3 LD BC,$0020     ;
+ $9EF6 LD A,D          ;
+ $9EF7 AND $07         ;
+ $9EF9 JR NZ,$9EFD     ;
+ $9EFB SBC HL,BC       ;
+*$9EFD LD A,(HL)       ;
+ $9EFE DEC A           ;
+ $9EFF JR NZ,$9F32     ;
+ $9F01 LD A,($7331)    ; }
+ $9F04 IN A,($FE)      ; {DOWN keypress
+ $9F06 AND $1F         ;
+ $9F08 LD C,A          ;
+ $9F09 LD A,($7330)    ;
+ $9F0C OR C            ;
+ $9F0D CP $1F          ;
+ $9F0F JR Z,$9F32      ;
+ $9F11 LD (IX+$03),$0D ;
+ $9F15 DEC (IX+$01)    ;
+ $9F18 LD A,($72D9)    ;
+ $9F1B AND $03         ;
+ $9F1D JR NZ,$9F25     ;
+ $9F1F LD HL,$1E15     ;
+ $9F22 CALL $9CA4      ;
+*$9F25 LD A,(IX+$02)   ;
+ $9F28 INC A           ;
+ $9F29 AND $03         ;
+ $9F2B LD (IX+$02),A   ;
+ $9F2E LD (IX+$4D),$00 ;
+*$9F32 LD HL,($72D8)   ;
+ $9F35 LD A,(IX+$02)   ;
+ $9F38 ADD A,(IX+$03)  ;
+ $9F3B CALL $9A4C      ;
+ $9F3E RET             ; }
+
+; Unused
+s$9F3F DEFS $21
+
+; Routine at 9F60
+;
+; Used by the routine at #R$98E6.
+c$9F60 LD A,($72D9)  ;
+ $9F63 INC A         ;
+ $9F64 AND $07       ;
+ $9F66 RET NZ        ;
+ $9F67 LD HL,($72D8) ;
+ $9F6A EX DE,HL      ;
+ $9F6B LD HL,$61A8   ;
+ $9F6E LD A,D        ;
+ $9F6F AND $F8       ;
+ $9F71 LD B,$00      ;
+ $9F73 SLA A         ;
+ $9F75 RL B          ;
+ $9F77 SLA A         ;
+ $9F79 RL B          ;
+ $9F7B LD C,A        ;
+ $9F7C ADD HL,BC     ;
+ $9F7D LD B,$00      ;
+ $9F7F LD C,E        ;
+ $9F80 SRL C         ;
+ $9F82 SRL C         ;
+ $9F84 SRL C         ;
+ $9F86 ADD HL,BC     ;
+ $9F87 LD BC,$0020   ;
+ $9F8A LD A,($7333)  ;
+ $9F8D IN A,($FE)    ; {LEFT/RIGHT keypress
+ $9F8F AND $1F       ;
+ $9F91 LD D,A        ;
+ $9F92 LD A,($7332)  ;
+ $9F95 OR D          ;
+ $9F96 CP $1F        ;
+ $9F98 JR Z,$9FB5    ;
+ $9F9A DEC HL        ;
+ $9F9B LD A,(HL)     ;
+ $9F9C CP $05        ; }
+
+; Routine at 9F9E
+c$9F9E RET NC        ;
+
+; Routine at 9F9F
+c$9F9F AND A         ;
+ $9FA0 SBC HL,BC     ;
+ $9FA2 LD A,(HL)     ;
+ $9FA3 CP $05        ;
+ $9FA5 RET NC        ;
+ $9FA6 AND A         ;
+ $9FA7 SBC HL,BC     ;
+ $9FA9 LD A,(HL)     ;
+ $9FAA AND A         ;
+ $9FAB RET Z         ;
+ $9FAC CP $09        ;
+ $9FAE RET NC        ;
+ $9FAF LD A,$04      ;
+ $9FB1 LD ($72DB),A  ;
+ $9FB4 RET           ;
+
+; Routine at 9FB5
+;
+; Used by the routine at #R$9F60.
+c$9FB5 LD A,($7335)  ;
+ $9FB8 IN A,($FE)    ;
+ $9FBA AND $1F       ;
+ $9FBC LD D,A        ;
+ $9FBD LD A,($7334)  ;
+ $9FC0 OR D          ;
+ $9FC1 CP $1F        ;
+ $9FC3 RET Z         ;
+ $9FC4 INC HL        ;
+ $9FC5 INC HL        ;
+ $9FC6 LD A,(HL)     ;
+ $9FC7 CP $05        ;
+ $9FC9 RET NC        ;
+ $9FCA AND A         ;
+ $9FCB SBC HL,BC     ;
+ $9FCD LD A,(HL)     ;
+ $9FCE CP $05        ;
+ $9FD0 RET NC        ;
+ $9FD1 AND A         ;
+ $9FD2 SBC HL,BC     ;
+ $9FD4 LD A,(HL)     ;
+ $9FD5 AND A         ;
+ $9FD6 RET Z         ;
+ $9FD7 CP $09        ;
+ $9FD9 RET NC        ;
+ $9FDA XOR A         ;
+ $9FDB LD ($72DB),A  ;
+ $9FDE RET           ;
+
+; Unused
+s$9FDF DEFS $35
+
+; Routine at A014
+;
+; Used by the routine at #R$98E6.
+c$A014 LD A,($7350)  ;
+ $A017 XOR $FF       ;
+ $A019 RET Z         ;
+ $A01A LD IX,$72D8   ;
+ $A01E LD HL,($734E) ;
+ $A021 LD C,$00      ;
+ $A023 CALL $A07B    ;
+ $A026 LD A,($7351)  ;
+ $A029 INC A         ;
+ $A02A CP $A6        ;
+ $A02C JR C,$A03B    ;
+ $A02E LD HL,$9787   ;
+ $A031 LD BC,$0004   ;
+ $A034 LD DE,$734E   ;
+ $A037 LDIR          ;
+ $A039 LD A,$03      ;
+*$A03B LD ($7351),A  ;
+ $A03E LD HL,($734E) ;
+ $A041 CALL $A0A9    ;
+ $A044 LD ($734E),HL ;
+ $A047 LD C,$FF      ;
+ $A049 CALL $A07B    ;
+ $A04C LD HL,($7352) ;
+ $A04F LD C,$00      ;
+ $A051 CALL $A07B    ;
+ $A054 LD A,($7354)  ;
+ $A057 INC A         ;
+ $A058 CP $A6        ;
+ $A05A JR C,$A069    ;
+ $A05C LD HL,$9787   ;
+ $A05F LD BC,$0003   ;
+ $A062 LD DE,$7352   ;
+ $A065 LDIR          ;
+ $A067 LD A,$03      ;
+*$A069 LD ($7354),A  ;
+ $A06C LD HL,($7352) ;
+ $A06F CALL $A0A9    ;
+ $A072 LD ($7352),HL ;
+ $A075 LD C,$FF      ;
+ $A077 CALL $A07B    ;
+ $A07A RET           ;
+
+; Draw the elevator platforms?
+;
+; Used by the routine at #R$A014.
+@label=DRAW_ELEVATOR_PLATFORM
+c$A07B PUSH HL       ;
+ $A07C DEC HL        ;
+ $A07D LD (HL),$00   ;
+ $A07F INC HL        ;
+ $A080 INC HL        ;
+ $A081 INC HL        ;
+ $A082 LD A,L        ;
+ $A083 AND $1F       ;
+ $A085 JR Z,$A089    ;
+ $A087 LD (HL),$00   ;
+*$A089 POP HL        ;
+ $A08A LD B,$04      ;
+*$A08C LD (HL),C     ;
+ $A08D INC L         ;
+ $A08E LD (HL),C     ;
+ $A08F DEC L         ;
+ $A090 CALL $A096    ;
+ $A093 DJNZ $A08C    ;
+ $A095 RET           ;
+
+; Calculate position of next platform?
+;
+; Used by the routine at #R$A07B.
+@label=CALCULATE_ELEVATOR_PLATFORM_POSITION
+c$A096 INC H         ;
+ $A097 LD A,H        ;
+ $A098 AND $07       ;
+ $A09A RET NZ        ;
+ $A09B LD A,H        ;
+ $A09C SUB $08       ;
+ $A09E LD H,A        ;
+ $A09F LD A,L        ;
+ $A0A0 ADD A,$20     ;
+ $A0A2 LD L,A        ;
+ $A0A3 RET NC        ;
+ $A0A4 LD A,H        ;
+ $A0A5 ADD A,$08     ;
+ $A0A7 LD H,A        ;
+ $A0A8 RET           ;
+
+; Calculations related to elevator position?
+;
+; Used by the routine at #R$A014.
+@label=CALCULATE_EVELVATOR_POSITION
+c$A0A9 DEC H         ;
+ $A0AA LD A,H        ;
+ $A0AB AND $07       ;
+ $A0AD CP $07        ;
+ $A0AF JR NZ,$A0BF   ;
+ $A0B1 LD A,H        ;
+ $A0B2 ADD A,$08     ;
+ $A0B4 LD H,A        ;
+ $A0B5 LD A,L        ;
+ $A0B6 SUB $20       ;
+ $A0B8 LD L,A        ;
+ $A0B9 JR NC,$A0BF   ;
+ $A0BB LD A,H        ;
+ $A0BC SUB $08       ;
+ $A0BE LD H,A        ;
+*$A0BF RET           ;
+
+; Unused code?
+;
+; Note same as last instructions of previous routine
+c$A0C0 LD A,H        ;
+ $A0C1 SUB $08       ;
+ $A0C3 LD H,A        ;
+ $A0C4 RET           ;
+
+; Unused bytes/code?
+b$A0C5 DEFB $73,$21,$CE
+
+; Could be giant duck code or another elevator related routine, called after
+; bigger movement of platform.
+;
+; Used by the routine at #R$98E6.
+c$A0C8 LD IX,$72D8     ;
+ $A0CC LD A,($7348)    ;
+ $A0CF CP (IX+$00)     ;
+ $A0D2 JR Z,$A0ED      ;
+ $A0D4 JR C,$A0E1      ;
+ $A0D6 LD A,($734A)    ;
+ $A0D9 DEC A           ;
+ $A0DA CP $FA          ;
+ $A0DC JR NZ,$A0DF     ;
+ $A0DE INC A           ;
+*$A0DF JR $A0EA        ;
+*$A0E1 LD A,($734A)    ;
+ $A0E4 INC A           ;
+ $A0E5 CP $06          ;
+ $A0E7 JR NZ,$A0EA     ;
+ $A0E9 DEC A           ;
+*$A0EA LD ($734A),A    ;
+*$A0ED LD A,($7349)    ;
+ $A0F0 CP (IX+$01)     ;
+ $A0F3 JR Z,$A10E      ;
+ $A0F5 JR C,$A102      ;
+ $A0F7 LD A,($734B)    ;
+ $A0FA DEC A           ;
+ $A0FB CP $FA          ;
+ $A0FD JR NZ,$A100     ;
+ $A0FF INC A           ;
+*$A100 JR $A10B        ;
+*$A102 LD A,($734B)    ;
+ $A105 INC A           ;
+ $A106 CP $06          ;
+ $A108 JR NZ,$A10B     ;
+ $A10A DEC A           ;
+*$A10B LD ($734B),A    ;
+*$A10E LD HL,($7348)   ;
+ $A111 LD A,$0C        ;
+ $A113 CALL $9A4C      ;
+ $A116 CALL $9538      ;
+ $A119 LD A,($7348)    ;
+ $A11C BIT 7,(IX+$72)  ;
+ $A120 JR NZ,$A135     ;
+ $A122 ADD A,(IX+$72)  ;
+ $A125 CP $EE          ;
+ $A127 JR C,$A144      ;
+ $A129 SUB (IX+$72)    ;
+ $A12C SUB (IX+$72)    ;
+ $A12F LD (IX+$72),$FB ;
+ $A133 JR $A144        ;
+*$A135 ADD A,(IX+$72)  ;
+ $A138 JR C,$A144      ;
+ $A13A SUB (IX+$72)    ;
+ $A13D SUB (IX+$72)    ;
+ $A140 LD (IX+$72),$05 ;
+*$A144 LD ($7348),A    ;
+ $A147 LD A,($7349)    ;
+ $A14A ADD A,(IX+$73)  ;
+ $A14D CP $A6          ;
+ $A14F JR C,$A15D      ;
+ $A151 SUB (IX+$73)    ;
+ $A154 SUB (IX+$73)    ;
+ $A157 LD (IX+$73),$FB ;
+ $A15B JR $A16B        ;
+*$A15D CP $14          ;
+ $A15F JR NC,$A16B     ;
+ $A161 SUB (IX+$73)    ;
+ $A164 SUB (IX+$73)    ;
+ $A167 LD (IX+$73),$05 ;
+*$A16B LD ($7349),A    ;
+ $A16E LD A,($6EEB)    ;
+ $A171 CP $08          ;
+ $A173 JR NC,$A17B     ;
+ $A175 LD HL,$9808     ;
+ $A178 LD ($7348),HL   ;
+*$A17B LD HL,($7348)   ;
+ $A17E LD C,$08        ;
+ $A180 LD A,($72D8)    ;
+ $A183 CP (IX+$70)     ;
+ $A186 JR NC,$A18A     ;
+ $A188 LD C,$0A        ;
+*$A18A LD A,C          ;
+ $A18B ADD A,(IX+$75)  ;
+ $A18E CALL $9A4C      ;
+ $A191 LD A,($734D)    ;
+ $A194 XOR $01         ;
+ $A196 LD ($734D),A    ;
+ $A199 RET             ;
+
+; Unused
+s$A19A DEFS $1E
+
+; Routine at A1B8
+;
+; Used by the routines at #R$98E6 and #R$A62C.
+c$A1B8 LD HL,$7341   ;
+ $A1BB LD DE,$0003   ;
+ $A1BE INC B         ;
+ $A1BF DEC B         ;
+ $A1C0 JR Z,$A1C3    ;
+ $A1C2 ADD HL,DE     ;
+*$A1C3 LD A,$FF      ;
+ $A1C5 LD D,$03      ;
+; This entry point is used by the routine at #R$A1D9.
+*$A1C7 DEC (HL)      ;
+ $A1C8 CP (HL)       ;
+ $A1C9 JR NZ,$A1DE   ;
+ $A1CB DEC D         ;
+ $A1CC JR NZ,$A1D9   ;
+ $A1CE POP HL        ;
+ $A1CF INC B         ;
+ $A1D0 DEC B         ;
+ $A1D1 RET NZ        ;
+ $A1D2 PUSH HL       ;
+ $A1D3 LD HL,$7347   ;
+ $A1D6 LD (HL),$00   ;
+ $A1D8 RET           ;
+
+; Routine at A1D9
+;
+; Used by the routine at #R$A1B8.
+c$A1D9 LD (HL),$09   ;
+ $A1DB DEC HL        ;
+ $A1DC JR $A1C7      ;
+; This entry point is used by the routine at #R$A1B8.
+*$A1DE LD DE,$000A   ;
+ $A1E1 LD HL,$4053   ;
+ $A1E4 INC B         ;
+ $A1E5 DEC B         ;
+ $A1E6 JR Z,$A1E9    ;
+ $A1E8 ADD HL,DE     ;
+*$A1E9 EX DE,HL      ;
+ $A1EA LD HL,$733F   ;
+ $A1ED INC B         ;
+ $A1EE DEC B         ;
+ $A1EF JR Z,$A1F4    ;
+ $A1F1 INC HL        ;
+ $A1F2 INC HL        ;
+ $A1F3 INC HL        ;
+*$A1F4 PUSH HL       ;
+ $A1F5 POP BC        ;
+ $A1F6 LD IXl,$03    ;
+*$A1F9 PUSH DE       ;
+ $A1FA LD A,(BC)     ;
+ $A1FB SLA A         ;
+ $A1FD SLA A         ;
+ $A1FF SLA A         ;
+ $A201 LD HL,$89E0   ; {Display a number from FONT_NUMBERS_BOLD
+ $A204 PUSH BC       ;
+ $A205 LD B,$00      ;
+ $A207 LD C,A        ;
+ $A208 ADD HL,BC     ;
+ $A209 LD B,$08      ;
+*$A20B LD A,(HL)     ;
+ $A20C LD (DE),A     ;
+ $A20D INC D         ;
+ $A20E INC L         ;
+ $A20F DJNZ $A20B    ; }
+ $A211 POP BC        ;
+ $A212 POP DE        ;
+ $A213 INC DE        ;
+ $A214 INC BC        ;
+ $A215 DEC IXl       ;
+ $A217 JR NZ,$A1F9   ;
+ $A219 RET           ;
+
+; Unused code/bytes? (code would be a RET)
+b$A21A DEFB $C9,$00
+
+; Farmer jumping/falling related routine.
+;
+; Used by the routine at #R$9858.
+c$A21C LD A,($72DC)  ;
+ $A21F DEC A         ;
+ $A220 JR Z,$A22A    ;
+ $A222 LD A,($7325)  ;
+ $A225 DEC A         ;
+ $A226 JP NZ,$A2B5   ;
+ $A229 RET           ;
+
+; Farmer jumping/falling related routine.
+;
+; Used by the routine at #R$A21C.
+c$A22A LD HL,($72D8)   ;
+ $A22D CALL $9538      ;
+ $A230 LD A,L          ;
+ $A231 ADD A,(IX+$4E)  ;
+ $A234 LD ($72D8),A    ;
+ $A237 AND A           ;
+ $A238 JR NZ,$A240     ;
+ $A23A LD (IX+$4E),$01 ;
+ $A23E JR $A248        ;
+*$A240 CP $EE          ;
+ $A242 JR C,$A248      ;
+ $A244 LD (IX+$4E),$FF ;
+*$A248 LD HL,$7351     ;
+ $A24B CALL $A256      ;
+ $A24E LD HL,$7354     ;
+ $A251 CALL $A256      ;
+ $A254 JR $A294        ;
+
+; Farmer jumping/falling related routine.
+;
+; Used by the routine at #R$A22A.
+c$A256 LD A,($7350)  ;
+ $A259 XOR $FF       ;
+ $A25B RET Z         ;
+ $A25C XOR $FF       ;
+ $A25E SUB $09       ;
+ $A260 LD B,A        ;
+ $A261 LD A,($72D8)  ;
+ $A264 CP B          ;
+ $A265 RET C         ;
+ $A266 SUB $13       ;
+ $A268 CP B          ;
+ $A269 RET NC        ;
+ $A26A LD B,$06      ;
+ $A26C LD A,(HL)     ;
+ $A26D ADD A,$10     ;
+*$A26F DEC A         ;
+ $A270 CP (IX+$01)   ;
+ $A273 JR Z,$A278    ;
+ $A275 DJNZ $A26F    ;
+ $A277 RET           ;
+
+; Farmer lands on a platform?
+;
+; Used by the routine at #R$A256.
+c$A278 LD (IX+$7D),$01 ;
+ $A27C LD (IX+$4D),$00 ;
+ $A280 EX DE,HL        ;
+ $A281 LD HL,($72D8)   ;
+ $A284 LD A,$0C        ;
+ $A286 CALL $9A4C      ;
+ $A289 LD A,(DE)       ;
+ $A28A ADD A,$11       ;
+ $A28C LD ($72D9),A    ;
+ $A28F POP HL          ;
+ $A290 CALL $A389      ;
+ $A293 RET             ;
+
+; Farmer jumping/falling related routine.
+;
+; Used by the routine at #R$A22A.
+c$A294 LD A,($7325)    ;
+ $A297 DEC A           ;
+ $A298 JR NZ,$A2B5     ;
+ $A29A DEC (IX+$4F)    ;
+ $A29D JR NZ,$A30F     ;
+ $A29F LD HL,$7325     ;
+ $A2A2 LD (HL),$02     ;
+ $A2A4 INC HL          ;
+ $A2A5 LD (HL),$00     ;
+ $A2A7 INC HL          ;
+ $A2A8 LD (HL),$FA     ;
+ $A2AA LD (IX+$52),$FF ;
+ $A2AE LD A,($72DA)    ;
+ $A2B1 CALL $A37F      ;
+ $A2B4 RET             ;
+
+; Routine at A2B5
+;
+; Used by the routines at #R$A21C and #R$A294.
+c$A2B5 LD HL,$7328     ;
+ $A2B8 DEC (HL)        ;
+ $A2B9 RET NZ          ;
+ $A2BA PUSH HL         ;
+ $A2BB LD HL,($72D8)   ;
+ $A2BE CALL $9538      ;
+ $A2C1 POP HL          ;
+ $A2C2 LD A,($732A)    ;
+ $A2C5 DEC A           ;
+ $A2C6 JR Z,$A2E1      ;
+ $A2C8 INC A           ;
+ $A2C9 AND A           ;
+ $A2CA JR NZ,$A2D4     ;
+*$A2CC LD (IX+$52),$FF ;
+ $A2D0 LD A,$FA        ;
+ $A2D2 JR $A2FB        ;
+*$A2D4 LD A,($7327)    ;
+ $A2D7 SUB $0A         ;
+ $A2D9 CP $28          ;
+ $A2DB JR NC,$A2DF     ;
+ $A2DD LD A,$28        ;
+*$A2DF JR $A2FB        ;
+*$A2E1 LD A,($72D9)    ;
+ $A2E4 CP $A7          ;
+ $A2E6 JR C,$A2ED      ;
+ $A2E8 INC (IX+$01)    ;
+ $A2EB JR $A2CC        ;
+*$A2ED LD A,($7327)    ;
+ $A2F0 ADD A,$0A       ;
+ $A2F2 CP $04          ;
+ $A2F4 JR NZ,$A2FB     ;
+ $A2F6 LD (IX+$52),$00 ;
+ $A2FA XOR A           ;
+*$A2FB LD ($7327),A    ;
+ $A2FE LD (HL),A       ;
+ $A2FF LD A,($72D9)    ;
+ $A302 ADD A,(IX+$52)  ;
+ $A305 CP $10          ;
+ $A307 JR NC,$A30C     ;
+ $A309 POP HL          ;
+ $A30A POP HL          ;
+ $A30B RET             ;
+
+; Farmer jumping/falling related routine.
+;
+; Used by the routine at #R$A2B5.
+c$A30C LD ($72D9),A    ;
+; This entry point is used by the routine at #R$A294.
+*$A30F LD A,$01        ;
+ $A311 CALL $A37F      ;
+ $A314 CALL $9E34      ;
+ $A317 LD BC,$003F     ;
+ $A31A AND A           ;
+ $A31B SBC HL,BC       ;
+ $A31D LD A,($732A)    ;
+ $A320 DEC A           ;
+ $A321 JR Z,$A356      ;
+ $A323 LD A,($7326)    ;
+ $A326 AND A           ;
+ $A327 JR Z,$A356      ;
+ $A329 DEC A           ;
+ $A32A JR Z,$A33E      ;
+ $A32C LD A,($72D8)    ;
+ $A32F AND $07         ;
+ $A331 CP $04          ;
+ $A333 JR NC,$A356     ;
+ $A335 DEC HL          ;
+ $A336 LD A,(HL)       ;
+ $A337 INC HL          ;
+ $A338 CP $05          ;
+ $A33A JR NZ,$A356     ;
+ $A33C JR $A34E        ;
+*$A33E LD A,($72D8)    ;
+ $A341 AND $07         ;
+ $A343 CP $03          ;
+ $A345 JR C,$A356      ;
+ $A347 INC HL          ;
+ $A348 LD A,(HL)       ;
+ $A349 DEC HL          ;
+ $A34A CP $05          ;
+ $A34C JR NZ,$A356     ;
+*$A34E LD A,($7326)    ;
+ $A351 XOR $FE         ;
+ $A353 LD ($7326),A    ;
+*$A356 LD A,(HL)       ;
+ $A357 AND A           ;
+ $A358 RET Z           ;
+ $A359 CP $05          ;
+ $A35B JR Z,$A36A      ;
+ $A35D CP $03          ;
+ $A35F RET NC          ;
+ $A360 DEC HL          ;
+ $A361 DEC A           ;
+ $A362 JR Z,$A366      ;
+ $A364 INC HL          ;
+ $A365 INC HL          ;
+*$A366 LD A,(HL)       ;
+ $A367 CP $05          ;
+ $A369 RET NZ          ;
+*$A36A LD A,($72D9)    ;
+ $A36D INC A           ;
+ $A36E AND $07         ;
+ $A370 RET NZ          ;
+ $A371 LD (IX+$4D),$00 ;
+ $A375 LD HL,$72DB     ;
+ $A378 LD A,(HL)       ;
+ $A379 CP $0D          ;
+ $A37B RET NZ          ;
+ $A37C LD (HL),$00     ;
+ $A37E RET             ;
+
+; Routine at A37F
+;
+; Used by the routines at #R$A294 and #R$A30C.
+c$A37F LD HL,($72D8)  ;
+ $A382 ADD A,(IX+$03) ;
+ $A385 CALL $9A4C     ;
+ $A388 RET            ;
+
+; Farmer lands on a platform?
+;
+; Used by the routine at #R$A278.
+c$A389 LD A,R        ;
+ $A38B AND $07       ;
+ $A38D INC A         ;
+ $A38E LD B,A        ;
+ $A38F LD HL,$A398   ;
+*$A392 INC HL        ;
+ $A393 DJNZ $A392    ;
+ $A395 LD A,(HL)     ;
+ $A396 JP $9CEB      ;
+
+; Unused code?
+c$A399 INC B         ;
+ $A39A LD B,$09      ;
+ $A39C DEC C         ;
+ $A39D LD (DE),A     ;
+ $A39E LD D,$04      ;
+ $A3A0 DEC C         ;
+ $A3A1 RET           ;
+
+; Unused code?
+c$A3A2 LD C,A        ;
+ $A3A3 INC B         ;
+ $A3A4 RET           ;
+
+; Unused
+s$A3A5 DEFS 2
+
+; Farmer collects an egg/corn...also at start of level.
+;
+; Used by the routines at #R$99DF, #R$9A17, #R$9A38, #R$A62C and #R$AE9C.
+c$A3A7 LD A,B        ;
+ $A3A8 AND A         ;
+ $A3A9 JR Z,$A3E6    ;
+ $A3AB LD A,$0A      ;
+*$A3AD LD HL,$6ECC   ;
+*$A3B0 INC (HL)      ;
+ $A3B1 CP (HL)       ;
+ $A3B2 JR NZ,$A3B9   ;
+ $A3B4 LD (HL),$00   ;
+ $A3B6 DEC HL        ;
+ $A3B7 JR $A3B0      ;
+*$A3B9 DJNZ $A3AD    ;
+ $A3BB LD HL,$736E   ;
+ $A3BE LD A,($6EC9)  ;
+ $A3C1 CP (HL)       ;
+ $A3C2 JR Z,$A3E6    ;
+ $A3C4 LD (HL),A     ;
+ $A3C5 LD A,($733B)  ;
+ $A3C8 ADD A,$EF     ;
+ $A3CA LD H,$6E      ;
+ $A3CC LD L,A        ;
+ $A3CD LD C,(HL)     ;
+ $A3CE INC (HL)      ;
+ $A3CF SUB $EF       ;
+ $A3D1 LD B,A        ;
+ $A3D2 LD A,C        ;
+ $A3D3 CP $06        ;
+ $A3D5 JR NC,$A3E6   ;
+ $A3D7 LD A,$FD      ;
+*$A3D9 ADD A,$07     ;
+ $A3DB DJNZ $A3D9    ;
+ $A3DD ADD A,C       ;
+ $A3DE LD L,A        ;
+ $A3DF LD H,$16      ;
+ $A3E1 LD A,$B6      ;
+ $A3E3 CALL $9C40    ; UPDATE_SCREEN_GFX
+*$A3E6 LD DE,($733D) ;
+ $A3EA LD BC,$6EC8   ;
+ $A3ED LD IXl,$06    ;
+*$A3F0 PUSH DE       ;
+ $A3F1 LD A,(BC)     ;
+ $A3F2 SLA A         ;
+ $A3F4 SLA A         ;
+ $A3F6 SLA A         ;
+ $A3F8 PUSH BC       ;
+ $A3F9 ADD A,$70     ;
+ $A3FB LD H,$86      ;
+ $A3FD LD L,A        ;
+ $A3FE LD B,$08      ;
+*$A400 LD A,(HL)     ;
+ $A401 LD (DE),A     ;
+ $A402 INC D         ;
+ $A403 INC L         ;
+ $A404 DJNZ $A400    ;
+ $A406 POP BC        ;
+ $A407 POP DE        ;
+ $A408 INC DE        ;
+ $A409 INC BC        ;
+ $A40A DEC IXl       ;
+ $A40C JR NZ,$A3F0   ;
+ $A40E RET           ;
+
+; Unused?
+b$A40F DEFB $00
+
+; The game has just loaded
+;
+; Used by the routine at #R$9858.
+@label=START
+c$A410 LD HL,$732D   ; {Set SCR_STATE to "Play Tune" POKE @A411 (the address
+ $A413 LD (HL),$06   ; value) to `003` to mute music notes}
+ $A415 LD HL,$736F   ; {Set MUSIC_PLAY_STATE to "play"
+ $A418 LD (HL),$00   ; }
+ $A41A LD A,$B2      ;
+ $A41C LD I,A        ;
+ $A41E IM 2          ; Interupt Mode: determine when and what an interrupt does
+
+; Display the home screen, which includes the scoreboard
+;
+; Note: this routine is very similar to the DISPLAY_SCREEN_INSTRUCTIONS
+; routine.
+@label=DISPLAY_SCREEN_HOME
+c$A420 CALL $AB9E    ; CLEAR_SCREEN
+ $A423 LD H,$02      ;
+ $A425 LD BC,$9630   ;
+*$A428 LD L,$00      ;
+*$A42A LD A,(BC)     ;
+ $A42B CALL $9C40    ; UPDATE_SCREEN_GFX
+ $A42E INC BC        ;
+ $A42F INC L         ;
+ $A430 LD A,L        ;
+ $A431 CP $0E        ;
+ $A433 JR NZ,$A42A   ;
+ $A435 INC H         ;
+ $A436 LD A,H        ;
+ $A437 CP $18        ;
+ $A439 JR NZ,$A428   ;
+ $A43B CALL $ABAD    ; DISPLAY_SCOREBOARD
+ $A43E LD HL,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
+ $A441 LD B,$0E      ;
+ $A443 LD C,$04      ; {Print "A & F SOFTWARE" text graphic
+ $A445 LD A,$03      ;
+ $A447 CALL $AA37    ; }
+ $A44A LD C,$07      ; {Print "CHUCKIE EGG (c)" text graphic
+ $A44C LD A,$06      ;
+ $A44E CALL $AA37    ; }
+ $A451 LD C,$0A      ; {Print "a game of skill..." text graphic
+ $A453 LD A,$04      ;
+ $A455 CALL $AA37    ; }
+ $A458 LD HL,$AE0C   ; Point #REGhl to THEME_TUNE data
+ $A45B LD A,($736F)  ; {If MUSIC_PLAY_STATE is "stopped" then Jump
+ $A45E AND A         ;
+ $A45F JR NZ,$A46E   ; }
+ $A461 CALL $AB60    ; else PLAY_TUNE
+ $A464 LD A,$14      ;
+ $A466 CALL $9CEB    ;
+ $A469 LD A,$01      ; {Set MUSIC_PLAY_STATE to "stopped"
+ $A46B LD ($736F),A  ; }
+
+; Routine at A46E
+;
+; Used by the routines at #R$A420 and #R$AA49.
+c$A46E LD HL,$5AE0   ; {update some colours
+ $A471 LD B,$20      ;
+*$A473 LD (HL),$05   ;
+ $A475 INC HL        ;
+ $A476 DJNZ $A473    ; }
+ $A478 LD HL,$732C   ;
+ $A47B LD (HL),$4E   ;
+
+; Scroll ticker text for home screen
+;
+; Note: this routine is very similar to the first half of SCROLL_TEXT_2
+; routine.
+@label=SCROLL_TEXT_1
+c$A47D LD HL,$50E1   ;
+ $A480 CALL $AB7B    ;
+ $A483 LD BC,$01F4   ;
+ $A486 CALL $A921    ;
+ $A489 LD HL,$732B   ;
+ $A48C DEC (HL)      ;
+ $A48D JR NZ,$A4AB   ;
+ $A48F LD (HL),$08   ;
+ $A491 LD HL,$AC7C   ; Point #REGhl to HOME_SCREEN_TICKER_TEXT
+ $A494 LD A,($732C)  ;
+ $A497 INC A         ;
+ $A498 CP $4E        ;
+ $A49A JR C,$A49D    ;
+ $A49C XOR A         ; {Set $732C to `$00`
+*$A49D LD ($732C),A  ; }
+ $A4A0 LD E,A        ;
+ $A4A1 LD D,$00      ;
+ $A4A3 ADD HL,DE     ;
+ $A4A4 LD A,(HL)     ;
+ $A4A5 LD HL,$001E   ;
+ $A4A8 CALL $9C40    ; UPDATE_SCREEN_GFX
+*$A4AB LD A,$FD      ; {Read keyboard and check keypress `S`
+ $A4AD IN A,($FE)    ;
+ $A4AF BIT 1,A       ;
+ $A4B1 JP Z,$A59D    ; }
+ $A4B4 LD A,$FB      ; {Read keyboard and check keypress `R`
+ $A4B6 IN A,($FE)    ;
+ $A4B8 BIT 3,A       ;
+ $A4BA JP Z,$AA49    ; }
+ $A4BD LD A,$DF      ; {Read keyboard and check keypress `I`
+ $A4BF IN A,($FE)    ;
+ $A4C1 BIT 2,A       ;
+ $A4C3 JR Z,$A4C8    ;
+ $A4C5 JP $A47D      ; }
+
+; Display the instructions screen
+;
+; Note: this routine is very similar to the DISPLAY_SCREEN_HOME routine.
+@label=DISPLAY_SCREEN_INSTRUCTIONS
+c$A4C8 CALL $AB9E    ; CLEAR_SCREEN
+ $A4CB LD H,$03      ;
+ $A4CD LD BC,$8390   ;
+*$A4D0 LD L,$00      ;
+*$A4D2 LD A,(BC)     ;
+ $A4D3 CALL $9C40    ; UPDATE_SCREEN_GFX
+ $A4D6 INC BC        ;
+ $A4D7 INC L         ;
+ $A4D8 LD A,L        ;
+ $A4D9 CP $20        ;
+ $A4DB JR NZ,$A4D2   ;
+ $A4DD INC H         ;
+ $A4DE INC H         ;
+ $A4DF LD A,H        ;
+ $A4E0 CP $19        ;
+ $A4E2 JR NZ,$A4D0   ;
+ $A4E4 LD HL,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
+ $A4E7 LD B,$20      ;
+ $A4E9 LD C,$06      ; {Print intructions headings
+ $A4EB LD A,$05      ;
+ $A4ED CALL $AA37    ; }
+ $A4F0 LD C,$09      ; {Print "KEYS" box
+ $A4F2 LD A,$17      ;
+ $A4F4 CALL $AA37    ; }
+ $A4F7 LD C,$06      ; {Print "KEY TYPES" text
+ $A4F9 LD A,$05      ;
+ $A4FB CALL $AA37    ; }
+ $A4FE LD C,$03      ; {I saw nothing change visually on the screen.
+ $A500 LD A,$04      ;
+ $A502 CALL $AA37    ; }
+ $A505 LD HL,$732C   ; {Set $732C to `$57`
+ $A508 LD (HL),$57   ; }
+ $A50A INC HL        ; {Set SCR_STATE to $0A - Instructions screen?
+ $A50B LD (HL),$0A   ; }
+ $A50D CALL $A960    ;
+ $A510 LD A,$18      ;
+ $A512 CALL $9CEB    ;
+
+; Scroll ticker text for instructions screen
+;
+; Note: first half of this routine is very similar SCROLL_TEXT_1 routine.
+@label=SCROLL_TEXT_2
+c$A515 LD HL,$50E1   ;
+ $A518 CALL $AB7B    ;
+ $A51B LD BC,$01F4   ;
+ $A51E CALL $A921    ;
+ $A521 LD HL,$732B   ;
+ $A524 DEC (HL)      ;
+ $A525 JR NZ,$A543   ;
+ $A527 LD (HL),$08   ;
+ $A529 LD HL,$ACCA   ; Point #REGhl to INSTRUCTIONS_SCREEN_TICKER_TEXT
+ $A52C LD A,($732C)  ;
+ $A52F INC A         ;
+ $A530 CP $57        ;
+ $A532 JR C,$A535    ;
+ $A534 XOR A         ; {Set $732C to `$00`
+*$A535 LD ($732C),A  ; }
+ $A538 LD E,A        ;
+ $A539 LD D,$00      ;
+ $A53B ADD HL,DE     ;
+ $A53C LD A,(HL)     ;
+ $A53D LD HL,$001E   ;
+ $A540 CALL $9C40    ; UPDATE_SCREEN_GFX
+*$A543 LD A,($7373)  ;
+ $A546 XOR $FF       ;
+ $A548 JR NZ,$A553   ;
+ $A54A LD A,$FD      ; {Read keyboard and check keypress (for what?)
+ $A54C IN A,($FE)    ;
+ $A54E BIT 1,A       ;
+ $A550 JP Z,$A59D    ; }
+*$A553 LD A,$FB      ; {Read keyboard and check keypress (for what?)
+ $A555 IN A,($FE)    ;
+ $A557 BIT 3,A       ;
+ $A559 JP Z,$AA49    ; }
+ $A55C LD A,$F7      ; {Read keyboard row 1..5 (on instructions screen?)
+ $A55E IN A,($FE)    ;
+ $A560 AND $07       ;
+ $A562 CP $07        ;
+ $A564 JR Z,$A59A    ; }
+
+; Highlight the "input type" line # 1, 2, or 3.
+c$A566 LD B,A        ; #REGb also saved to SCR_STATE later, at $A57D
+ $A567 LD A,($732D)  ; {Check the current SCR_STATE
+ $A56A CP B          ;
+ $A56B JR Z,$A59A    ; }
+ $A56D LD HL,$5980   ; Input type #1
+ $A570 CP $05        ;
+ $A572 JR Z,$A57C    ;
+ $A574 LD HL,$59C0   ; Input type #2
+ $A577 JR C,$A57C    ;
+ $A579 LD HL,$5940   ; Input type #3
+*$A57C LD A,B        ;
+ $A57D LD ($732D),A  ; Update SCR_STATE with
+ $A580 CP $05        ;
+ $A582 LD DE,$5980   ; Input type #1
+ $A585 JR Z,$A58F    ;
+ $A587 LD DE,$59C0   ; Input type #2
+ $A58A JR C,$A58F    ;
+ $A58C LD DE,$5940   ; Input type #3
+*$A58F LD B,$20      ;
+ $A591 LD A,$97      ;
+*$A593 LD (HL),$17   ;
+ $A595 LD (DE),A     ;
+ $A596 INC HL        ;
+ $A597 INC DE        ;
+ $A598 DJNZ $A593    ;
+; This entry point is used by the routine at #R$A515.
+*$A59A JP $A515      ;
+
+; Initialize a new game
+;
+; Routine to start a new game, first asking for number of players!
+@label=INIT_GAME
+c$A59D LD IXh,$02    ;
+ $A5A0 CALL $A929    ;
+ $A5A3 LD HL,$4000   ; {Clear the entire DISPLAY_FILE
+ $A5A6 LD BC,$1800   ;
+*$A5A9 LD (HL),$00   ;
+ $A5AB INC HL        ;
+ $A5AC DEC BC        ;
+ $A5AD LD A,B        ;
+ $A5AE OR C          ;
+ $A5AF JR NZ,$A5A9   ; }
+ $A5B1 LD IXh,$01    ;
+ $A5B4 CALL $A929    ;
+ $A5B7 LD C,$E8      ;
+ $A5B9 LD DE,$AD21   ; Point #REGde to CHOOSE_NUMBER_OF_PLAYERS_TEXT
+ $A5BC LD B,$01      ;
+*$A5BE DJNZ $A5CA    ; {Scroll text onto screen? vertical-middle of
+ $A5C0 LD A,(DE)     ; DISPLAY_FILE
+ $A5C1 INC DE        ;
+ $A5C2 LD HL,$0C1E   ;
+ $A5C5 CALL $9C40    ;
+ $A5C8 LD B,$08      ;
+*$A5CA LD HL,$4861   ;
+ $A5CD CALL $AB7B    ;
+ $A5D0 DEC C         ;
+ $A5D1 JR NZ,$A5BE   ; }
+*$A5D3 LD A,$F7      ; {Input to get NUMBER_OF_PLAYERS for this game
+ $A5D5 IN A,($FE)    ;
+ $A5D7 AND $0F       ;
+ $A5D9 CP $0F        ;
+ $A5DB JR Z,$A5D3    ; }
+ $A5DD LD B,$00      ; {INCrement #REGb until it equals #REGa; the
+*$A5DF INC B         ; NUMBER_OF_PLAYERS
+ $A5E0 SRL A         ;
+ $A5E2 JR C,$A5DF    ; }
+ $A5E4 LD L,B        ; NUMBER_OF_PLAYERS (#REGl) = #REGb
+ $A5E5 LD H,$01      ; CURRENT_PLAYER (#REGh) = $01
+ $A5E7 LD ($733A),HL ; Set total and current player(s). Note: $733B is
+                     ; CURRENT_PLAYER
+ $A5EA LD B,$F0      ; {scroll text off screen
+*$A5EC LD HL,$4861   ;
+ $A5EF CALL $AB7B    ;
+ $A5F2 DJNZ $A5EC    ; }
+ $A5F4 LD A,$05      ;
+ $A5F6 LD DE,$61A8   ; Load #REGde with LEVEL_BUFFER address.
+*$A5F9 LD BC,$02A0   ; Load #REGbc with size of level data.
+ $A5FC LD HL,$B3B0   ; Point #REGh; to LEVEL_1 address.
+ $A5FF LDIR          ; Copy level data.
+ $A601 DEC A         ; {Why repeat the copy 5 times?
+ $A602 JR NZ,$A5F9   ; }
+ $A604 LD HL,$6EC8   ; {Reset anim buffer data at $6EC8 (6 bytes) + ANIMBUF1
+ $A607 LD B,$1E      ; (24 bytes)
+*$A609 LD (HL),$00   ;
+ $A60B INC HL        ;
+ $A60C DJNZ $A609    ; }
+ $A60E LD B,$05      ; {Reset all egg counters to $0C (12...why?): from address
+*$A610 LD (HL),$0C   ; $6EE6 for 5 bytes
+ $A612 INC HL        ;
+ $A613 DJNZ $A610    ; }
+ $A615 LD B,$05      ; {Reset all cleared levels counters: from address $6EEB
+*$A617 LD (HL),$00   ; for 5 bytes
+ $A619 INC HL        ;
+ $A61A DJNZ $A617    ; }
+ $A61C LD B,$04      ; {Reset all player lives to 5: from address $6EF0 for 4
+*$A61E LD (HL),$05   ; bytes
+ $A620 INC HL        ;
+ $A621 DJNZ $A61E    ; }
+ $A623 LD HL,$9F9E   ;
+ $A626 LD ($AD58),HL ;
+ $A629 CALL $A960    ;
+
+; Routine at A62C
+;
+; Used by the routine at #R$A6FE.
+c$A62C LD A,($733A)  ; NUMBER_OF_PLAYERS
+ $A62F DEC A         ;
+ $A630 JR Z,$A653    ;
+ $A632 LD A,($733B)  ; {Does some stuff with CURRENT_PLAYER value
+ $A635 ADD A,$19     ;
+ $A637 CALL $9CEB    ;
+ $A63A LD BC,$AD49   ;
+ $A63D LD A,($733B)  ;
+ $A640 ADD A,$30     ;
+ $A642 LD ($AD50),A  ; }
+ $A645 LD C,$08      ;
+ $A647 LD DE,$AD49   ; #REGde points to address for "player 1" text
+ $A64A CALL $A9CE    ;
+ $A64D LD BC,$0000   ;
+ $A650 CALL $A921    ;
+*$A653 CALL $AE9C    ;
+ $A656 CALL $A960    ;
+ $A659 LD BC,$0006   ;
+ $A65C LD HL,$6EC8   ;
+ $A65F LD A,($733B)  ;
+*$A662 ADD HL,BC     ;
+ $A663 DEC A         ;
+ $A664 JR NZ,$A662   ;
+ $A666 EX DE,HL      ;
+ $A667 LD HL,$6EC8   ;
+ $A66A LDIR          ;
+ $A66C IM 2          ;
+ $A66E LD A,($6EE6)  ;
+ $A671 AND A         ;
+ $A672 JP NZ,$A6FE   ; POKE @A672 to 202 (`JP Z`) to jump to next level on
+                     ; death
+*$A675 LD A,($7347)  ;
+ $A678 AND A         ;
+ $A679 JR Z,$A68D    ;
+ $A67B LD B,$00      ;
+ $A67D CALL $A1B8    ;
+ $A680 LD B,$01      ;
+ $A682 CALL $A3A7    ;
+ $A685 LD HL,$1E04   ;
+ $A688 CALL $9CA4    ;
+ $A68B JR $A675      ;
+*$A68D LD D,$02      ;
+*$A68F LD BC,$0000   ;
+ $A692 CALL $A921    ;
+ $A695 DEC D         ;
+ $A696 JR NZ,$A68F   ;
+ $A698 CALL $A968    ;
+ $A69B LD BC,$0006   ;
+ $A69E LD HL,$6EC8   ;
+ $A6A1 LD A,($733B)  ; CURRENT_PLAYER
+*$A6A4 ADD HL,BC     ;
+ $A6A5 DEC A         ;
+ $A6A6 JR NZ,$A6A4   ;
+ $A6A8 EX DE,HL      ;
+ $A6A9 LD HL,$6EC8   ;
+ $A6AC LDIR          ;
+ $A6AE LD HL,$6EEB   ;
+ $A6B1 INC (HL)      ;
+ $A6B2 LD A,(HL)     ;
+ $A6B3 INC A         ;
+ $A6B4 CP $C8        ;
+ $A6B6 JR C,$A6BC    ;
+ $A6B8 SUB $C8       ;
+ $A6BA JR $A6C2      ;
+*$A6BC CP $64        ;
+ $A6BE JR C,$A6C2    ;
+ $A6C0 SUB $64       ;
+*$A6C2 LD B,$00      ;
+*$A6C4 SUB $0A       ;
+ $A6C6 JR C,$A6CB    ;
+ $A6C8 INC B         ;
+ $A6C9 JR $A6C4      ;
+*$A6CB ADD A,$A8     ;
+ $A6CD LD ($AD59),A  ;
+ $A6D0 LD A,B        ;
+ $A6D1 AND A         ;
+ $A6D2 JR Z,$A6D6    ;
+ $A6D4 ADD A,$9E     ;
+*$A6D6 LD ($AD58),A  ;
+ $A6D9 LD DE,$AD52   ; #REGde is loaded with "level " text
+ $A6DC LD C,$08      ;
+ $A6DE CALL $A9CE    ;
+ $A6E1 LD DE,$61A8   ; Load #REGde with LEVEL_BUFFER address
+ $A6E4 LD BC,$02A0   ; Load #REGbc with value of 672 (size of level data)
+ $A6E7 LD HL,$B110   ; NOTE: $B110 is not read from. First, 672 is added to the
+                     ; address.
+ $A6EA LD A,($6EEB)  ;
+ $A6ED AND $07       ;
+ $A6EF INC A         ;
+*$A6F0 ADD HL,BC     ; $B110 + $02A0 = LEVEL_1 address, which is where the
+                     ; reading starts.
+ $A6F1 DEC A         ;
+ $A6F2 JR NZ,$A6F0   ;
+ $A6F4 LDIR          ;
+ $A6F6 LD A,$0C      ;
+ $A6F8 LD ($6EE6),A  ;
+ $A6FB JP $A653      ;
+
+; Farmer has died!
+;
+; Used by the routine at #R$A62C.
+@label=KILL_FARMER
+c$A6FE LD HL,$AE6A   ;
+ $A701 CALL $AB60    ; PLAY_TUNE
+ $A704 CALL $AAE4    ;
+ $A707 CALL $A960    ;
+ $A70A LD BC,$0000   ;
+ $A70D CALL $A921    ;
+ $A710 CALL $AB9E    ; CLEAR_SCREEN
+ $A713 LD HL,$7342   ;
+ $A716 LD A,(HL)     ;
+ $A717 CP $FF        ;
+ $A719 JR NZ,$A72D   ;
+ $A71B INC HL        ;
+ $A71C LD A,$09      ;
+ $A71E CP (HL)       ;
+ $A71F JR NZ,$A72D   ;
+ $A721 INC HL        ;
+ $A722 CP (HL)       ;
+ $A723 JR NZ,$A72D   ;
+ $A725 LD DE,$AD5A   ; Point #REGde to OUT_OF_TIME_TEXT
+ $A728 LD C,$0D      ;
+ $A72A CALL $A9CE    ;
+*$A72D LD HL,$61A8   ; {copy LEVEL data to LEVEL_BUFFER
+ $A730 LD BC,$02A0   ;
+ $A733 PUSH HL       ;
+ $A734 POP DE        ;
+ $A735 LD A,($733B)  ;
+*$A738 ADD HL,BC     ;
+ $A739 DEC A         ;
+ $A73A JR NZ,$A738   ;
+ $A73C EX DE,HL      ;
+ $A73D LDIR          ; }
+ $A73F LD A,($733B)  ; CURRENT_PLAYER
+ $A742 LD E,A        ;
+ $A743 LD D,$00      ;
+ $A745 LD HL,$6EE6   ;
+ $A748 LD A,(HL)     ;
+ $A749 ADD HL,DE     ;
+ $A74A LD (HL),A     ;
+ $A74B LD HL,$6EEB   ;
+ $A74E LD A,(HL)     ;
+ $A74F ADD HL,DE     ;
+ $A750 LD (HL),A     ;
+ $A751 LD HL,$6EEF   ;
+ $A754 ADD HL,DE     ;
+ $A755 DEC (HL)      ; POKE to 182 (`OR (HL)`) to get infinite LIVES
+ $A756 JR NZ,$A768   ;
+ $A758 LD C,$12      ;
+ $A75A LD A,($733A)  ;
+ $A75D DEC A         ;
+ $A75E JR NZ,$A762   ;
+ $A760 LD C,$09      ;
+*$A762 LD DE,$AD3F   ; Point #REGde to GAME_OVER_TEXT
+ $A765 CALL $A9CE    ;
+*$A768 LD B,$05      ;
+*$A76A LD HL,($733A) ;
+ $A76D LD A,H        ;
+ $A76E CP L          ;
+ $A76F JR NZ,$A772   ;
+ $A771 XOR A         ;
+*$A772 INC A         ;
+ $A773 LD ($733B),A  ; CURRENT_PLAYER
+ $A776 LD HL,$6EEF   ;
+ $A779 LD E,A        ;
+ $A77A LD D,$00      ;
+ $A77C ADD HL,DE     ;
+ $A77D LD A,(HL)     ;
+ $A77E AND A         ;
+ $A77F JR NZ,$A785   ;
+ $A781 DJNZ $A76A    ;
+ $A783 JR $A7BC      ;
+*$A785 LD BC,$0004   ;
+ $A788 AND A         ;
+ $A789 SBC HL,BC     ;
+ $A78B LD A,(HL)     ;
+ $A78C LD ($6EEB),A  ;
+ $A78F INC BC        ;
+ $A790 AND A         ;
+ $A791 SBC HL,BC     ;
+ $A793 LD A,(HL)     ;
+ $A794 LD ($6EE6),A  ;
+ $A797 LD A,($733B)  ; CURRENT_PLAYER
+ $A79A INC BC        ;
+ $A79B LD HL,$6EC8   ;
+*$A79E ADD HL,BC     ;
+ $A79F DEC A         ;
+ $A7A0 JR NZ,$A79E   ;
+ $A7A2 LD DE,$6EC8   ;
+ $A7A5 LDIR          ;
+ $A7A7 LD A,($733B)  ; CURRENT_PLAYER
+ $A7AA LD HL,$61A8   ; {copy LEVEL data to LEVEL_BUFFER
+ $A7AD LD BC,$02A0   ;
+*$A7B0 ADD HL,BC     ;
+ $A7B1 DEC A         ;
+ $A7B2 JR NZ,$A7B0   ;
+ $A7B4 LD DE,$61A8   ;
+ $A7B7 LDIR          ; }
+ $A7B9 JP $A62C      ;
+
+; Related to animation #1
+;
+; Used by the routine at #R$A6FE.
+c$A7BC LD IXh,$02    ;
+ $A7BF CALL $A929    ;
+ $A7C2 LD HL,$4000   ; {Point #REGhl to DISPLAY_FILE and reset first 18 bytes
+ $A7C5 LD BC,$0018   ;
+*$A7C8 LD (HL),$00   ;
+ $A7CA INC HL        ;
+ $A7CB DJNZ $A7C8    ; }
+ $A7CD DEC C         ;
+ $A7CE JR NZ,$A7C8   ;
+ $A7D0 LD IXh,$01    ;
+ $A7D3 CALL $A929    ;
+ $A7D6 LD HL,$6ECE   ; {Increment value in (#REGhl) by $30 for 24 bytes.
+ $A7D9 LD B,$18      ;
+*$A7DB LD A,(HL)     ;
+ $A7DC ADD A,$30     ;
+ $A7DE LD (HL),A     ;
+ $A7DF INC HL        ;
+ $A7E0 DJNZ $A7DB    ; }
+ $A7E2 LD A,$01      ;
+ $A7E4 LD HL,$6ECE   ;
+*$A7E7 ADD A,$30     ;
+ $A7E9 LD ($AD72),A  ;
+ $A7EC SUB $30       ;
+ $A7EE CALL $A80C    ;
+ $A7F1 DEC D         ;
+ $A7F2 JR Z,$A7FB    ;
+ $A7F4 PUSH AF       ;
+ $A7F5 PUSH HL       ;
+ $A7F6 CALL $A968    ;
+ $A7F9 POP HL        ;
+ $A7FA POP AF        ;
+*$A7FB LD DE,$0006   ;
+ $A7FE ADD HL,DE     ;
+ $A7FF LD IX,$72D8   ; {check if a score has been entered on scoreboard?
+ $A803 CP (IX+$62)   ;
+ $A806 JP Z,$A420    ; }
+ $A809 INC A         ;
+ $A80A JR $A7E7      ;
+
+; Called before loading main screen or highscores?
+;
+; Used by the routine at #R$A7BC.
+c$A80C PUSH BC       ;
+ $A80D PUSH AF       ;
+ $A80E PUSH HL       ;
+ $A80F LD B,$0A      ;
+ $A811 LD DE,$97B9   ;
+*$A814 CALL $AA0C    ;
+ $A817 DEC A         ;
+ $A818 JR Z,$A828    ;
+ $A81A LD C,$10      ;
+*$A81C INC DE        ;
+ $A81D DEC C         ;
+ $A81E JR NZ,$A81C   ;
+ $A820 DJNZ $A814    ;
+ $A822 POP HL        ;
+ $A823 POP AF        ;
+ $A824 POP BC        ;
+ $A825 LD D,$01      ;
+ $A827 RET           ;
+
+; Player enters their name on the highscore table?
+;
+; Used by the routine at #R$A80C.
+@label=ENTER_NEW_HIGH_SCORE_NAME
+c$A828 LD IXh,B      ;
+ $A82A LD HL,$983F   ;
+ $A82D DEC B         ;
+ $A82E JR Z,$A844    ;
+ $A830 LD HL,$0000   ;
+ $A833 LD DE,$0010   ;
+*$A836 ADD HL,DE     ;
+ $A837 DJNZ $A836    ;
+ $A839 PUSH HL       ;
+ $A83A POP BC        ;
+ $A83B LD DE,$984E   ; {Seems to move a highscore to different position. NOTE:
+ $A83E LD HL,$983E   ; LDDR decrements HL/DE, unlike LDIR, which increments
+ $A841 LDDR          ; them}
+ $A843 INC HL        ;
+*$A844 LD B,$0A      ; {Does this clear the name for the selected highscore?
+*$A846 LD (HL),$00   ;
+ $A848 INC HL        ;
+ $A849 DJNZ $A846    ; }
+ $A84B LD BC,$0006   ;
+ $A84E PUSH HL       ;
+ $A84F POP DE        ;
+ $A850 POP HL        ;
+ $A851 PUSH HL       ;
+ $A852 PUSH DE       ;
+ $A853 LDIR          ;
+ $A855 LD C,$0B      ;
+ $A857 LD H,$17      ;
+ $A859 LD DE,$AD67   ; Point #REGde to NEW_HIGH_SCORE_TEXT
+*$A85C LD L,$00      ;
+ $A85E LD B,$0F      ;
+*$A860 LD A,(DE)     ;
+ $A861 INC DE        ;
+ $A862 CALL $9C40    ; UPDATE_SCREEN_GFX
+ $A865 INC L         ;
+ $A866 DJNZ $A860    ;
+ $A868 DEC H         ;
+ $A869 DEC H         ;
+ $A86A DEC C         ;
+ $A86B JR NZ,$A85C   ;
+ $A86D CALL $ABAD    ; DISPLAY_SCOREBOARD
+ $A870 LD HL,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
+ $A873 LD A,$03      ; {Highlight the "Player 1" text in magenta ($03)
+ $A875 LD B,$0F      ;
+ $A877 LD C,$04      ;
+ $A879 CALL $AA37    ; }
+ $A87C INC A         ; {Highlight the "well done..." message in green (INC A =
+ $A87D LD C,$09      ; $04)
+ $A87F CALL $AA37    ; }
+ $A882 LD A,$02      ; {Highlight the "enter initials..." message in red ($02)
+ $A884 CALL $AA37    ; }
+ $A887 CALL $A960    ;
+ $A88A LD A,$07      ;
+ $A88C CALL $9CEB    ;
+ $A88F CALL $A960    ;
+ $A892 POP HL        ;
+ $A893 LD BC,$000A   ;
+ $A896 AND A         ;
+ $A897 SBC HL,BC     ;
+ $A899 EX DE,HL      ;
+ $A89A LD A,IXh      ;
+ $A89C SLA A         ;
+ $A89E INC A         ;
+ $A89F LD H,A        ;
+ $A8A0 IM 1          ;
+ $A8A2 LD L,$10      ;
+*$A8A4 LD A,$B7      ;
+ $A8A6 CALL $9C40    ; UPDATE_SCREEN_GFX
+*$A8A9 LD A,($5C04)  ; reads SYSVAR_KSTATE_4
+ $A8AC XOR $FF       ;
+ $A8AE JR NZ,$A8A9   ;
+*$A8B0 HALT          ;
+ $A8B1 LD A,($5C04)  ; reads SYSVAR_KSTATE_4
+ $A8B4 XOR $FF       ;
+ $A8B6 JR Z,$A8B0    ;
+ $A8B8 LD A,($5C08)  ; reads SYSVAR_LAST_K (newly pressed key)
+ $A8BB CP $0D        ;
+ $A8BD JR Z,$A8E4    ;
+ $A8BF CP $0C        ;
+ $A8C1 JR NZ,$A8D1   ;
+ $A8C3 LD A,L        ;
+ $A8C4 CP $10        ;
+ $A8C6 JR Z,$A8B0    ;
+ $A8C8 XOR A         ;
+ $A8C9 DEC DE        ;
+ $A8CA LD (DE),A     ;
+ $A8CB CALL $9C40    ; UPDATE_SCREEN_GFX
+ $A8CE DEC L         ;
+ $A8CF JR $A8A4      ;
+*$A8D1 CP $20        ;
+ $A8D3 JR C,$A8B0    ;
+ $A8D5 LD B,A        ;
+ $A8D6 LD A,L        ;
+ $A8D7 CP $19        ;
+ $A8D9 JR Z,$A8B0    ;
+ $A8DB LD A,B        ;
+ $A8DC LD (DE),A     ;
+ $A8DD CALL $9C40    ; UPDATE_SCREEN_GFX
+ $A8E0 INC L         ;
+ $A8E1 INC DE        ;
+ $A8E2 JR $A8A4      ;
+*$A8E4 POP HL        ;
+ $A8E5 POP AF        ;
+ $A8E6 POP BC        ;
+ $A8E7 LD D,$02      ;
+ $A8E9 IM 2          ;
+ $A8EB RET           ;
+
+; Animated transition
+;
+; Used by the routines at #R$A929, #R$A968 and #R$A9FA.
+@label=TRANSITION_ANIMATION
+c$A8EC PUSH AF       ;
+ $A8ED PUSH HL       ;
+ $A8EE PUSH BC       ;
+ $A8EF PUSH DE       ;
+ $A8F0 PUSH HL       ;
+ $A8F1 POP BC        ;
+ $A8F2 CALL $AA23    ;
+ $A8F5 EX DE,HL      ;
+ $A8F6 LD A,B        ;
+ $A8F7 SUB H         ;
+ $A8F8 LD B,H        ;
+ $A8F9 LD H,A        ;
+ $A8FA LD A,C        ;
+ $A8FB ADD A,L       ;
+ $A8FC LD C,L        ;
+ $A8FD LD L,A        ;
+ $A8FE CALL $AA23    ;
+ $A901 LD A,($732C)  ;
+*$A904 LD (DE),A     ;
+ $A905 LD (HL),A     ;
+ $A906 INC DE        ;
+ $A907 DEC HL        ;
+ $A908 DEC C         ;
+ $A909 JR NZ,$A904   ;
+ $A90B LD IXl,B      ;
+ $A90D LD BC,$0020   ;
+*$A910 LD (DE),A     ;
+ $A911 LD (HL),A     ;
+ $A912 AND A         ;
+ $A913 SBC HL,BC     ;
+ $A915 EX DE,HL      ;
+ $A916 ADD HL,BC     ;
+ $A917 EX DE,HL      ;
+ $A918 DEC IXl       ;
+ $A91A JR NZ,$A910   ;
+ $A91C POP DE        ;
+ $A91D POP BC        ;
+ $A91E POP HL        ;
+ $A91F POP AF        ;
+ $A920 RET           ;
+
+; Possible pause routine
+;
+; Used by the routines at #R$A47D, #R$A515, #R$A62C, #R$A6FE, #R$A929 and
+; #R$A968.
+@label=PAUSE_ROUTINE
+c$A921 PUSH AF       ;
+*$A922 DEC BC        ;
+ $A923 LD A,B        ;
+ $A924 OR C          ;
+ $A925 JR NZ,$A922   ;
+ $A927 POP AF        ;
+ $A928 RET           ;
+
+; Animated transition #1 (1 square)
+;
+; Used by the routines at #R$A59D and #R$A7BC.
+c$A929 LD HL,$0C0B   ;
+ $A92C LD DE,$0109   ;
+ $A92F LD A,$12      ;
+ $A931 DEC IXh       ;
+ $A933 JR NZ,$A937   ;
+ $A935 LD A,$03      ;
+*$A937 INC IXh       ;
+ $A939 LD B,$0C      ;
+*$A93B LD ($732C),A  ; Set $732C to `$03`
+ $A93E CALL $A8EC    ;
+ $A941 PUSH BC       ;
+ $A942 LD BC,$1388   ;
+ $A945 CALL $A921    ;
+ $A948 POP BC        ;
+ $A949 INC H         ;
+ $A94A DEC L         ;
+ $A94B INC D         ;
+ $A94C INC D         ;
+ $A94D INC E         ;
+ $A94E INC E         ;
+ $A94F DEC IXh       ;
+ $A951 JR Z,$A95B    ;
+ $A953 ADD A,$09     ;
+ $A955 CP $30        ;
+ $A957 JR C,$A95B    ;
+ $A959 LD A,$12      ;
+*$A95B INC IXh       ;
+ $A95D DJNZ $A93B    ;
+ $A95F RET           ;
+
+; Called when farmer dies
+;
+; Used by the routines at #R$A4C8, #R$A59D, #R$A62C, #R$A6FE and #R$A828.
+c$A960 LD A,($7373)  ;
+ $A963 XOR $FF       ;
+ $A965 JR NZ,$A960   ; POKE @A965 to 0 (`NOP`) and @A966 to 201 (`RET`) to
+                     ; prevent music from being player
+ $A967 RET           ;
+
+; Animated transition #2 (4 squares)
+;
+; Used by the routines at #R$A62C and #R$A7BC.
+c$A968 LD IXh,$00    ;
+ $A96B LD HL,$732C   ; {Set $732C to `$09`
+ $A96E LD (HL),$09   ; }
+*$A970 LD HL,$0605   ;
+ $A973 LD D,$01      ;
+*$A975 PUSH HL       ;
+ $A976 PUSH DE       ;
+ $A977 LD E,D        ;
+ $A978 CALL $A8EC    ;
+ $A97B LD A,$14      ;
+ $A97D ADD A,L       ;
+ $A97E LD L,A        ;
+ $A97F LD A,$0C      ;
+ $A981 ADD A,H       ;
+ $A982 LD H,A        ;
+ $A983 CALL $A8EC    ;
+ $A986 LD A,$08      ;
+ $A988 ADD A,E       ;
+ $A989 LD E,A        ;
+ $A98A LD A,L        ;
+ $A98B SUB $14       ;
+ $A98D LD L,A        ;
+ $A98E LD A,$08      ;
+ $A990 ADD A,E       ;
+ $A991 CALL $A8EC    ;
+ $A994 LD A,H        ;
+ $A995 SUB $0C       ;
+ $A997 LD H,A        ;
+ $A998 LD A,$0C      ;
+ $A99A ADD A,L       ;
+ $A99B LD L,A        ;
+ $A99C CALL $A9FA    ;
+ $A99F POP DE        ;
+ $A9A0 POP HL        ;
+ $A9A1 INC E         ;
+ $A9A2 INC E         ;
+ $A9A3 INC D         ;
+ $A9A4 INC D         ;
+ $A9A5 INC H         ;
+ $A9A6 DEC L         ;
+ $A9A7 LD BC,$2710   ;
+ $A9AA CALL $A921    ;
+ $A9AD LD A,L        ;
+ $A9AE CP $FF        ;
+ $A9B0 JR NZ,$A975   ;
+ $A9B2 LD BC,$1800   ;
+ $A9B5 LD HL,$4000   ;
+*$A9B8 LD (HL),$00   ;
+ $A9BA INC HL        ;
+ $A9BB DEC BC        ;
+ $A9BC LD A,B        ;
+ $A9BD OR C          ;
+ $A9BE JR NZ,$A9B8   ;
+ $A9C0 LD A,IXh      ;
+ $A9C2 LD IXh,$01    ;
+ $A9C5 LD HL,$732C   ; {Set $732C to `$04`
+ $A9C8 LD (HL),$04   ; }
+ $A9CA AND A         ;
+ $A9CB JR Z,$A970    ;
+ $A9CD RET           ;
+
+; Prepare to scroll GAME OVER message
+;
+; Used by the routines at #R$A62C and #R$A6FE.
+c$A9CE LD HL,$5960   ; {Update some attribute colours to $04
+ $A9D1 LD B,$80      ;
+*$A9D3 LD (HL),$04   ;
+ $A9D5 INC HL        ;
+ $A9D6 DJNZ $A9D3    ; }
+ $A9D8 LD B,$01      ;
+*$A9DA LD HL,$4861   ; Point #REGhl to vertical middle of screen
+ $A9DD CALL $AB7B    ; SCROLL_TICKER_TEXT
+ $A9E0 DJNZ $A9DA    ;
+ $A9E2 LD A,(DE)     ;
+ $A9E3 LD HL,$0C1E   ;
+ $A9E6 INC DE        ;
+ $A9E7 CALL $9C40    ; UPDATE_SCREEN_GFX
+ $A9EA LD B,$08      ;
+ $A9EC DEC C         ;
+ $A9ED JR NZ,$A9DA   ;
+ $A9EF LD B,$00      ;
+*$A9F1 LD HL,$4861   ; Point #REGhl to vertical middle of screen
+ $A9F4 CALL $AB7B    ; SCROLL_TICKER_TEXT
+ $A9F7 DJNZ $A9F1    ;
+ $A9F9 RET           ;
+
+; Animated transition after death...related to animation #1
+;
+; Used by the routine at #R$A968.
+c$A9FA INC IXh       ;
+ $A9FC DEC IXh       ;
+ $A9FE JR NZ,$AA08   ;
+ $AA00 LD A,($732C)  ; {Increment value at $732C by `$09`.
+ $AA03 ADD A,$09     ;
+ $AA05 LD ($732C),A  ; }
+*$AA08 CALL $A8EC    ;
+ $AA0B RET           ;
+
+; Routine at AA0C
+;
+; Used by the routine at #R$A80C.
+c$AA0C PUSH BC       ;
+ $AA0D PUSH DE       ;
+ $AA0E PUSH HL       ;
+ $AA0F LD C,$01      ;
+ $AA11 LD B,$06      ;
+*$AA13 LD A,(DE)     ;
+ $AA14 INC DE        ;
+ $AA15 CP (HL)       ;
+ $AA16 INC HL        ;
+ $AA17 JR C,$AA1E    ;
+ $AA19 JR NZ,$AA1D   ;
+ $AA1B DJNZ $AA13    ;
+*$AA1D DEC C         ;
+*$AA1E LD A,C        ;
+ $AA1F POP HL        ;
+ $AA20 POP DE        ;
+ $AA21 POP BC        ;
+ $AA22 RET           ;
+
+; Called during animation #1
+;
+; Used by the routine at #R$A8EC.
+c$AA23 PUSH DE       ;
+ $AA24 PUSH BC       ;
+ $AA25 EX DE,HL      ;
+ $AA26 LD HL,$5B00   ; Point #REGhl to start of PRINTER_BUFFER...why?
+ $AA29 LD BC,$0020   ;
+ $AA2C INC D         ;
+*$AA2D AND A         ;
+ $AA2E SBC HL,BC     ;
+ $AA30 DEC D         ;
+ $AA31 JR NZ,$AA2D   ;
+ $AA33 ADD HL,DE     ;
+ $AA34 POP BC        ;
+ $AA35 POP DE        ;
+ $AA36 RET           ;
+
+; Prints a text block to the screen.
+;
+; Used by the routines at #R$A420, #R$A4C8 and #R$A828.
+@label=PRINT_TEXT
+c$AA37 PUSH BC       ;
+ $AA38 LD DE,$0020   ;
+*$AA3B PUSH BC       ;
+ $AA3C PUSH HL       ;
+*$AA3D LD (HL),A     ;
+ $AA3E INC HL        ;
+ $AA3F DJNZ $AA3D    ;
+ $AA41 POP HL        ;
+ $AA42 ADD HL,DE     ;
+ $AA43 POP BC        ;
+ $AA44 DEC C         ;
+ $AA45 JR NZ,$AA3B   ;
+ $AA47 POP BC        ;
+ $AA48 RET           ;
+
+; Redefine keys wizard - read new keys
+;
+; Used by the routines at #R$A47D and #R$A515.
+@label=REDEFINE_KEYS_WIZARD
+c$AA49 CALL $AB9E    ; CLEAR_SCREEN
+ $AA4C LD HL,$732D   ;
+ $AA4F LD (HL),$03   ;
+ $AA51 LD HL,$8268   ; {Clear 10 of the 12 bytes at this address
+ $AA54 LD B,$0A      ;
+*$AA56 LD (HL),$00   ;
+ $AA58 INC HL        ;
+ $AA59 DJNZ $AA56    ; }
+ $AA5B LD HL,$1100   ;
+ $AA5E LD B,$20      ;
+ $AA60 LD DE,$AC02   ; Point #REGde to REDEFINE_KEYS_WIZARD_TEXT
+*$AA63 LD A,(DE)     ;
+ $AA64 CALL $9C40    ; UPDATE_SCREEN_GFX
+ $AA67 INC L         ;
+ $AA68 INC DE        ;
+ $AA69 DJNZ $AA63    ;
+ $AA6B LD H,$0E      ;
+ $AA6D LD C,$05      ;
+*$AA6F LD B,$0A      ;
+ $AA71 LD L,$0A      ;
+*$AA73 LD A,(DE)     ;
+ $AA74 CALL $9C40    ; UPDATE_SCREEN_GFX
+ $AA77 INC DE        ;
+ $AA78 INC L         ;
+ $AA79 DJNZ $AA73    ;
+ $AA7B DEC H         ;
+ $AA7C DEC H         ;
+ $AA7D DEC C         ;
+ $AA7E JR NZ,$AA6F   ;
+ $AA80 LD HL,$58C0   ; {Update colour attributes to $04
+ $AA83 LD B,$20      ;
+*$AA85 LD (HL),$04   ;
+ $AA87 INC HL        ;
+ $AA88 DJNZ $AA85    ; }
+*$AA8A CALL $AAF4    ;
+ $AA8D LD A,L        ;
+ $AA8E AND A         ;
+ $AA8F JR NZ,$AA8A   ;
+ $AA91 LD A,$05      ;
+ $AA93 LD IX,$8268   ;
+ $AA97 LD HL,$592A   ;
+ $AA9A LD BC,$83F6   ;
+ $AA9D LD DE,$0E16   ;
+*$AAA0 CALL $AB19    ;
+ $AAA3 PUSH BC       ;
+ $AAA4 LD BC,$0040   ;
+ $AAA7 ADD HL,BC     ;
+ $AAA8 POP BC        ;
+ $AAA9 DEC D         ;
+ $AAAA DEC D         ;
+ $AAAB INC IX        ;
+ $AAAD INC IX        ;
+ $AAAF INC BC        ;
+ $AAB0 INC BC        ;
+ $AAB1 INC BC        ;
+ $AAB2 INC BC        ;
+ $AAB3 INC BC        ;
+ $AAB4 DEC A         ;
+ $AAB5 JR NZ,$AAA0   ;
+ $AAB7 JP $A46E      ;
+
+; Routine at AABA
+;
+; Used by the routine at #R$AB19.
+c$AABA LD HL,$8267   ;
+ $AABD LD B,$00      ;
+*$AABF INC HL        ;
+ $AAC0 INC HL        ;
+ $AAC1 INC B         ;
+ $AAC2 LD A,B        ;
+ $AAC3 CP $06        ;
+ $AAC5 JR Z,$AACB    ;
+ $AAC7 LD A,(HL)     ;
+ $AAC8 AND A         ;
+ $AAC9 JR NZ,$AABF   ;
+*$AACB DEC HL        ;
+ $AACC DEC HL        ;
+ $AACD DEC B         ;
+ $AACE INC B         ;
+ $AACF LD D,(HL)     ;
+ $AAD0 DEC HL        ;
+ $AAD1 LD E,(HL)     ;
+; This entry point is used by the routine at #R$AADF.
+*$AAD2 DEC HL        ;
+ $AAD3 LD A,(HL)     ;
+ $AAD4 DEC HL        ;
+ $AAD5 CP D          ;
+ $AAD6 JR NZ,$AADF   ;
+ $AAD8 LD A,(HL)     ;
+ $AAD9 CP E          ;
+ $AADA JR NZ,$AADF   ;
+ $AADC LD B,$01      ;
+ $AADE RET           ;
+
+; Some kind of pause routine?
+;
+; Used by the routine at #R$AABA.
+c$AADF DJNZ $AAD2    ;
+ $AAE1 LD B,$00      ;
+ $AAE3 RET           ;
+
+; Called after death tune
+;
+; Used by the routine at #R$A6FE.
+c$AAE4 LD A,R        ;
+ $AAE6 LD HL,$ABE9   ; address $ABE9 not used, but data block starting at $ABEA
+ $AAE9 AND $07       ;
+ $AAEB INC A         ;
+ $AAEC LD B,A        ;
+*$AAED INC HL        ; #REGhl will be at least $ABEA here
+ $AAEE DJNZ $AAED    ;
+ $AAF0 LD A,(HL)     ;
+ $AAF1 JP $9CEB      ;
+
+; Redefine keys: get key
+;
+; Used by the routines at #R$AA49 and #R$AB19.
+@label=REDEFINE_KEYS_GET_KEY
+c$AAF4 LD D,$00      ;
+ $AAF6 LD HL,$0000   ;
+ $AAF9 LD B,$08      ;
+ $AAFB LD C,$FE      ;
+; This entry point is used by the routine at #R$AB0D.
+*$AAFD LD A,C        ;
+ $AAFE IN A,($FE)    ; {Read keyboard
+ $AB00 AND $1F       ;
+ $AB02 CP $1F        ;
+ $AB04 JR Z,$AB12    ;
+ $AB06 DEC D         ;
+ $AB07 JR NZ,$AB0D   ;
+ $AB09 LD HL,$0000   ;
+ $AB0C RET           ; }
+
+; Redefine keys: print the key you just pressed?
+;
+; Used by the routine at #R$AAF4.
+@label=REDEFINE_KEYS_PRINT_KEY
+c$AB0D LD D,$01      ;
+ $AB0F LD L,A        ;
+ $AB10 LD H,C        ;
+ $AB11 LD E,B        ;
+; This entry point is used by the routine at #R$AAF4.
+*$AB12 SLA C         ;
+ $AB14 SET 0,C       ;
+ $AB16 DJNZ $AAFD    ;
+ $AB18 RET           ;
+
+; Print redefine key direction label?
+;
+; Used by the routine at #R$AA49.
+@label=REDEFINE_KEYS_PRINT_DIRECTION
+c$AB19 PUSH AF       ;
+ $AB1A PUSH HL       ;
+ $AB1B PUSH DE       ;
+ $AB1C PUSH BC       ;
+ $AB1D LD B,$0D      ;
+*$AB1F LD (HL),$03   ;
+ $AB21 INC HL        ;
+ $AB22 DJNZ $AB1F    ;
+*$AB24 CALL $AAF4    ;
+ $AB27 LD A,L        ;
+ $AB28 AND A         ;
+ $AB29 JR Z,$AB24    ;
+ $AB2B LD C,L        ;
+ $AB2C LD B,E        ;
+ $AB2D LD (IX+$00),L ;
+ $AB30 LD (IX+$01),H ;
+ $AB33 LD HL,$AC4E   ; end of REDEFINE_KEYS_WIZARD_TEXT
+ $AB36 LD DE,$0005   ;
+*$AB39 ADD HL,DE     ;
+ $AB3A DJNZ $AB39    ;
+*$AB3C INC HL        ;
+ $AB3D SRL C         ;
+ $AB3F JR C,$AB3C    ;
+ $AB41 LD A,(HL)     ;
+ $AB42 POP BC        ;
+ $AB43 PUSH BC       ;
+ $AB44 LD (BC),A     ;
+ $AB45 PUSH AF       ;
+ $AB46 CALL $AABA    ;
+ $AB49 POP AF        ;
+ $AB4A DEC B         ;
+ $AB4B JR Z,$AB24    ;
+ $AB4D POP BC        ;
+ $AB4E POP HL        ;
+ $AB4F PUSH HL       ;
+ $AB50 PUSH BC       ;
+ $AB51 CALL $9C40    ; UPDATE_SCREEN_GFX
+*$AB54 CALL $AAF4    ;
+ $AB57 LD A,L        ;
+ $AB58 AND A         ;
+ $AB59 JR NZ,$AB54   ;
+ $AB5B POP BC        ;
+ $AB5C POP DE        ;
+ $AB5D POP HL        ;
+ $AB5E POP AF        ;
+ $AB5F RET           ;
+
+; Play the theme tune.
+;
+; Used by the routines at #R$A420, #R$A6FE and #R$AB70.
+@label=PLAY_TUNE
+c$AB60 LD C,(HL)     ;
+ $AB61 INC HL        ;
+ $AB62 LD B,(HL)     ;
+ $AB63 INC HL        ;
+ $AB64 LD A,C        ;
+ $AB65 AND A         ;
+ $AB66 RET Z         ;
+ $AB67 PUSH HL       ;
+ $AB68 PUSH BC       ;
+ $AB69 CALL $2D28    ;
+ $AB6C RST $28       ; RST $28 can jump back to AB70
+
+; Probably unused. Looks like code but the RST $28 means it's never reached!
+b$AB6D DEFB $A4,$05,$38
+
+; The above RST $28 returns here!
+c$AB70 POP BC        ;
+ $AB71 LD A,B        ;
+ $AB72 CALL $2D28    ;
+ $AB75 CALL $03F8    ;
+ $AB78 POP HL        ;
+ $AB79 JR $AB60      ; PLAY_TUNE
+
+; Scroll the ticket text across the screen
+;
+; Used by the routines at #R$A47D, #R$A515, #R$A59D and #R$A9CE.
+@label=SCROLL_TICKER_TEXT
+c$AB7B PUSH DE       ;
+ $AB7C PUSH BC       ;
+ $AB7D PUSH AF       ;
+ $AB7E LD D,$08      ;
+*$AB80 PUSH HL       ;
+ $AB81 POP BC        ;
+ $AB82 INC BC        ;
+ $AB83 LD E,$1E      ;
+*$AB85 SLA (HL)      ;
+ $AB87 LD A,(BC)     ;
+ $AB88 BIT 7,A       ;
+ $AB8A JR Z,$AB8E    ;
+ $AB8C SET 0,(HL)    ;
+*$AB8E INC HL        ;
+ $AB8F INC BC        ;
+ $AB90 DEC E         ;
+ $AB91 JR NZ,$AB85   ;
+ $AB93 LD BC,$00E2   ;
+ $AB96 ADD HL,BC     ;
+ $AB97 DEC D         ;
+ $AB98 JR NZ,$AB80   ;
+ $AB9A POP AF        ;
+ $AB9B POP BC        ;
+ $AB9C POP DE        ;
+ $AB9D RET           ;
+
+; Clears the screen to black: from bottom to top.
+;
+; Used by the routines at #R$A420, #R$A4C8, #R$A6FE and #R$AA49.
+@label=CLEAR_SCREEN
+c$AB9E LD HL,$5AFF   ;
+ $ABA1 LD BC,$1B00   ;
+*$ABA4 LD (HL),$00   ;
+ $ABA6 DEC BC        ;
+ $ABA7 DEC HL        ;
+ $ABA8 LD A,C        ;
+ $ABA9 OR B          ;
+ $ABAA JR NZ,$ABA4   ;
+ $ABAC RET           ;
+
+; Displays scoreboard with heading and names/scores list
+;
+; Used by the routines at #R$A420 and #R$A828.
+@label=DISPLAY_SCOREBOARD
+c$ABAD LD DE,$ABF2   ; Point #REGde to HIGH_SCORE_HEADING_TEXT
+ $ABB0 LD H,$17      ;
+ $ABB2 LD L,$10      ;
+ $ABB4 LD B,$10      ;
+*$ABB6 LD A,(DE)     ;
+ $ABB7 CALL $9C40    ; UPDATE_SCREEN_GFX
+ $ABBA INC L         ;
+ $ABBB INC DE        ;
+ $ABBC DJNZ $ABB6    ;
+ $ABBE LD H,$15      ;
+ $ABC0 LD DE,$97AF   ; set #REGde to high score table
+*$ABC3 LD L,$10      ;
+ $ABC5 LD B,$10      ;
+*$ABC7 LD A,(DE)     ;
+ $ABC8 CALL $9C40    ; UPDATE_SCREEN_GFX
+ $ABCB INC L         ;
+ $ABCC INC DE        ;
+ $ABCD DJNZ $ABC7    ;
+ $ABCF DEC H         ;
+ $ABD0 DEC H         ;
+ $ABD1 LD A,H        ;
+ $ABD2 CP $02        ;
+ $ABD4 JR NC,$ABC3   ;
+ $ABD6 LD HL,$5810   ; {update screen colours
+ $ABD9 LD DE,$0010   ;
+ $ABDC LD C,$15      ;
+*$ABDE LD B,$10      ;
+*$ABE0 LD (HL),$17   ;
+ $ABE2 INC HL        ;
+ $ABE3 DJNZ $ABE0    ;
+ $ABE5 ADD HL,DE     ;
+ $ABE6 DEC C         ;
+ $ABE7 JR NZ,$ABDE   ; }
+ $ABE9 RET           ;
+
+; Not sure if this data is used directly, but the address is used (by #R$AAE4)
+; as a base to later data
+t$ABEA DEFB $01
+ $ABEB DEFB $10
+ $ABEC DEFB $13
+ $ABED DEFB $17
+ $ABEE DEFB $1E
+ $ABEF DEFM " !"
+ $ABF1 DEFB $01
+
+; High score table heading text data
+@label=HIGH_SCORE_HEADING_TEXT
+t$ABF2 DEFM "high score table"
+
+; Wizard instructions for redefining the keys
+@label=REDEFINE_KEYS_WIZARD_TEXT
+t$AC02 DEFM "press the key you wish to use to"
+ $AC22 DEFM "move up   "
+ $AC2C DEFM "move down "
+ $AC36 DEFM "move left "
+ $AC40 DEFM "move right"
+ $AC4A DEFM "jump      "
+
+; Alphabet characters, but out of order
+t$AC54 DEFB $97
+ $AC55 DEFB $99
+ $AC56 DEFM "mnb"
+ $AC59 DEFB $9A
+ $AC5A DEFM "lkjhpoiuy0987612345qwertasdfg"
+ $AC77 DEFB $98
+ $AC78 DEFM "zxcv"
+
+; Home screen ticker text
+@label=HOME_SCREEN_TICKER_TEXT
+t$AC7C DEFM "{"
+ $AC7D DEFB $00
+ $AC7E DEFM "press S to start game "
+; Redefine keys text
+ $AC94 DEFM "{"
+ $AC95 DEFB $00
+ $AC96 DEFM "press R to redefine keys "
+; Instructions text
+ $ACAF DEFM "{"
+ $ACB0 DEFB $00
+ $ACB1 DEFM "press I for instructions "
+
+; Instructions screen ticker text
+@label=INSTRUCTIONS_SCREEN_TICKER_TEXT
+t$ACCA DEFM "{"
+ $ACCB DEFB $00
+ $ACCC DEFM "press S to start game "
+; Redefine keys text
+ $ACE2 DEFM "{"
+ $ACE3 DEFB $00
+ $ACE4 DEFM "press R to redefine keys "
+; Select key type
+ $ACFD DEFM "{"
+ $ACFE DEFB $00
+ $ACFF DEFM "press 1,2 or 3 to select key type "
+
+; "1,2,3 or 4 players ?" - choose number of players text data
+@label=CHOOSE_NUMBER_OF_PLAYERS_TEXT
+t$AD21 DEFM "1,2,3 or 4 players ?          "
+
+; "game over player 1 " text data
+@label=GAME_OVER_TEXT
+t$AD3F DEFM "game over player 1 "
+
+; "level" text (for current level?)
+@label=LEVEL_TEXT
+t$AD52 DEFM "level "
+
+; Address $9F9E is stored here, which points to a single opcode: `RET NZ`.
+b$AD58 DEFB $9E
+
+; this value is updated
+b$AD59 DEFB $9F
+
+; "OUT OF TIME !" text data
+@label=OUT_OF_TIME_TEXT
+t$AD5A DEFM "OUT OF TIME !"
+
+; Congratulate player on new high score, and instructions.
+@label=NEW_HIGH_SCORE_TEXT
+t$AD67 DEFM "   PLAYER  1   "
+ $AD76 DEFM "               "
+ $AD85 DEFM "  well  done!  "
+ $AD94 DEFM "you have beaten"
+ $ADA3 DEFM " one of todays "
+ $ADB2 DEFM "highest scores."
+ $ADC1 DEFM "               "
+ $ADD0 DEFM "  please type  "
+ $ADDF DEFM "in your name or"
+ $ADEE DEFM " initials then "
+ $ADFD DEFM " press  ENTER. "
+
+; Chuckie Egg theme tune
+;
+; Notes for the tune; byte 0: length, byte 1: pitch
+@label=THEME_TUNE
+b$AE0C DEFB $01,$10
+ $AE0E DEFB $01,$10
+ $AE10 DEFB $01,$12
+ $AE12 DEFB $01,$12
+ $AE14 DEFB $01,$0D
+ $AE16 DEFB $01,$0D
+ $AE18 DEFB $02,$10
+ $AE1A DEFB $01,$10
+ $AE1C DEFB $01,$10
+ $AE1E DEFB $01,$12
+ $AE20 DEFB $01,$12
+ $AE22 DEFB $01,$0D
+ $AE24 DEFB $01,$0D
+ $AE26 DEFB $02,$10
+ $AE28 DEFB $01,$10
+ $AE2A DEFB $01,$10
+ $AE2C DEFB $02,$12
+ $AE2E DEFB $02,$15
+ $AE30 DEFB $02,$14
+ $AE32 DEFB $02,$14
+ $AE34 DEFB $02,$12
+ $AE36 DEFB $02,$10
+ $AE38 DEFB $02,$0E
+ $AE3A DEFB $01,$0E
+ $AE3C DEFB $01,$0E
+ $AE3E DEFB $01,$10
+ $AE40 DEFB $01,$10
+ $AE42 DEFB $01,$0B
+ $AE44 DEFB $01,$0B
+ $AE46 DEFB $02,$0E
+ $AE48 DEFB $01,$0E
+ $AE4A DEFB $01,$0E
+ $AE4C DEFB $01,$10
+ $AE4E DEFB $01,$10
+ $AE50 DEFB $01,$0B
+ $AE52 DEFB $01,$0B
+ $AE54 DEFB $02,$0E
+ $AE56 DEFB $01,$0E
+ $AE58 DEFB $01,$0E
+ $AE5A DEFB $02,$10
+ $AE5C DEFB $02,$12
+ $AE5E DEFB $02,$13
+ $AE60 DEFB $02,$10
+ $AE62 DEFB $02,$0E
+ $AE64 DEFB $02,$0B
+ $AE66 DEFB $02,$07
+ $AE68 DEFB $00,$00
+
+; Death tune, played when the farmer, well, dies.
+;
+; Notes for the tune; byte 0: length, byte 1: pitch
+@label=DEATH_TUNE
+b$AE6A DEFB $02,$08
+ $AE6C DEFB $02,$08
+ $AE6E DEFB $02,$08
+ $AE70 DEFB $02,$08
+ $AE72 DEFB $02,$06
+ $AE74 DEFB $02,$04
+ $AE76 DEFB $02,$04
+ $AE78 DEFB $02,$03
+ $AE7A DEFB $02,$01
+ $AE7C DEFB $02,$01
+ $AE7E DEFB $02,$04
+ $AE80 DEFB $02,$08
+ $AE82 DEFB $02,$0D
+ $AE84 DEFB $02,$0D
+ $AE86 DEFB $02,$0D
+ $AE88 DEFB $02,$0D
+ $AE8A DEFB $02,$0B
+ $AE8C DEFB $02,$09
+ $AE8E DEFB $02,$09
+ $AE90 DEFB $02,$08
+ $AE92 DEFB $02,$06
+ $AE94 DEFB $02,$06
+ $AE96 DEFB $02,$08
+ $AE98 DEFB $02,$09
+ $AE9A DEFB $00,$00
+
+; Called just before showing new level
+;
+; Used by the routine at #R$A62C.
+c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
+ $AE9F LD BC,$1B00     ; some or all of the screen
+*$AEA2 LD (HL),$00     ;
+ $AEA4 DEC HL          ;
+ $AEA5 DEC BC          ;
+ $AEA6 LD A,B          ;
+ $AEA7 OR C            ;
+ $AEA8 JR NZ,$AEA2     ; }
+ $AEAA LD BC,$61A8     ;
+ $AEAD LD H,$00        ;
+*$AEAF LD L,$00        ;
+*$AEB1 LD A,(BC)       ;
+ $AEB2 CALL $9C40      ; UPDATE_SCREEN_GFX
+ $AEB5 INC BC          ;
+ $AEB6 INC L           ;
+ $AEB7 LD A,L          ;
+ $AEB8 CP $20          ;
+ $AEBA JR NZ,$AEB1     ;
+ $AEBC INC H           ;
+ $AEBD LD A,H          ;
+ $AEBE CP $15          ;
+ $AEC0 JR NZ,$AEAF     ;
+ $AEC2 LD A,($6EEB)    ;
+ $AEC5 LD B,A          ;
+ $AEC6 INC B           ;
+ $AEC7 XOR A           ;
+*$AEC8 ADD A,$01       ;
+ $AECA DAA             ; WARNING! opcode: DAA
+ $AECB DJNZ $AEC8      ;
+ $AECD LD D,A          ;
+ $AECE AND $0F         ;
+ $AED0 ADD A,$9E       ;
+ $AED2 LD ($9773),A    ;
+ $AED5 LD A,D          ;
+ $AED6 LD B,$04        ;
+*$AED8 SRL A           ;
+ $AEDA DJNZ $AED8      ;
+ $AEDC ADD A,$9E       ;
+ $AEDE LD ($9772),A    ;
+ $AEE1 LD A,($6EEB)    ;
+ $AEE4 INC A           ;
+ $AEE5 CP $0A          ;
+ $AEE7 JR C,$AEEB      ;
+ $AEE9 LD A,$09        ;
+*$AEEB LD ($733F),A    ;
+ $AEEE ADD A,$9E       ;
+ $AEF0 LD ($977A),A    ;
+ $AEF3 LD A,($6EEB)    ;
+ $AEF6 SRL A           ;
+ $AEF8 SRL A           ;
+ $AEFA SRL A           ;
+ $AEFC SRL A           ;
+ $AEFE CP $05          ;
+ $AF00 JR C,$AF04      ;
+ $AF02 LD A,$05        ;
+*$AF04 LD C,A          ;
+ $AF05 LD A,$09        ;
+ $AF07 SUB C           ;
+ $AF08 LD ($7342),A    ;
+ $AF0B ADD A,$9E       ;
+ $AF0D LD ($9784),A    ;
+ $AF10 LD A,($733B)    ;
+ $AF13 ADD A,$9E       ;
+ $AF15 LD ($976B),A    ;
+ $AF18 LD HL,$1700     ;
+ $AF1B LD DE,$9764     ;
+ $AF1E LD B,$03        ;
+*$AF20 LD A,(DE)       ;
+ $AF21 CALL $9C40      ; UPDATE_SCREEN_GFX
+ $AF24 INC L           ;
+ $AF25 INC DE          ;
+ $AF26 DJNZ $AF20      ;
+ $AF28 LD HL,$1500     ;
+ $AF2B LD B,$20        ;
+*$AF2D LD A,(DE)       ;
+ $AF2E CALL $9C40      ; UPDATE_SCREEN_GFX
+ $AF31 INC L           ;
+ $AF32 INC DE          ;
+ $AF33 DJNZ $AF2D      ;
+ $AF35 LD HL,$3FFE     ;
+ $AF38 LD ($733D),HL   ;
+ $AF3B LD A,($733A)    ;
+ $AF3E LD HL,$6ECE     ; {Copy 6 bytes
+*$AF41 LD DE,$6EC8     ;
+ $AF44 LD BC,$0006     ;
+ $AF47 LDIR            ; }
+ $AF49 PUSH HL         ;
+ $AF4A LD BC,$0007     ;
+ $AF4D LD HL,($733D)   ;
+ $AF50 ADD HL,BC       ;
+ $AF51 LD ($733D),HL   ;
+ $AF54 LD B,$00        ;
+ $AF56 PUSH AF         ;
+ $AF57 CALL $A3A7      ;
+ $AF5A POP AF          ;
+ $AF5B POP HL          ;
+ $AF5C DEC A           ;
+ $AF5D JR NZ,$AF41     ;
+ $AF5F LD BC,$0006     ;
+ $AF62 LD HL,$6EC8     ;
+ $AF65 LD A,($733B)    ;
+*$AF68 ADD HL,BC       ;
+ $AF69 DEC A           ;
+ $AF6A JR NZ,$AF68     ;
+ $AF6C LD DE,$6EC8     ;
+ $AF6F LDIR            ;
+ $AF71 LD A,($6EC9)    ;
+ $AF74 LD ($736E),A    ;
+ $AF77 LD B,$14        ;
+ $AF79 LD HL,$7357     ;
+*$AF7C LD (HL),$FF     ;
+ $AF7E INC HL          ;
+ $AF7F DJNZ $AF7C      ;
+ $AF81 LD A,($6EEB)    ;
+ $AF84 CP $08          ;
+ $AF86 JR C,$AF8C      ;
+ $AF88 CP $10          ;
+ $AF8A JR C,$AFAD      ;
+*$AF8C AND $07         ;
+ $AF8E LD HL,$945B     ;
+ $AF91 LD BC,$0015     ;
+ $AF94 INC A           ;
+*$AF95 ADD HL,BC       ;
+ $AF96 DEC A           ;
+ $AF97 JR NZ,$AF95     ;
+ $AF99 LD B,(HL)       ;
+ $AF9A INC HL          ;
+ $AF9B LD A,($6EEB)    ;
+ $AF9E CP $18          ;
+ $AFA0 JR C,$AFA4      ;
+ $AFA2 LD B,$14        ;
+*$AFA4 LD DE,$7357     ;
+*$AFA7 LD A,(HL)       ;
+ $AFA8 LD (DE),A       ;
+ $AFA9 INC DE          ;
+ $AFAA INC HL          ;
+ $AFAB DJNZ $AFA7      ;
+*$AFAD LD HL,$0001     ;
+ $AFB0 LD ($736B),HL   ;
+ $AFB3 LD H,$16        ;
+ $AFB5 LD L,$05        ;
+ $AFB7 LD A,($733A)    ;
+ $AFBA LD B,A          ;
+ $AFBB LD DE,$6EF0     ;
+*$AFBE PUSH HL         ;
+ $AFBF LD A,(DE)       ;
+ $AFC0 CP $07          ;
+ $AFC2 JR C,$AFC6      ;
+ $AFC4 LD A,$06        ;
+*$AFC6 INC DE          ;
+ $AFC7 AND A           ;
+ $AFC8 JR Z,$AFD4      ;
+ $AFCA LD C,A          ;
+ $AFCB LD A,$B6        ;
+*$AFCD CALL $9C40      ; UPDATE_SCREEN_GFX
+ $AFD0 INC L           ;
+ $AFD1 DEC C           ;
+ $AFD2 JR NZ,$AFCD     ;
+*$AFD4 POP HL          ;
+ $AFD5 LD A,L          ;
+ $AFD6 ADD A,$07       ;
+ $AFD8 LD L,A          ;
+ $AFD9 DJNZ $AFBE      ;
+ $AFDB LD HL,$0000     ;
+ $AFDE LD B,$03        ;
+ $AFE0 LD A,$17        ;
+ $AFE2 CALL $B130      ;
+ $AFE5 INC H           ;
+ $AFE6 LD B,$20        ;
+ $AFE8 LD A,$06        ;
+ $AFEA CALL $B130      ;
+ $AFED INC H           ;
+ $AFEE LD B,$05        ;
+ $AFF0 LD A,$17        ;
+ $AFF2 CALL $B130      ;
+ $AFF5 LD L,$07        ;
+ $AFF7 INC B           ;
+ $AFF8 CALL $B130      ;
+ $AFFB LD B,$08        ;
+ $AFFD LD L,$0F        ;
+ $AFFF CALL $B130      ;
+ $B002 DEC B           ;
+ $B003 LD L,$19        ;
+ $B005 CALL $B130      ;
+ $B008 LD HL,$0005     ;
+ $B00B LD BC,$0601     ;
+*$B00E LD D,$0F        ;
+ $B010 LD A,($733B)    ;
+ $B013 CP C            ;
+ $B014 JR NZ,$B018     ;
+ $B016 LD D,$17        ;
+*$B018 LD A,D          ;
+ $B019 CALL $B130      ;
+ $B01C LD A,L          ;
+ $B01D ADD A,$07       ;
+ $B01F LD L,A          ;
+ $B020 INC C           ;
+ $B021 LD A,($733A)    ;
+ $B024 CP C            ;
+ $B025 JR NC,$B00E     ;
+ $B027 LD HL,$61A8     ;
+ $B02A LD DE,$5AE0     ;
+ $B02D LD C,$15        ;
+*$B02F LD B,$20        ;
+ $B031 PUSH DE         ;
+*$B032 PUSH BC         ;
+ $B033 LD A,(HL)       ;
+ $B034 CP $09          ;
+ $B036 JR C,$B03C      ;
+ $B038 LD A,$06        ;
+ $B03A JR $B042        ;
+*$B03C ADD A,$4F       ;
+ $B03E LD B,$98        ;
+ $B040 LD C,A          ;
+ $B041 LD A,(BC)       ;
+*$B042 LD (DE),A       ;
+ $B043 INC DE          ;
+ $B044 INC HL          ;
+ $B045 POP BC          ;
+ $B046 DJNZ $B032      ;
+ $B048 POP DE          ;
+ $B049 EX DE,HL        ;
+ $B04A PUSH DE         ;
+ $B04B LD DE,$0020     ;
+ $B04E AND A           ;
+ $B04F SBC HL,DE       ;
+ $B051 POP DE          ;
+ $B052 EX DE,HL        ;
+ $B053 DEC C           ;
+ $B054 JR NZ,$B02F     ;
+ $B056 LD IX,$72D8     ;
+ $B05A LD (IX+$00),$64 ;
+ $B05E LD (IX+$01),$17 ;
+ $B062 LD (IX+$70),$08 ;
+ $B066 LD (IX+$71),$98 ;
+ $B06A LD (IX+$64),$05 ;
+ $B06E XOR A           ;
+ $B06F LD (IX+$68),A   ;
+ $B072 LD (IX+$69),A   ;
+ $B075 LD (IX+$6B),A   ;
+ $B078 LD (IX+$6C),A   ;
+ $B07B LD (IX+$72),A   ;
+ $B07E LD (IX+$73),A   ;
+ $B081 LD (IX+$75),A   ;
+ $B084 LD (IX+$7D),A   ;
+ $B087 LD (IX+$02),A   ;
+ $B08A LD (IX+$03),A   ;
+ $B08D LD (IX+$4D),A   ;
+ $B090 LD ($7356),A    ;
+ $B093 LD ($7370),A    ;
+ $B096 INC A           ;
+ $B097 LD (IX+$6F),A   ;
+ $B09A LD (IX+$6D),A   ;
+ $B09D LD (IX+$6E),A   ;
+ $B0A0 LD (IX+$74),A   ;
+ $B0A3 LD (IX+$04),A   ;
+ $B0A6 LD A,($732D)    ; {choose which 12-bytes to use
+ $B0A9 CP $05          ;
+ $B0AB LD HL,$825C     ;
+ $B0AE JR Z,$B0B8      ;
+ $B0B0 LD HL,$8268     ;
+ $B0B3 JR C,$B0B8      ;
+ $B0B5 LD HL,$8250     ; }
+*$B0B8 LD BC,$000C     ;
+ $B0BB LD DE,$732E     ;
+ $B0BE LDIR            ;
+ $B0C0 LD BC,$0007     ;
+ $B0C3 LD HL,$3FFE     ;
+ $B0C6 LD A,($733B)    ;
+*$B0C9 ADD HL,BC       ;
+ $B0CA DEC A           ;
+ $B0CB JR NZ,$B0C9     ;
+ $B0CD LD ($733D),HL   ;
+ $B0D0 LD BC,$0004     ;
+ $B0D3 LD HL,$9787     ;
+ $B0D6 PUSH HL         ;
+ $B0D7 POP DE          ;
+ $B0D8 LD A,($6EEB)    ;
+ $B0DB AND $07         ;
+ $B0DD INC A           ;
+*$B0DE ADD HL,BC       ;
+ $B0DF DEC A           ;
+ $B0E0 JR NZ,$B0DE     ;
+ $B0E2 LDIR            ;
+ $B0E4 LD BC,$0004     ;
+ $B0E7 AND A           ;
+ $B0E8 SBC HL,BC       ;
+ $B0EA LD DE,$734E     ;
+ $B0ED LDIR            ;
+ $B0EF LD (IX+$7C),$43 ;
+ $B0F3 LD HL,($734E)   ;
+ $B0F6 LD BC,$0800     ;
+ $B0F9 AND A           ;
+ $B0FA SBC HL,BC       ;
+ $B0FC LD ($7352),HL   ;
+ $B0FF CALL $B14F      ;
+ $B102 LD D,$1E        ;
+*$B104 LD BC,$2710     ;
+*$B107 DEC BC          ;
+ $B108 LD A,B          ;
+ $B109 OR C            ;
+ $B10A JR NZ,$B107     ;
+ $B10C DEC D           ;
+ $B10D JR NZ,$B104     ;
+ $B10F LD A,($733B)    ;
+ $B112 LD L,A          ;
+ $B113 LD H,$00        ;
+ $B115 LD DE,$6EEF     ;
+ $B118 ADD HL,DE       ;
+ $B119 LD C,A          ;
+ $B11A LD A,(HL)       ;
+ $B11B CP $07          ;
+ $B11D JR NC,$B12D     ;
+ $B11F SUB $03         ;
+*$B121 ADD A,$07       ;
+ $B123 DEC C           ;
+ $B124 JR NZ,$B121     ;
+ $B126 LD H,$16        ;
+ $B128 LD L,A          ;
+ $B129 XOR A           ;
+ $B12A CALL $9C40      ; UPDATE_SCREEN_GFX
+*$B12D JP $9858        ;
+
+; Update colours?
+;
+; Used by the routine at #R$AE9C.
+c$B130 PUSH HL       ;
+ $B131 PUSH BC       ;
+ $B132 PUSH AF       ;
+ $B133 LD E,L        ;
+ $B134 LD A,H        ;
+ $B135 LD HL,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
+ $B138 AND A         ;
+ $B139 JR Z,$B144    ;
+ $B13B LD HL,$5820   ;
+ $B13E DEC A         ;
+ $B13F JR Z,$B144    ;
+ $B141 LD HL,$5840   ;
+*$B144 LD D,$00      ;
+ $B146 ADD HL,DE     ;
+ $B147 POP AF        ;
+*$B148 LD (HL),A     ;
+ $B149 INC HL        ;
+ $B14A DJNZ $B148    ;
+ $B14C POP BC        ;
+ $B14D POP HL        ;
+ $B14E RET           ;
+
+; After death, screen is redrawn, before hens/farmer displayed
+;
+; Used by the routine at #R$AE9C.
+c$B14F LD HL,$B15E   ;
+ $B152 LD A,R        ;
+ $B154 AND $07       ;
+ $B156 INC A         ;
+ $B157 LD B,A        ;
+*$B158 INC HL        ; #REGhl is first incremented to $B15F before being used.
+ $B159 DJNZ $B158    ;
+ $B15B LD A,(HL)     ;
+ $B15C JP $9CEB      ;
+
+; Data block at B15F
+b$B15F DEFB $02,$08,$0A,$0B,$0C,$11,$11,$02
+
+; Source code remnants
+;
+; The source code here corresponds to the code at #R$A58A...maybe!
+t$B167 DEFM " JR C,C10"
+ $B170 DEFB $0D
+ $B171 DEFB $22              ; is a double quote character
+ $B172 DEFB $90
+ $B173 DEFM "  LD DE,22849"
+ $B180 DEFB $0D
+ $B181 DEFM "#"
+ $B182 DEFB $00
+ $B183 DEFM " C10 LD B,3"
+ $B18E DEFB $0D
+ $B18F DEFM "#"
+ $B190 DEFB $10
+ $B191 DEFM "  LD A,151"
+ $B19B DEFB $0D
+ $B19C DEFM "#   LD (HL),23"
+ $B1AA DEFB $0D
+ $B1AB DEFM "#0  LD (DE),A"
+ $B1B8 DEFB $0D
+ $B1B9 DEFM "#@  INC HL"
+ $B1C3 DEFB $0D
+ $B1C4 DEFM "#P  INC DE"
+ $B1CE DEFB $0D
+ $B1CF DEFM "#"
+ $B1D0 DEFB $60
+ $B1D1 DEFM "  DJNZ -7"
+ $B1DA DEFB $0D
+ $B1DB DEFM "#p ;  "
+ $B1E1 DEFB $0D
+ $B1E2 DEFM "#"
+ $B1E3 DEFB $80
+ $B1E4 DEFM " C8 JP SCRL2"
+ $B1F0 DEFB $0D
+ $B1F1 DEFM "#"
+ $B1F2 DEFB $90
+ $B1F3 DEFM " ;  "
+ $B1F7 DEFB $0D
+ $B1F8 DEFM "%"
+ $B1F9 DEFB $00
+ $B1FA DEFM " INITG"
+
+; Data block at B200
+b$B200 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B208 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B210 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B218 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B220 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B228 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B230 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B238 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B240 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B248 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B250 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B258 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B260 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B268 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B270 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B278 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B280 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B288 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B290 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B298 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2A0 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2A8 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2B0 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2B8 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2C0 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2C8 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2D0 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2D8 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2E0 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2E8 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2F0 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B2F8 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
+ $B300 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C
+
+; Source code remnants
+;
+; The source code here corresponds to the code at #R$A5C5.
+t$B307 DEFM " CALL 40000"
+ $B312 DEFB $0D
+ $B313 DEFM "'"
+ $B314 DEFB $00
+ $B315 DEFM "  LD B,8"
+ $B31D DEFB $0D
+ $B31E DEFM "'"
+ $B31F DEFB $10
+ $B320 DEFM " C15 LD HL,18529"
+ $B330 DEFB $0D
+ $B331 DEFM "'   CALL SCROL"
+ $B33F DEFB $0D
+ $B340 DEFM "'0  DEC C"
+ $B349 DEFB $0D
+ $B34A DEFM "'@"
+
+; Routine at B34C
+;
+; Used by the routine at #R$98E6.
+c$B34C LD A,($72D8)  ;
+ $B34F AND $07       ;
+ $B351 RET Z         ;
+ $B352 LD HL,($72D8) ;
+ $B355 CALL $9E34    ;
+ $B358 LD BC,$003F   ;
+ $B35B AND A         ;
+ $B35C SBC HL,BC     ;
+ $B35E LD A,(HL)     ;
+ $B35F CP $05        ;
+ $B361 RET NC        ;
+ $B362 CP $01        ;
+ $B364 RET Z         ;
+ $B365 CP $02        ;
+ $B367 RET Z         ;
+ $B368 LD A,$01      ;
+ $B36A LD ($7325),A  ;
+ $B36D LD D,$FF      ;
+ $B36F LD A,($72DB)  ;
+ $B372 AND A         ;
+ $B373 JR NZ,$B377   ;
+ $B375 LD D,$01      ;
+*$B377 LD A,D        ;
+ $B378 LD ($7326),A  ;
+ $B37B LD A,$04      ;
+ $B37D LD ($7327),A  ;
+ $B380 RET           ;
+
+; Source code remnants
+;
+; The source code here corresponds to the code at #R$A5D7.
+t$B381 DEFM " AND 15"
+ $B388 DEFB $0D
+ $B389 DEFM "'"
+ $B38A DEFB $90
+ $B38B DEFM "  CP 15"
+ $B392 DEFB $0D
+ $B393 DEFM "("
+ $B394 DEFB $00
+ $B395 DEFM "  JR Z,L41"
+ $B39F DEFB $0D
+ $B3A0 DEFM "("
+ $B3A1 DEFB $10
+ $B3A2 DEFM "  LD B,0"
+ $B3AA DEFB $0D
+ $B3AB DEFM "(  L4"
+
+; Level 1 layout data - see LEVEL_BUFFER for byte map
+@label=LEVEL_1
+b$B3B0 DEFB $05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
+ $B3D0 DEFB $00,$00,$00,$00,$04,$00,$03,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$04,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00
+ $B3F0 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00
+ $B410 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00
+ $B430 DEFB $00,$00,$05,$05,$05,$05,$05,$05,$05,$05,$01,$02,$05,$05,$05,$05,$01,$02,$05,$05,$05,$05,$05,$05,$05,$05,$01,$02,$05,$05,$00,$00
+ $B450 DEFB $00,$00,$00,$03,$00,$01,$02,$00,$04,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$03,$00,$00,$04,$00,$00,$01,$02,$00,$03,$00,$00
+ $B470 DEFB $00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00
+ $B490 DEFB $00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $B4B0 DEFB $00,$00,$00,$00,$05,$01,$02,$05,$05,$05,$01,$02,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$05,$05,$05,$00,$00
+ $B4D0 DEFB $00,$00,$00,$00,$03,$01,$02,$00,$04,$00,$01,$02,$00,$00,$00,$05,$05,$05,$00,$00,$00,$00,$00,$00,$04,$00,$00,$00,$03,$00,$00,$00
+ $B4F0 DEFB $00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00,$00,$03,$00,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $B510 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00
+ $B530 DEFB $00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$00,$00,$00,$00,$00
+ $B550 DEFB $00,$00,$00,$00,$00,$00,$00,$03,$00,$00,$01,$02,$00,$00,$00,$05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$04,$00,$00,$00,$00,$00,$00
+ $B570 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$03,$04,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $B590 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $B5B0 DEFB $B2,$B3,$B4,$B5,$00,$00,$00,$00,$05,$05,$01,$02,$05,$05,$05,$05,$00,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$00,$00,$05,$05,$05
+ $B5D0 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$00,$00,$03,$01,$02,$00,$00,$00,$04,$00,$00,$00,$00,$03,$00,$04,$00,$00,$00,$00,$00,$00,$00,$03,$00
+ $B5F0 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $B610 DEFB $AA,$AB,$AC,$AD,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $B630 DEFB $00,$A8,$A9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+; Level 2 layout data - see LEVEL_BUFFER for byte map
+@label=LEVEL_2
+b$B650 DEFB $05,$05,$05,$05,$05,$05,$00,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
+ $B670 DEFB $00,$04,$00,$01,$02,$04,$00,$00,$03,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$03,$00,$00,$00,$00,$04,$00,$01,$02,$00,$00,$00
+ $B690 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $B6B0 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $B6D0 DEFB $05,$05,$05,$01,$02,$05,$05,$05,$05,$05,$05,$05,$00,$00,$05,$01,$02,$05,$00,$00,$05,$05,$05,$05,$00,$00,$05,$01,$02,$05,$05,$05
+ $B6F0 DEFB $00,$03,$00,$01,$02,$00,$03,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$03,$00,$00,$00,$00,$04,$01,$02,$00,$00,$00
+ $B710 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $B730 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $B750 DEFB $05,$05,$05,$01,$02,$05,$00,$00,$05,$01,$02,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$00,$00,$05,$01,$02,$05,$05,$05
+ $B770 DEFB $00,$03,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$03,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$03,$00
+ $B790 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $B7B0 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $B7D0 DEFB $05,$05,$05,$01,$02,$05,$05,$05,$05,$01,$02,$05,$05,$05,$05,$01,$02,$05,$00,$00,$05,$01,$02,$05,$05,$05,$05,$05,$05,$05,$05,$05
+ $B7F0 DEFB $00,$04,$00,$01,$02,$00,$01,$02,$00,$01,$02,$00,$03,$00,$00,$01,$02,$04,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $B810 DEFB $00,$00,$00,$01,$02,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $B830 DEFB $00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $B850 DEFB $B2,$B3,$B4,$B5,$00,$00,$01,$02,$05,$05,$05,$05,$05,$05,$05,$01,$02,$05,$00,$00,$05,$05,$05,$05,$05,$05,$05,$01,$02,$05,$05,$05
+ $B870 DEFB $AE,$AF,$B0,$B1,$00,$00,$01,$02,$00,$00,$00,$00,$03,$00,$00,$01,$02,$00,$00,$00,$04,$00,$00,$00,$03,$00,$00,$01,$02,$00,$03,$00
+ $B890 DEFB $AE,$AF,$B0,$B1,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $B8B0 DEFB $AA,$AB,$AC,$AD,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $B8D0 DEFB $00,$A8,$A9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+; Level 3 layout data - see LEVEL_BUFFER for byte map
+@label=LEVEL_3
+b$B8F0 DEFB $05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$05,$00,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
+ $B910 DEFB $00,$01,$02,$04,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$04,$00,$00,$03,$00,$00,$00,$01,$02,$00
+ $B930 DEFB $00,$01,$02,$00,$00,$00,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00
+ $B950 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$01,$02,$00
+ $B970 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$05,$05,$00,$05,$05,$00,$00,$00,$00,$00,$00,$00,$03,$00,$01,$02,$00
+ $B990 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$04,$01,$02,$03,$01,$02,$00,$00,$00,$00,$05,$05,$00,$00,$00,$00,$00,$00,$01,$02,$00
+ $B9B0 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$05,$05,$00,$00,$00,$00,$00,$00,$00
+ $B9D0 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$03,$00,$05,$05,$00,$00,$00,$00
+ $B9F0 DEFB $05,$01,$02,$05,$05,$05,$05,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$00
+ $BA10 DEFB $00,$01,$02,$04,$01,$02,$03,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$05,$05,$05,$00,$05,$05,$00,$00,$00,$00,$00,$01,$02,$00
+ $BA30 DEFB $00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$00,$04,$00,$00,$03,$00,$00,$00,$00,$00,$01,$02,$00
+ $BA50 DEFB $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$01,$02,$00
+ $BA70 DEFB $05,$05,$05,$05,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$00,$00,$01,$02,$00
+ $BA90 DEFB $00,$04,$03,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$05,$05,$00,$00,$03,$00,$00,$01,$02,$00
+ $BAB0 DEFB $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$05,$05,$05,$00,$04,$00,$00,$00,$00,$00,$00,$03,$00,$00
+ $BAD0 DEFB $00,$00,$00,$00,$01,$02,$05,$00,$00,$00,$00,$05,$01,$02,$05,$01,$02,$05,$04,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BAF0 DEFB $B2,$B3,$B4,$B5,$01,$02,$03,$00,$00,$00,$00,$04,$01,$02,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$00,$05,$00,$00,$05,$05,$05
+ $BB10 DEFB $AE,$AF,$B0,$B1,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$01,$02,$05,$05,$05,$05,$05,$00,$00,$00,$04,$03,$00
+ $BB30 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BB50 DEFB $AA,$AB,$AC,$AD,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BB70 DEFB $00,$A8,$A9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+; Level 4 layout data - see LEVEL_BUFFER for byte map
+@label=LEVEL_4
+b$BB90 DEFB $05,$05,$05,$05,$05,$05,$05,$05,$00,$05,$05,$05,$05,$05,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
+ $BBB0 DEFB $00,$03,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$04,$00,$00,$00,$00,$03,$00,$00,$01,$02,$00,$00,$00,$04,$00,$00
+ $BBD0 DEFB $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00
+ $BBF0 DEFB $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$05,$05
+ $BC10 DEFB $05,$05,$05,$05,$01,$02,$05,$05,$00,$00,$05,$05,$01,$02,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$01,$02,$05,$05,$00,$00,$00,$00
+ $BC30 DEFB $00,$04,$00,$00,$01,$02,$00,$00,$00,$00,$03,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$03,$00,$00,$00,$00
+ $BC50 DEFB $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00
+ $BC70 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05
+ $BC90 DEFB $05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$05,$01,$02,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$05,$05,$05,$00,$00,$03,$00
+ $BCB0 DEFB $00,$03,$00,$00,$05,$05,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$03,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00
+ $BCD0 DEFB $00,$00,$00,$00,$00,$00,$00,$05,$05,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00
+ $BCF0 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$04,$00,$05,$05,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00
+ $BD10 DEFB $05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$05,$05,$05,$00,$00,$00,$00,$05,$01,$02,$00,$05,$05,$03,$05,$01,$02,$05
+ $BD30 DEFB $00,$03,$00,$00,$00,$05,$00,$00,$00,$00,$00,$00,$01,$02,$00,$03,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00
+ $BD50 DEFB $00,$00,$00,$00,$00,$00,$05,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00
+ $BD70 DEFB $00,$00,$00,$00,$00,$00,$00,$05,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00
+ $BD90 DEFB $B2,$B3,$B4,$B5,$00,$00,$00,$00,$05,$05,$00,$05,$01,$02,$05,$05,$05,$00,$00,$00,$00,$05,$01,$02,$05,$05,$03,$05,$05,$01,$02,$05
+ $BDB0 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$04,$00,$00,$00,$00,$00,$00,$04,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00
+ $BDD0 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00
+ $BDF0 DEFB $AA,$AB,$AC,$AD,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$03,$00,$00,$00,$00,$00
+ $BE10 DEFB $00,$A8,$A9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+; Level 5 layout data - see LEVEL_BUFFER for byte map
+@label=LEVEL_5
+b$BE30 DEFB $05,$05,$05,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$00,$00,$05,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$05
+ $BE50 DEFB $00,$03,$00,$00,$01,$02,$00,$04,$04,$04,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$04,$01,$02,$04,$00,$00,$00,$00,$04,$00,$00,$00
+ $BE70 DEFB $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BE90 DEFB $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BEB0 DEFB $05,$05,$05,$05,$01,$02,$05,$05,$05,$05,$00,$01,$02,$00,$05,$01,$02,$05,$05,$05,$03,$01,$02,$05,$00,$00,$00,$00,$00,$00,$00,$00
+ $BED0 DEFB $00,$03,$00,$00,$01,$02,$00,$00,$03,$00,$00,$01,$02,$00,$00,$01,$02,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BEF0 DEFB $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BF10 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BF30 DEFB $05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$00,$01,$02,$00,$03,$05,$05,$05,$01,$02,$05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$05,$05
+ $BF50 DEFB $00,$03,$00,$01,$02,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$04,$00,$01,$02,$00,$00,$00,$04,$00,$00,$00,$00,$00,$00,$03,$00
+ $BF70 DEFB $00,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BF90 DEFB $00,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BFB0 DEFB $05,$05,$05,$01,$02,$05,$05,$01,$02,$05,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BFD0 DEFB $00,$03,$00,$01,$02,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $BFF0 DEFB $00,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C010 DEFB $00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$05,$00,$03,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C030 DEFB $B2,$B3,$B4,$B5,$00,$00,$05,$01,$02,$05,$05,$05,$05,$05,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05
+ $C050 DEFB $AE,$AF,$B0,$B1,$00,$00,$04,$01,$02,$03,$00,$04,$04,$00,$00,$00,$00,$00,$01,$02,$05,$05,$05,$05,$00,$00,$00,$00,$04,$00,$03,$00
+ $C070 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$03,$00,$04,$00,$00,$00,$00,$00,$00,$00,$00
+ $C090 DEFB $AA,$AB,$AC,$AD,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C0B0 DEFB $00,$A8,$A9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+; Level 6 layout data - see LEVEL_BUFFER for byte map
+@label=LEVEL_6
+b$C0D0 DEFB $05,$05,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00
+ $C0F0 DEFB $00,$01,$02,$00,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$04,$04,$04,$04,$00,$00,$00,$03,$01,$02,$00,$00,$00
+ $C110 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $C130 DEFB $00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $C150 DEFB $05,$01,$02,$05,$00,$05,$01,$02,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$05,$05,$00,$00,$01,$02,$00,$00,$00
+ $C170 DEFB $00,$01,$02,$00,$00,$00,$01,$02,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$03,$00,$00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00
+ $C190 DEFB $00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00
+ $C1B0 DEFB $00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$01,$02,$05,$05,$05
+ $C1D0 DEFB $00,$00,$00,$00,$05,$05,$01,$02,$05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$01,$02,$05,$05,$05,$01,$02,$00,$04,$00
+ $C1F0 DEFB $00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$04,$00,$00,$00,$00,$00,$00,$00,$03,$00,$00,$01,$02,$00,$03,$00,$01,$02,$00,$00,$00
+ $C210 DEFB $00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00
+ $C230 DEFB $00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C250 DEFB $05,$05,$05,$05,$05,$05,$01,$02,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$01,$02,$05,$05,$05
+ $C270 DEFB $00,$04,$04,$04,$04,$00,$01,$02,$00,$00,$00,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$03,$00
+ $C290 DEFB $00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00
+ $C2B0 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$01,$02,$05,$05,$05,$01,$02,$00,$00,$00
+ $C2D0 DEFB $B2,$B3,$B4,$B5,$00,$03,$00,$00,$00,$05,$05,$00,$05,$05,$00,$00,$00,$00,$00,$03,$00,$00,$01,$02,$00,$00,$00,$01,$02,$00,$00,$00
+ $C2F0 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$00,$00,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$01,$02,$05,$05,$05
+ $C310 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$03,$00
+ $C330 DEFB $AA,$AB,$AC,$AD,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $C350 DEFB $00,$A8,$A9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+; Level 7 layout data - see LEVEL_BUFFER for byte map
+@label=LEVEL_7
+b$C370 DEFB $00,$00,$00,$00,$00,$05,$05,$05,$05,$00,$00,$00,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C390 DEFB $00,$01,$02,$00,$00,$01,$02,$00,$00,$05,$05,$05,$00,$00,$00,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$03,$00,$00,$00
+ $C3B0 DEFB $05,$01,$02,$03,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$05,$00,$00,$00,$00,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C3D0 DEFB $00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C3F0 DEFB $00,$01,$02,$05,$05,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C410 DEFB $00,$01,$02,$00,$04,$01,$02,$00,$00,$00,$05,$05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C430 DEFB $00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$05,$00,$03,$04,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$05,$05,$00,$00,$00,$00
+ $C450 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$03,$00,$00,$00,$00,$00,$00
+ $C470 DEFB $05,$01,$02,$05,$00,$00,$00,$00,$00,$00,$05,$00,$00,$00,$05,$00,$00,$05,$05,$05,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00
+ $C490 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$05,$00,$00,$00,$05,$00,$00,$00,$03,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00
+ $C4B0 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00
+ $C4D0 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$01,$02,$03,$00,$00,$00,$00,$00,$00
+ $C4F0 DEFB $05,$01,$02,$05,$05,$05,$05,$05,$05,$05,$00,$05,$05,$05,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00
+ $C510 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$04,$00,$00,$00,$03,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00
+ $C530 DEFB $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C550 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C570 DEFB $B2,$B3,$B4,$B5,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$05,$05,$01,$02,$05,$05,$05,$05,$05,$05,$00,$00,$00,$00
+ $C590 DEFB $AE,$AF,$B0,$B1,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$04,$01,$02,$00,$00,$00,$03,$00,$00,$00,$00,$00,$00
+ $C5B0 DEFB $AE,$AF,$B0,$B1,$00,$00,$01,$02,$03,$00,$01,$02,$03,$00,$01,$02,$03,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C5D0 DEFB $AA,$AB,$AC,$AD,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C5F0 DEFB $00,$A8,$A9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+; Level 8 layout data - see LEVEL_BUFFER for byte map
+@label=LEVEL_8
+b$C610 DEFB $05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
+ $C630 DEFB $00,$04,$04,$01,$02,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$01,$02,$04,$04,$00
+ $C650 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $C670 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $C690 DEFB $00,$00,$05,$01,$02,$05,$05,$00,$03,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$00,$03,$00,$05,$05,$01,$02,$05,$00,$00
+ $C6B0 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $C6D0 DEFB $00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
+ $C6F0 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C710 DEFB $00,$00,$00,$05,$05,$05,$05,$05,$05,$05,$00,$03,$00,$05,$05,$01,$02,$05,$05,$00,$03,$00,$05,$05,$05,$05,$05,$05,$05,$00,$00,$00
+ $C730 DEFB $00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00
+ $C750 DEFB $00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00
+ $C770 DEFB $00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00
+ $C790 DEFB $00,$00,$00,$00,$05,$01,$02,$05,$05,$05,$00,$03,$00,$05,$05,$05,$05,$05,$05,$00,$03,$00,$05,$05,$05,$01,$02,$05,$00,$00,$00,$00
+ $C7B0 DEFB $00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00
+ $C7D0 DEFB $00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00
+ $C7F0 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C810 DEFB $B2,$B3,$B4,$B5,$00,$05,$05,$00,$03,$00,$05,$05,$03,$05,$05,$01,$02,$05,$05,$03,$05,$05,$00,$03,$00,$05,$05,$00,$00,$00,$00,$00
+ $C830 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C850 DEFB $AE,$AF,$B0,$B1,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ $C870 DEFB $AA,$AB,$AC,$AD,$00,$00,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$03,$00,$00,$00,$00,$00,$00
+ $C890 DEFB $00,$A8,$A9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+; Source code remnants
+;
+; The source code here corresponds to the code at ????.
+t$C8B0 DEFM "ALL CONV1"
+ $C8B9 DEFB $0D
+ $C8BA DEFM "V"
+ $C8BB DEFB $60
+ $C8BC DEFM "  LD A,(2948,"
+
+; This seems to be a jump table...where does it end?
+@label=JUMP_TABLE
+c$C8C9 RET           ;
+ $C8CA JR C,$C895    ;
+ $C8CC LD C,H        ;
+ $C8CD RET           ;
+ $C8CE LD E,B        ;
+ $C8CF RET           ;
+ $C8D0 LD H,(HL)     ;
+ $C8D1 RET           ;
+ $C8D2 ADD A,B       ;
+ $C8D3 RET           ;
+ $C8D4 ADC A,H       ;
+ $C8D5 RET           ;
+ $C8D6 SBC A,H       ;
+ $C8D7 RET           ;
+ $C8D8 XOR H         ;
+ $C8D9 RET           ;
+ $C8DA RET NZ        ;
+ $C8DB RET           ;
+
+; Does this contain code, data, or is just unused?
+b$C8DC DEFB $D6,$C9,$E4,$C9,$FA,$C9,$0A,$CA
+ $C8E4 DEFB $1C,$CA,$2E,$CA,$46,$CA,$56,$CA
+ $C8EC DEFB $66,$CA,$78,$CA,$BE,$CA,$D4,$CA
+ $C8F4 DEFB $E2,$CA,$FA,$CA,$14,$CB,$2A,$CB
+ $C8FC DEFB $3E,$CB,$50,$CB,$64,$CB,$76,$CB
+ $C904 DEFB $80,$CB,$96,$CB,$B0,$CB,$00,$00
+ $C90C DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $C914 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $C91C DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $C924 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $C92C DEFB $06,$35,$05,$00,$04,$38,$05,$35
+ $C934 DEFB $02,$00,$FF,$FF,$05,$3D,$07,$35
+ $C93C DEFB $05,$00,$05,$28,$06,$3B,$09,$00
+ $C944 DEFB $05,$0C,$05,$0D,$02,$00,$FF,$FF
+ $C94C DEFB $06,$10,$05,$0C,$05,$37,$03,$11
+ $C954 DEFB $02,$00,$FF,$FF,$03,$38,$06,$06
+ $C95C DEFB $0E,$37,$05,$2D,$07,$13,$02,$00
+ $C964 DEFB $FF,$FF,$05,$0B,$06,$07,$05,$29
+ $C96C DEFB $07,$37,$05,$11,$08,$00,$07,$2D
+ $C974 DEFB $05,$07,$05,$23,$03,$1E,$05,$3E
+ $C97C DEFB $02,$00,$FF,$FF,$05,$20,$08,$2B
+ $C984 DEFB $09,$1A,$05,$11,$02,$00,$FF,$FF
+ $C98C DEFB $04,$39,$05,$06,$10,$00,$05,$37
+ $C994 DEFB $06,$08,$05,$3A,$02,$00,$FF,$FF
+ $C99C DEFB $03,$3F,$07,$13,$07,$00,$06,$3E
+ $C9A4 DEFB $07,$33,$02,$0D,$02,$00,$FF,$FF
+ $C9AC DEFB $09,$2E,$06,$07,$07,$3E,$09,$00
+ $C9B4 DEFB $06,$21,$02,$1E,$05,$1E,$05,$0B
+ $C9BC DEFB $02,$00,$FF,$FF,$05,$39,$05,$1A
+ $C9C4 DEFB $05,$23,$07,$00,$04,$38,$07,$35
+ $C9CC DEFB $0A,$00,$06,$1D,$06,$2F,$02,$00
+ $C9D4 DEFB $FF,$FF,$05,$3D,$07,$35,$06,$00
+ $C9DC DEFB $03,$38,$06,$20,$02,$00,$FF,$FF
+ $C9E4 DEFB $04,$21,$03,$35,$04,$0B,$07,$11
+ $C9EC DEFB $09,$00,$05,$37,$05,$11,$04,$18
+ $C9F4 DEFB $05,$09,$02,$00,$FF,$FF,$05,$22
+ $C9FC DEFB $05,$35,$05,$2C,$0D,$00,$06,$0F
+ $CA04 DEFB $03,$09,$02,$00,$FF,$FF,$05,$22
+ $CA0C DEFB $05,$14,$05,$10,$0F,$00,$07,$35
+ $CA14 DEFB $04,$23,$03,$34,$02,$00,$FF,$FF
+ $CA1C DEFB $05,$35,$05,$38,$06,$37,$0B,$00
+ $CA24 DEFB $05,$10,$06,$1A,$04,$0B,$02,$00
+ $CA2C DEFB $FF,$FF,$06,$27,$05,$17,$05,$2C
+ $CA34 DEFB $0B,$00,$05,$10,$06,$0F,$04,$0B
+ $CA3C DEFB $05,$1F,$07,$23,$09,$33,$02,$00
+ $CA44 DEFB $FF,$FF,$05,$2D,$07,$29,$04,$00
+ $CA4C DEFB $02,$1A,$04,$35,$04,$11,$02,$00
+ $CA54 DEFB $FF,$FF,$05,$3D,$02,$18,$05,$11
+ $CA5C DEFB $08,$00,$05,$0C,$04,$11,$02,$00
+ $CA64 DEFB $FF,$FF,$05,$0D,$05,$1E,$05,$28
+ $CA6C DEFB $09,$00,$05,$2E,$05,$17,$05,$0B
+ $CA74 DEFB $02,$00,$FF,$FF,$06,$14,$0B,$00
+ $CA7C DEFB $05,$1A,$05,$2C,$05,$15,$09,$00
+ $CA84 DEFB $05,$07,$05,$28,$0A,$00,$04,$37
+ $CA8C DEFB $04,$37,$05,$17,$04,$28,$04,$11
+ $CA94 DEFB $05,$2E,$05,$2F,$09,$00,$05,$09
+ $CA9C DEFB $04,$0E,$05,$07,$05,$2B,$05,$07
+ $CAA4 DEFB $05,$0B,$04,$11,$07,$37,$09,$00
+ $CAAC DEFB $05,$32,$05,$0F,$04,$08,$06,$13
+ $CAB4 DEFB $0B,$00,$06,$07,$03,$22,$02,$00
+ $CABC DEFB $FF,$FF,$05,$2D,$07,$35,$08,$00
+ $CAC4 DEFB $05,$17,$05,$0B,$08,$00,$05,$0D
+ $CACC DEFB $05,$06,$07,$10,$02,$00,$FF,$FF
+ $CAD4 DEFB $05,$37,$05,$37,$07,$16,$05,$09
+ $CADC DEFB $05,$33,$02,$00,$FF,$FF,$05,$39
+ $CAE4 DEFB $06,$35,$05,$09,$05,$2D,$05,$0F
+ $CAEC DEFB $05,$37,$09,$00,$05,$2A,$05,$14
+ $CAF4 DEFB $08,$37,$02,$00,$FF,$FF,$06,$0C
+ $CAFC DEFB $06,$0B,$05,$37,$03,$11,$04,$27
+ $CB04 DEFB $03,$0F,$04,$29,$04,$25,$0A,$0F
+ $CB0C DEFB $05,$0B,$06,$37,$02,$00,$FF,$FF
+ $CB14 DEFB $05,$38,$05,$35,$09,$11,$05,$14
+ $CB1C DEFB $05,$00,$05,$38,$05,$35,$09,$11
+ $CB24 DEFB $05,$14,$02,$00,$FF,$FF,$05,$09
+ $CB2C DEFB $05,$2D,$04,$14,$07,$33,$09,$00
+ $CB34 DEFB $05,$2E,$05,$17,$05,$0B,$02,$00
+ $CB3C DEFB $FF,$FF,$05,$09,$05,$2D,$04,$14
+ $CB44 DEFB $07,$33,$09,$00,$05,$0D,$05,$1F
+ $CB4C DEFB $02,$00,$FF,$FF,$05,$09,$05,$2D
+ $CB54 DEFB $04,$14,$07,$33,$09,$00,$05,$1D
+ $CB5C DEFB $04,$27,$05,$13,$02,$00,$FF,$FF
+ $CB64 DEFB $05,$09,$05,$2D,$04,$14,$07,$33
+ $CB6C DEFB $09,$00,$05,$28,$05,$3A,$02,$00
+ $CB74 DEFB $FF,$FF,$06,$35,$09,$00,$05,$05
+ $CB7C DEFB $02,$00,$FF,$FF,$05,$3B,$09,$00
+ $CB84 DEFB $05,$19,$07,$1E,$08,$00,$06,$27
+ $CB8C DEFB $09,$07,$02,$21,$09,$31,$02,$00
+ $CB94 DEFB $FF,$FF,$05,$0B,$07,$17,$06,$11
+ $CB9C DEFB $09,$00,$06,$22,$04,$1E,$04,$21
+ $CBA4 DEFB $09,$00,$05,$07,$07,$38,$08,$28
+ $CBAC DEFB $02,$00,$FF,$FF,$06,$39,$08,$3B
+ $CBB4 DEFB $04,$15,$06,$00,$06,$2D,$05,$1E
+ $CBBC DEFB $03,$29,$06,$00,$0B,$00,$FF,$FF
+
+; Unused
+s$CBC4 DEFS $3354
+
+; NOTE: snapshot from FUSE has data here.
+s$FF18 DEFS $40
+
+; RESERVED MEMORY for User defined graphics (UDG)
+i$FF58
