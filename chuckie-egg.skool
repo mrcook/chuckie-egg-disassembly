@@ -59,22 +59,22 @@ b$61A8 DEFB $45,$43,$54,$20,$41,$20,$44,$4F,$5A,$45,$4E,$20,$45,$47,$47,$53,$20,
 ; This area is unused for gameplay, although it was used during game loading.
 s$6448 DEFS $0A80
 
-; Buffer releated to ANIMBUF1?
+; 6 bytes: some kind of buffer? Related to ANIMBUF1 or collecting corn!
 b$6EC8 DEFB $00
 
-; Data block at 6EC9
+; Used after a DEC (from $6ECC), and filled from $6EC8
 b$6EC9 DEFB $00
 
-; Data block at 6ECA
+; Used after a DEC (from $6ECC), and filled from $6EC8
 b$6ECA DEFB $00
 
-; Data block at 6ECB
+; Used after a DEC (from $6ECC), and filled from $6EC8
 b$6ECB DEFB $00
 
-; Data block at 6ECC
+; Used when player collects corn?
 b$6ECC DEFB $00
 
-; Data block at 6ECD
+; Filled when buffer is filled starting at $6EC8?
 b$6ECD DEFB $00
 
 ; Animation Buffer #1
@@ -162,12 +162,22 @@ b$72A0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $72C8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $72D0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
 
-; Farmer's current X,Y position
-@label=POSITION
-b$72D8 DEFB $00,$00
+; Farmer's current position? (perhaps X)
+@label=POSITION_A
+b$72D8 DEFB $00
 
-; Possibly unused data block.
-b$72DA DEFB $00,$00,$00
+; Farmer's current position? (perhaps Y)
+@label=POSITION_B
+b$72D9 DEFB $00
+
+; Data block at 72DA
+b$72DA DEFB $00
+
+; Data block at 72DB
+b$72DB DEFB $00
+
+; Data block at 72DC
+b$72DC DEFB $00
 
 ; Animation Buffer #3
 ;
@@ -195,7 +205,7 @@ b$7327 DEFB $00
 ; Data block at 7328
 b$7328 DEFB $00
 
-; Data block at 7329
+; Unused?
 b$7329 DEFB $00
 
 ; Data block at 732A
@@ -231,28 +241,47 @@ b$732C DEFB $00
 @label=SCR_STATE
 b$732D DEFB $00
 
-; Keyboard address for the UP key: row address+1
+; Keyboard: UP key row address
+b$732E DEFB $00
+
+; Keyboard: UP key
 @label=KEY_UP
-b$732E DEFB $00,$00
+b$732F DEFB $00
 
-; Keyboard address for the DOWN key: row address+1
+; Keyboard: DOWN key row address
+b$7330 DEFB $00
+
+; Keyboard: DOWN key
 @label=KEY_DOWN
-b$7330 DEFB $00,$00
+b$7331 DEFB $00
 
-; Keyboard address for the LEFT key: row address+1
+; Keyboard: LEFT key row address
+b$7332 DEFB $00
+
+; Keyboard: LEFT key
 @label=KEY_LEFT
-b$7332 DEFB $00,$00
+b$7333 DEFB $00
 
-; Keyboard address for the RIGHT key: row address+1
+; Keyboard: RIGHT key row address
+b$7334 DEFB $00
+
+; Keyboard: RIGHT key
 @label=KEY_RIGHT
-b$7334 DEFB $00,$00
+b$7335 DEFB $00
 
-; Keyboard address for the JUMP key: row address+1.
+; Keyboard: JUMP key row address
+b$7336 DEFB $00
+
+; Keyboard: JUMP key
 @label=KEY_JUMP
-b$7336 DEFB $00,$00
+b$7337 DEFB $00
 
-; Another keyboard address??
-b$7338 DEFB $00,$00
+; Keyboard: unknown key row address
+b$7338 DEFB $00
+
+; Keyboard: unknown key
+@label=KEY_UNKNOWN
+b$7339 DEFB $00
 
 ; Total number of players for the current game?
 ;
@@ -267,16 +296,22 @@ b$733A DEFB $00
 b$733B DEFB $00
 
 ; Data block at 733C
-b$733C DEFB $00,$00
+b$733C DEFB $00
 
-; Data block at 733E
-b$733E DEFB $00
+; Data block at 733D
+w$733D DEFW $0000
 
 ; Data block at 733F
-b$733F DEFB $00,$00,$00,$00
+b$733F DEFB $00
 
-; Data block at 7343
-b$7343 DEFB $00,$00
+; Unused?
+b$7340 DEFB $00
+
+; Data block at 7341
+b$7341 DEFB $00
+
+; All three bytes are accessed via an INC
+b$7342 DEFB $00,$00,$00
 
 ; Time remaining for level
 ;
@@ -306,34 +341,43 @@ b$734A DEFB $00
 b$734B DEFB $00
 
 ; Data block at 734C
-b$734C DEFB $00,$00
+b$734C DEFB $00
+
+; Data block at 734D
+b$734D DEFB $00
 
 ; Data block at 734E
-b$734E DEFB $00,$00,$00,$00
+w$734E DEFW $0000
+
+; Data block at 7350
+b$7350 DEFB $00
+
+; Data block at 7351
+b$7351 DEFB $00
 
 ; Data block at 7352
-b$7352 DEFB $00
-
-; Data block at 7353
-b$7353 DEFB $00
+w$7352 DEFW $0000
 
 ; Data block at 7354
 b$7354 DEFB $00
 
 ; Data block at 7355
-b$7355 DEFB $00,$00
+b$7355 DEFB $00
+
+; Data block at 7356
+b$7356 DEFB $00
 
 ; Possibly 20 bytes from this address are used
-b$7357 DEFB $00,$00
+b$7357 DEFB $00
 
-; These are probably used.
-s$7359 DEFS $12
+; These bytes are used.
+s$7358 DEFS $13
 
 ; Data block at 736B
 b$736B DEFB $00
 
-; stores a 2 byte value
-b$736C DEFB $00,$00
+; Data block at 736C
+w$736C DEFW $0000
 
 ; Data block at 736E
 b$736E DEFB $00
@@ -352,25 +396,25 @@ b$736F DEFB $00
 ; Data block at 7370
 b$7370 DEFB $00
 
-; Data block at 7371
+; Unused?
 b$7371 DEFB $00,$00
 
 ; Data block at 7373
 b$7373 DEFB $00
 
 ; Data block at 7374
-b$7374 DEFB $00
+w$7374 DEFW $0000
 
 ; Unused
-s$7375 DEFS $0EAE
+s$7376 DEFS $0EAD
 
-; Data block at 8223
+; Unknown and unused?
 b$8223 DEFB $01,$02
 
 ; Really unused?
 s$8225 DEFS $0C
 
-; Data block at 8231
+; Unknown and unused?
 b$8231 DEFB $A8,$A9
 
 ; Really unused?

@@ -11,12 +11,12 @@ D $61A8 Screen map data is copied to this buffer at the start of each new level.
 @ $61A8 label=LEVEL_BUFFER
   $61A8,672,32
 s $6448 This area is unused for gameplay, although it was used during game loading.
-b $6EC8 Buffer releated to ANIMBUF1?
-b $6EC9
-b $6ECA
-b $6ECB
-b $6ECC
-b $6ECD
+b $6EC8 6 bytes: some kind of buffer? Related to ANIMBUF1 or collecting corn!
+b $6EC9 Used after a DEC (from $6ECC), and filled from $6EC8
+b $6ECA Used after a DEC (from $6ECC), and filled from $6EC8
+b $6ECB Used after a DEC (from $6ECC), and filled from $6EC8
+b $6ECC Used when player collects corn?
+b $6ECD Filled when buffer is filled starting at $6EC8?
 b $6ECE Animation Buffer #1
 D $6ECE Buffer used for animating a sprite (?)
 @ $6ECE label=ANIMBUF1
@@ -54,9 +54,13 @@ s $6EF4 Unused by game.
 b $72A0 Animation Buffer #2
 D $72A0 Buffer used for animating a sprite (?)
 @ $72A0 label=ANIMBUF2
-b $72D8 Farmer's current X,Y position
-@ $72D8 label=POSITION
-b $72DA Possibly unused data block.
+b $72D8 Farmer's current position? (perhaps X)
+@ $72D8 label=POSITION_A
+b $72D9 Farmer's current position? (perhaps Y)
+@ $72D9 label=POSITION_B
+b $72DA
+b $72DB
+b $72DC
 b $72DD Animation Buffer #3
 D $72DD Buffer used for animating a sprite?
 @ $72DD label=ANIMBUF3
@@ -64,7 +68,7 @@ b $7325
 b $7326
 b $7327
 b $7328
-b $7329
+b $7329 Unused?
 b $732A
 b $732B
 b $732C A variable possibly releated to SCR_STATE below
@@ -72,17 +76,24 @@ D $732C Some possible values (guesses) are given in the table below: #TABLE(defa
 b $732D Current game/screen state (maybe)
 D $732D Some possible values (guesses) are given in the table below: #TABLE(default,centre,:w) { =h Byte | =h state } { 03 | Redefine keys screen/input type selected } { 06 | Play Music } { 0A | Instructions screen } TABLE#
 @ $732D label=SCR_STATE
-b $732E Keyboard address for the UP key: row address+1
-@ $732E label=KEY_UP
-b $7330 Keyboard address for the DOWN key: row address+1
-@ $7330 label=KEY_DOWN
-b $7332 Keyboard address for the LEFT key: row address+1
-@ $7332 label=KEY_LEFT
-b $7334 Keyboard address for the RIGHT key: row address+1
-@ $7334 label=KEY_RIGHT
-b $7336 Keyboard address for the JUMP key: row address+1.
-@ $7336 label=KEY_JUMP
-b $7338 Another keyboard address??
+b $732E Keyboard: UP key row address
+b $732F Keyboard: UP key
+@ $732F label=KEY_UP
+b $7330 Keyboard: DOWN key row address
+b $7331 Keyboard: DOWN key
+@ $7331 label=KEY_DOWN
+b $7332 Keyboard: LEFT key row address
+b $7333 Keyboard: LEFT key
+@ $7333 label=KEY_LEFT
+b $7334 Keyboard: RIGHT key row address
+b $7335 Keyboard: RIGHT key
+@ $7335 label=KEY_RIGHT
+b $7336 Keyboard: JUMP key row address
+b $7337 Keyboard: JUMP key
+@ $7337 label=KEY_JUMP
+b $7338 Keyboard: unknown key row address
+b $7339 Keyboard: unknown key
+@ $7339 label=KEY_UNKNOWN
 b $733A Total number of players for the current game?
 D $733A Possible values are 1, 2, 3, and 4.
 @ $733A label=NUMBER_OF_PLAYERS
@@ -90,9 +101,11 @@ b $733B Current active player.
 D $733B Possible values are 1, 2, 3, and 4.
 @ $733B label=CURRENT_PLAYER
 b $733C
-b $733E
+w $733D
 b $733F
-b $7343
+b $7340 Unused?
+b $7341
+b $7342 All three bytes are accessed via an INC
 b $7345 Time remaining for level
 D $7345 This may not be correct!
 @ $7345 label=TIME_REMAINING
@@ -105,27 +118,30 @@ b $7349
 b $734A
 b $734B
 b $734C
-b $734E
-b $7352
-b $7353
+b $734D
+w $734E
+b $7350
+b $7351
+w $7352
 b $7354
 b $7355
+b $7356
 b $7357 Possibly 20 bytes from this address are used
-s $7359 These are probably used.
+s $7358 These bytes are used.
 b $736B
-b $736C stores a 2 byte value
+w $736C
 b $736E
 b $736F Music play state
 D $736F Strange that 00 means "play music" - probably need a more appropriate label. #TABLE(default,centre,:w) { =h Byte | =h state } { 00 | play } { 01 | stopped } TABLE#
 @ $736F label=MUSIC_PLAY_STATE
 b $7370
-b $7371
+b $7371 Unused?
 b $7373
-b $7374
-s $7375 Unused
-b $8223
+w $7374
+s $7376 Unused
+b $8223 Unknown and unused?
 s $8225 Really unused?
-b $8231
+b $8231 Unknown and unused?
 s $8233 Really unused?
 b $8250 These bytes are copied to @732E
 b $825C These bytes are copied to @732E
