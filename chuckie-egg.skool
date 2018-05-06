@@ -1,9 +1,3 @@
-; SkoolKit disassembly for Chuckie Egg
-; (https://github.com/mrcook/chuckie-egg-disassembly/)
-;
-; Copyright (c) 2018 Michael R. Cook (this disassembly)
-; Copyright (c) 1984 A&F Software (Chuckie Egg)
-; Chuckie Egg was designed and developed by Nigel Alderton
 @start
 @org=$A410
 ; Level Buffer
@@ -3773,17 +3767,15 @@ c$A420 CALL $AB9E    ; CLEAR_SCREEN
  $A466 CALL $9CEB    ;
  $A469 LD A,$01      ; {Set MUSIC_PLAY_STATE to "stopped"
  $A46B LD ($736F),A  ; }
-
-; Routine at A46E
-;
-; Used by the routines at #R$A420 and #R$AA49.
-c$A46E LD HL,$5AE0   ; {update some colours
+; This entry point is used by the routine at #R$AA49.
+@label=SET_TICKER_TEXT_COLOUR
+*$A46E LD HL,$5AE0   ; Point #REGhl to last line of ATTRIBUTE_FILE.
  $A471 LD B,$20      ;
-*$A473 LD (HL),$05   ;
+*$A473 LD (HL),$05   ; Set foreground colour to Cyan, background remains black.
  $A475 INC HL        ;
- $A476 DJNZ $A473    ; }
- $A478 LD HL,$732C   ;
- $A47B LD (HL),$4E   ;
+ $A476 DJNZ $A473    ;
+ $A478 LD HL,$732C   ; {Sets $732C to $4E ...whatever that is.
+ $A47B LD (HL),$4E   ; }
 
 ; Scroll ticker text for home screen
 ;

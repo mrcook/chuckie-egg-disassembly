@@ -488,8 +488,10 @@ D $A420 Note: this routine is very similar to the DISPLAY_SCREEN_INSTRUCTIONS ro
   $A45B,6 If MUSIC_PLAY_STATE is "stopped" then Jump
   $A461,3 else PLAY_TUNE
   $A469,5 Set MUSIC_PLAY_STATE to "stopped"
-c $A46E
-  $A46E,10 update some colours
+@ $A46E label=SET_TICKER_TEXT_COLOUR
+  $A46E,3 Point #REGhl to last line of ATTRIBUTE_FILE.
+  $A473,2 Set foreground colour to Cyan, background remains black.
+  $A478,5 Sets $732C to $4E ...whatever that is.
 c $A47D Scroll ticker text for home screen
 D $A47D Note: this routine is very similar to the first half of SCROLL_TEXT_2 routine.
 @ $A47D label=SCROLL_TEXT_1
