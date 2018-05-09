@@ -208,7 +208,7 @@ b$732A DEFB $00
 ; Data block at 732B
 b$732B DEFB $00
 
-; A variable possibly releated to SCR_STATE below
+; A variable possibly releated to GAME_STATE below
 ;
 ; Some possible values (guesses) are given in the table below:
 ; #TABLE(default,centre,:w)
@@ -223,7 +223,7 @@ b$732B DEFB $00
 ; TABLE#
 b$732C DEFB $00
 
-; Current game/screen state (maybe)
+; Current game state
 ;
 ; Some possible values (guesses) are given in the table below:
 ; #TABLE(default,centre,:w)
@@ -233,7 +233,7 @@ b$732C DEFB $00
 ; { 06 | Play music }
 ; { 0A | Show instructions screen }
 ; TABLE#
-@label=SCR_STATE
+@label=GAME_STATE
 b$732D DEFB $00
 
 ; Keyboard: UP key row address
@@ -3722,9 +3722,9 @@ b$A40F DEFB $00
 ;
 ; Used by the routine at #R$9858.
 @label=START
-c$A410 LD HL,$732D   ; {Set SCR_STATE to "Play Tune" -- POKE @A411 (the address
- $A413 LD (HL),$06   ; value) to `003` to mute music notes (on game start
-                     ; only)}
+c$A410 LD HL,$732D   ; {Set GAME_STATE to "Play Tune" -- POKE @A411 (the
+ $A413 LD (HL),$06   ; address value) to `003` to mute music notes (on game
+                     ; start only)}
  $A415 LD HL,$736F   ; {Set MUSIC_PLAY_STATE to "play"
  $A418 LD (HL),$00   ; }
  $A41A LD A,$B2      ;
@@ -3858,7 +3858,7 @@ c$A4C8 CALL $AB9E    ; CLEAR_SCREEN
  $A502 CALL $AA37    ; }
  $A505 LD HL,$732C   ; {Set $732C to `$57`
  $A508 LD (HL),$57   ; }
- $A50A INC HL        ; {Set SCR_STATE to $0A - Instructions screen?
+ $A50A INC HL        ; {Set GAME_STATE to $0A - Instructions screen?
  $A50B LD (HL),$0A   ; }
  $A50D CALL $A960    ;
  $A510 LD A,$18      ;
@@ -3907,8 +3907,8 @@ c$A515 LD HL,$50E1   ;
  $A564 JR Z,$A59A    ; }
 
 ; Highlight the "input type" line # 1, 2, or 3.
-c$A566 LD B,A        ; #REGb also saved to SCR_STATE later, at $A57D
- $A567 LD A,($732D)  ; {Check the current SCR_STATE.
+c$A566 LD B,A        ; #REGb also saved to GAME_STATE later, at $A57D
+ $A567 LD A,($732D)  ; {Check the current GAME_STATE.
  $A56A CP B          ;
  $A56B JR Z,$A59A    ; }
  $A56D LD HL,$5980   ; Input type #2.
@@ -3918,7 +3918,7 @@ c$A566 LD B,A        ; #REGb also saved to SCR_STATE later, at $A57D
  $A577 JR C,$A57C    ;
  $A579 LD HL,$5940   ; Input type #1 (default).
 *$A57C LD A,B        ;
- $A57D LD ($732D),A  ; Update SCR_STATE value.
+ $A57D LD ($732D),A  ; Update GAME_STATE value.
  $A580 CP $05        ;
  $A582 LD DE,$5980   ; Input type #2.
  $A585 JR Z,$A58F    ;
@@ -4652,7 +4652,7 @@ c$AA37 PUSH BC       ;
 ; Used by the routines at #R$A47D and #R$A515.
 @label=REDEFINE_KEYS_WIZARD
 c$AA49 CALL $AB9E    ; CLEAR_SCREEN
- $AA4C LD HL,$732D   ; {Set SCR_STATE to $03 (redefine keys)
+ $AA4C LD HL,$732D   ; {Set GAME_STATE to $03 (redefine keys)
  $AA4F LD (HL),$03   ; }
  $AA51 LD HL,$8268   ; {Clear 10 of the 12 bytes at this address
  $AA54 LD B,$0A      ;
@@ -5396,7 +5396,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $B09D LD (IX+$6E),A   ;
  $B0A0 LD (IX+$74),A   ;
  $B0A3 LD (IX+$04),A   ;
- $B0A6 LD A,($732D)    ; Set #REGa to current SCR_STATE.
+ $B0A6 LD A,($732D)    ; Set #REGa to current GAME_STATE.
  $B0A9 CP $05          ; Is it set to input type selection?
  $B0AB LD HL,$825C     ; {Point #REGhl to input type #2.
  $B0AE JR Z,$B0B8      ; }

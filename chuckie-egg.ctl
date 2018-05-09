@@ -71,11 +71,11 @@ b $7328
 b $7329 Unused?
 b $732A
 b $732B
-b $732C A variable possibly releated to SCR_STATE below
+b $732C A variable possibly releated to GAME_STATE below
 D $732C Some possible values (guesses) are given in the table below: #TABLE(default,centre,:w) { =h Byte | =h meaning } { 00 | ?? } { 03 | ?? } { 04 | ?? } { 09 | ?? } { 4E | ?? } { 57 | ?? } { nn+09 | ?? } TABLE#
-b $732D Current game/screen state (maybe)
+b $732D Current game state
 D $732D Some possible values (guesses) are given in the table below: #TABLE(default,centre,:w) { =h Byte | =h state } { 03 | Redefine keys } { 05 | Select input type } { 06 | Play music } { 0A | Show instructions screen } TABLE#
-@ $732D label=SCR_STATE
+@ $732D label=GAME_STATE
 b $732E Keyboard: UP key row address
 b $732F Keyboard: UP key
 @ $732F label=KEY_UP
@@ -474,7 +474,7 @@ c $A3A7 Farmer collects an egg/corn...also at start of level.
 b $A40F Unused?
 c $A410 The game has just loaded
 @ $A410 label=START
-  $A410,5 Set SCR_STATE to "Play Tune" -- POKE @A411 (the address value) to `003` to mute music notes (on game start only)
+  $A410,5 Set GAME_STATE to "Play Tune" -- POKE @A411 (the address value) to `003` to mute music notes (on game start only)
   $A415,5 Set MUSIC_PLAY_STATE to "play"
   $A41E,2 Interupt Mode: determine when and what an interrupt does
 c $A420 Display the home screen, which includes the scoreboard
@@ -515,7 +515,7 @@ D $A4C8 Note: this routine is very similar to the DISPLAY_SCREEN_HOME routine.
   $A4F7,7 Print "KEY TYPES" text
   $A4FE,7 I saw nothing change visually on the screen.
   $A505,5 Set $732C to `$57`
-  $A50A,3 Set SCR_STATE to $0A - Instructions screen?
+  $A50A,3 Set GAME_STATE to $0A - Instructions screen?
 c $A515 Scroll ticker text for instructions screen
 D $A515 Note: first half of this routine is very similar SCROLL_TEXT_1 routine.
 @ $A515 label=SCROLL_TEXT_2
@@ -526,12 +526,12 @@ D $A515 Note: first half of this routine is very similar SCROLL_TEXT_1 routine.
   $A553,9 Read keyboard and check keypress (for what?)
   $A55C,10 Read keyboard row 1..5 (on instructions screen?)
 c $A566 Highlight the "input type" line # 1, 2, or 3.
-  $A566,1 #REGb also saved to SCR_STATE later, at $A57D
-  $A567,6 Check the current SCR_STATE.
+  $A566,1 #REGb also saved to GAME_STATE later, at $A57D
+  $A567,6 Check the current GAME_STATE.
   $A56D,3 Input type #2.
   $A574,3 Input type #3.
   $A579,3 Input type #1 (default).
-  $A57D,3 Update SCR_STATE value.
+  $A57D,3 Update GAME_STATE value.
   $A582,3 Input type #2.
   $A587,3 Input type #3.
   $A58C,3 Input type #1 (default).
@@ -630,7 +630,7 @@ c $AA37 Prints a text block to the screen.
 c $AA49 Redefine keys wizard - read new keys
 @ $AA49 label=REDEFINE_KEYS_WIZARD
   $AA49,3 CLEAR_SCREEN
-  $AA4C,5 Set SCR_STATE to $03 (redefine keys)
+  $AA4C,5 Set GAME_STATE to $03 (redefine keys)
   $AA51,10 Clear 10 of the 12 bytes at this address
   $AA60,3 Point #REGde to REDEFINE_KEYS_WIZARD_TEXT
   $AA64,3 UPDATE_SCREEN_GFX
@@ -711,7 +711,7 @@ c $AE9C Called just before showing new level
   $AF2E,3 UPDATE_SCREEN_GFX
   $AF3E,11 Copy 6 bytes
   $AFCD,3 UPDATE_SCREEN_GFX
-  $B0A6,3 Set #REGa to current SCR_STATE.
+  $B0A6,3 Set #REGa to current GAME_STATE.
   $B0A9,2 Is it set to input type selection?
   $B0AB,5 Point #REGhl to input type #2.
   $B0B0,5 Point #REGhl to input type #3.
