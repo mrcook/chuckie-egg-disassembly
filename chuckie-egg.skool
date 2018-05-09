@@ -228,9 +228,10 @@ b$732C DEFB $00
 ; Some possible values (guesses) are given in the table below:
 ; #TABLE(default,centre,:w)
 ; { =h Byte | =h state }
-; { 03 | Redefine keys screen/input type selected }
-; { 06 | Play Music }
-; { 0A | Instructions screen }
+; { 03 | Redefine keys }
+; { 05 | Select input type }
+; { 06 | Play music }
+; { 0A | Show instructions screen }
 ; TABLE#
 @label=SCR_STATE
 b$732D DEFB $00
@@ -414,15 +415,18 @@ b$8231 DEFB $A8,$A9
 ; Really unused?
 s$8233 DEFS $1D
 
-; These bytes are copied to @732E
+; Keyboard input controls type #1
+@label=KEY_INPUT_TYPE_1
 b$8250 DEFB $1D,$F7,$1D,$FB,$1D,$EF,$1E,$EF
  $8258 DEFB $1D,$FE,$1B,$7F
 
-; These bytes are copied to @732E
+; Keyboard input controls type #2
+@label=KEY_INPUT_TYPE_2
 b$825C DEFB $17,$EF,$0F,$EF,$0F,$F7,$1B,$EF
  $8264 DEFB $17,$F7,$1D,$EF
 
-; These bytes are copied to @732E
+; Keyboard input controls type #3
+@label=KEY_INPUT_TYPE_3
 b$8268 DEFB $1E,$FB,$1E,$FD,$1D,$DF,$1E,$DF
  $8270 DEFB $1B,$7F,$1E,$F7
 
@@ -3718,8 +3722,9 @@ b$A40F DEFB $00
 ;
 ; Used by the routine at #R$9858.
 @label=START
-c$A410 LD HL,$732D   ; {Set SCR_STATE to "Play Tune" POKE @A411 (the address
- $A413 LD (HL),$06   ; value) to `003` to mute music notes}
+c$A410 LD HL,$732D   ; {Set SCR_STATE to "Play Tune" -- POKE @A411 (the address
+ $A413 LD (HL),$06   ; value) to `003` to mute music notes (on game start
+                     ; only)}
  $A415 LD HL,$736F   ; {Set MUSIC_PLAY_STATE to "play"
  $A418 LD (HL),$00   ; }
  $A41A LD A,$B2      ;
@@ -3903,23 +3908,23 @@ c$A515 LD HL,$50E1   ;
 
 ; Highlight the "input type" line # 1, 2, or 3.
 c$A566 LD B,A        ; #REGb also saved to SCR_STATE later, at $A57D
- $A567 LD A,($732D)  ; {Check the current SCR_STATE
+ $A567 LD A,($732D)  ; {Check the current SCR_STATE.
  $A56A CP B          ;
  $A56B JR Z,$A59A    ; }
- $A56D LD HL,$5980   ; Input type #1
+ $A56D LD HL,$5980   ; Input type #2.
  $A570 CP $05        ;
  $A572 JR Z,$A57C    ;
- $A574 LD HL,$59C0   ; Input type #2
+ $A574 LD HL,$59C0   ; Input type #3.
  $A577 JR C,$A57C    ;
- $A579 LD HL,$5940   ; Input type #3
+ $A579 LD HL,$5940   ; Input type #1 (default).
 *$A57C LD A,B        ;
- $A57D LD ($732D),A  ; Update SCR_STATE with
+ $A57D LD ($732D),A  ; Update SCR_STATE value.
  $A580 CP $05        ;
- $A582 LD DE,$5980   ; Input type #1
+ $A582 LD DE,$5980   ; Input type #2.
  $A585 JR Z,$A58F    ;
- $A587 LD DE,$59C0   ; Input type #2
+ $A587 LD DE,$59C0   ; Input type #3.
  $A58A JR C,$A58F    ;
- $A58C LD DE,$5940   ; Input type #3
+ $A58C LD DE,$5940   ; Input type #1 (default).
 *$A58F LD B,$20      ;
  $A591 LD A,$97      ;
 *$A593 LD (HL),$17   ;
@@ -4647,8 +4652,8 @@ c$AA37 PUSH BC       ;
 ; Used by the routines at #R$A47D and #R$A515.
 @label=REDEFINE_KEYS_WIZARD
 c$AA49 CALL $AB9E    ; CLEAR_SCREEN
- $AA4C LD HL,$732D   ;
- $AA4F LD (HL),$03   ;
+ $AA4C LD HL,$732D   ; {Set SCR_STATE to $03 (redefine keys)
+ $AA4F LD (HL),$03   ; }
  $AA51 LD HL,$8268   ; {Clear 10 of the 12 bytes at this address
  $AA54 LD B,$0A      ;
 *$AA56 LD (HL),$00   ;
@@ -5391,16 +5396,16 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $B09D LD (IX+$6E),A   ;
  $B0A0 LD (IX+$74),A   ;
  $B0A3 LD (IX+$04),A   ;
- $B0A6 LD A,($732D)    ; {choose which 12-bytes to use
- $B0A9 CP $05          ;
- $B0AB LD HL,$825C     ;
- $B0AE JR Z,$B0B8      ;
- $B0B0 LD HL,$8268     ;
- $B0B3 JR C,$B0B8      ;
- $B0B5 LD HL,$8250     ; }
-*$B0B8 LD BC,$000C     ;
- $B0BB LD DE,$732E     ;
- $B0BE LDIR            ;
+ $B0A6 LD A,($732D)    ; Set #REGa to current SCR_STATE.
+ $B0A9 CP $05          ; Is it set to input type selection?
+ $B0AB LD HL,$825C     ; {Point #REGhl to input type #2.
+ $B0AE JR Z,$B0B8      ; }
+ $B0B0 LD HL,$8268     ; {Point #REGhl to input type #3.
+ $B0B3 JR C,$B0B8      ; }
+ $B0B5 LD HL,$8250     ; Point #REGhl to input type #1 (default).
+*$B0B8 LD BC,$000C     ; {Update the game input control keys with selected
+ $B0BB LD DE,$732E     ; input type stored in #REGhl.
+ $B0BE LDIR            ; }
  $B0C0 LD BC,$0007     ;
  $B0C3 LD HL,$3FFE     ;
  $B0C6 LD A,($733B)    ;
