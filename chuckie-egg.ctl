@@ -6,10 +6,9 @@
 ; Chuckie Egg was designed and developed by Nigel Alderton
 @ $61A8 start
 @ $61A8 org=$A410
-b $61A8 Level Buffer (empty level)
+s $61A8 Level Buffer (empty level)
 D $61A8 Screen map data is copied to this buffer at the start of each new level. Each byte represents a tile ID, with 20 tile GFX in total. #TABLE(default,centre,:w) { =h Byte | =h Tile } { 00 | Blank Tile } { 01 | Ladder #1 (left) } { 02 | Ladder #2 (right) } { 03 | Egg } { 04 | Corn } { 05 | Floor } { A8 | Birdcage: handle #1 } { A9 | Birdcage: handle #2 } { AA | Birdcage: #01 (top) } { AB | Birdcage: #02 (top) } { AC | Birdcage: #03 (top) } { AD | Birdcage: #04 (top) } { AE | Birdcage: #05 (middle) } { AF | Birdcage: #06 (middle) } { B0 | Birdcage: #07 (middle) } { B1 | Birdcage: #08 (middle) } { B2 | Birdcage: #09 (bottom) } { B3 | Birdcage: #10 (bottom) } { B4 | Birdcage: #11 (bottom) } { B5 | Birdcage: #12 (bottom) } TABLE#
 @ $61A8 label=LEVEL_BUFFER
-  $61A8,672,32
 s $6448 This area is unused for gameplay, although it was used during game loading.
 b $6EC8 6 bytes: some kind of buffer? Related to ANIMBUF1 or collecting corn!
 b $6EC9 Used after a DEC (from $6ECC), and filled from $6EC8
