@@ -374,10 +374,10 @@ b$7370 DEFB $00
 ; Unused?
 b$7371 DEFB $00,$00
 
-; Data block at 7373
+; Current player level?
 b$7373 DEFB $00
 
-; Data block at 7374
+; An address related to the current level?
 w$7374 DEFW $0000
 
 ; Unused
@@ -773,7 +773,7 @@ b$88E0 DEFB $3C,$42,$B9,$A5,$B9,$A5,$42,$3C
 @label=FONT_COPYRIGHT_SYMBOL
 b$88E8 DEFB $3C,$42,$99,$A1,$A1,$99,$42,$3C
 
-; Unknown graphics/data
+; Used but unknown (graphics?) data
 b$88F0 DEFB $F0,$F0,$F0,$F0,$00,$00,$00,$00
  $88F8 DEFB $0F,$0F,$0F,$0F,$00,$00,$00,$00
  $8900 DEFB $FF,$FF,$FF,$FF,$00,$00,$00,$00
@@ -4462,8 +4462,7 @@ c$A929 LD HL,$0C0B   ;
 ; Used by the routines at #R$A4C8, #R$A59D, #R$A62C, #R$A6FE and #R$A828.
 c$A960 LD A,($7373)  ;
  $A963 XOR $FF       ;
- $A965 JR NZ,$A960   ; POKE @A965 to 0 (`NOP`) and @A966 to 201 (`RET`) to
-                     ; prevent music from being player
+ $A965 JR NZ,$A960   ;
  $A967 RET           ;
 
 ; Animated transition #2 (4 squares)
@@ -5415,21 +5414,21 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $B0FA SBC HL,BC       ;
  $B0FC LD ($7352),HL   ;
  $B0FF CALL $B14F      ;
- $B102 LD D,$1E        ;
+ $B102 LD D,$1E        ; {Players score is a multiple of 10,000 points?
 *$B104 LD BC,$2710     ;
 *$B107 DEC BC          ;
  $B108 LD A,B          ;
  $B109 OR C            ;
- $B10A JR NZ,$B107     ;
+ $B10A JR NZ,$B107     ; }
  $B10C DEC D           ;
  $B10D JR NZ,$B104     ;
  $B10F LD A,($733B)    ; Get CURRENT_PLAYER
- $B112 LD L,A          ;
- $B113 LD H,$00        ;
+ $B112 LD L,A          ; {Calculate address of lives variable for current
+ $B113 LD H,$00        ; player, and assign to #REGhl
  $B115 LD DE,$6EEF     ;
- $B118 ADD HL,DE       ;
+ $B118 ADD HL,DE       ; }
  $B119 LD C,A          ;
- $B11A LD A,(HL)       ;
+ $B11A LD A,(HL)       ; Load #REGa with remaining lives of current player
  $B11B CP $07          ;
  $B11D JR NC,$B12D     ;
  $B11F SUB $03         ;
@@ -5852,100 +5851,176 @@ c$C8C9 RET           ;
  $C8DA RET NZ        ;
  $C8DB RET           ;
 
+; Address table for data blocks
+@label=DATA_ADDRESS_TABLE
+b$C8DC DEFB $D6,$C9
+ $C8DE DEFB $E4,$C9
+ $C8E0 DEFB $FA,$C9
+ $C8E2 DEFB $0A,$CA
+ $C8E4 DEFB $1C,$CA
+ $C8E6 DEFB $2E,$CA
+ $C8E8 DEFB $46,$CA
+ $C8EA DEFB $56,$CA
+ $C8EC DEFB $66,$CA
+ $C8EE DEFB $78,$CA
+ $C8F0 DEFB $BE,$CA
+ $C8F2 DEFB $D4,$CA
+ $C8F4 DEFB $E2,$CA
+ $C8F6 DEFB $FA,$CA
+ $C8F8 DEFB $14,$CB
+ $C8FA DEFB $2A,$CB
+ $C8FC DEFB $3E,$CB
+ $C8FE DEFB $50,$CB
+ $C900 DEFB $64,$CB
+ $C902 DEFB $76,$CB
+ $C904 DEFB $80,$CB
+ $C906 DEFB $96,$CB
+ $C908 DEFB $B0,$CB
+
 ; Does this contain code, data, or is just unused?
-b$C8DC DEFB $D6,$C9,$E4,$C9,$FA,$C9,$0A,$CA
- $C8E4 DEFB $1C,$CA,$2E,$CA,$46,$CA,$56,$CA
- $C8EC DEFB $66,$CA,$78,$CA,$BE,$CA,$D4,$CA
- $C8F4 DEFB $E2,$CA,$FA,$CA,$14,$CB,$2A,$CB
- $C8FC DEFB $3E,$CB,$50,$CB,$64,$CB,$76,$CB
- $C904 DEFB $80,$CB,$96,$CB,$B0,$CB,$00,$00
- $C90C DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $C914 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $C91C DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $C924 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $C92C DEFB $06,$35,$05,$00,$04,$38,$05,$35
- $C934 DEFB $02,$00,$FF,$FF,$05,$3D,$07,$35
- $C93C DEFB $05,$00,$05,$28,$06,$3B,$09,$00
- $C944 DEFB $05,$0C,$05,$0D,$02,$00,$FF,$FF
- $C94C DEFB $06,$10,$05,$0C,$05,$37,$03,$11
- $C954 DEFB $02,$00,$FF,$FF,$03,$38,$06,$06
- $C95C DEFB $0E,$37,$05,$2D,$07,$13,$02,$00
- $C964 DEFB $FF,$FF,$05,$0B,$06,$07,$05,$29
- $C96C DEFB $07,$37,$05,$11,$08,$00,$07,$2D
- $C974 DEFB $05,$07,$05,$23,$03,$1E,$05,$3E
- $C97C DEFB $02,$00,$FF,$FF,$05,$20,$08,$2B
- $C984 DEFB $09,$1A,$05,$11,$02,$00,$FF,$FF
- $C98C DEFB $04,$39,$05,$06,$10,$00,$05,$37
- $C994 DEFB $06,$08,$05,$3A,$02,$00,$FF,$FF
- $C99C DEFB $03,$3F,$07,$13,$07,$00,$06,$3E
- $C9A4 DEFB $07,$33,$02,$0D,$02,$00,$FF,$FF
- $C9AC DEFB $09,$2E,$06,$07,$07,$3E,$09,$00
- $C9B4 DEFB $06,$21,$02,$1E,$05,$1E,$05,$0B
- $C9BC DEFB $02,$00,$FF,$FF,$05,$39,$05,$1A
- $C9C4 DEFB $05,$23,$07,$00,$04,$38,$07,$35
- $C9CC DEFB $0A,$00,$06,$1D,$06,$2F,$02,$00
- $C9D4 DEFB $FF,$FF,$05,$3D,$07,$35,$06,$00
- $C9DC DEFB $03,$38,$06,$20,$02,$00,$FF,$FF
- $C9E4 DEFB $04,$21,$03,$35,$04,$0B,$07,$11
+b$C90A DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $C912 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $C91A DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $C922 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $C92A DEFB $00,$00,$06,$35,$05,$00,$04,$38
+ $C932 DEFB $05,$35,$02,$00,$FF,$FF,$05,$3D
+ $C93A DEFB $07,$35,$05,$00,$05,$28,$06,$3B
+ $C942 DEFB $09,$00,$05,$0C,$05,$0D,$02,$00
+ $C94A DEFB $FF,$FF,$06,$10,$05,$0C,$05,$37
+ $C952 DEFB $03,$11,$02,$00,$FF,$FF,$03,$38
+ $C95A DEFB $06,$06,$0E,$37,$05,$2D,$07,$13
+ $C962 DEFB $02,$00,$FF,$FF,$05,$0B,$06,$07
+ $C96A DEFB $05,$29,$07,$37,$05,$11,$08,$00
+ $C972 DEFB $07,$2D,$05,$07,$05,$23,$03,$1E
+ $C97A DEFB $05,$3E,$02,$00,$FF,$FF,$05,$20
+ $C982 DEFB $08,$2B,$09,$1A,$05,$11,$02,$00
+ $C98A DEFB $FF,$FF,$04,$39,$05,$06,$10,$00
+ $C992 DEFB $05,$37,$06,$08,$05,$3A,$02,$00
+ $C99A DEFB $FF,$FF,$03,$3F,$07,$13,$07,$00
+ $C9A2 DEFB $06,$3E,$07,$33,$02,$0D,$02,$00
+ $C9AA DEFB $FF,$FF,$09,$2E,$06,$07,$07,$3E
+ $C9B2 DEFB $09,$00,$06,$21,$02,$1E,$05,$1E
+ $C9BA DEFB $05,$0B,$02,$00,$FF,$FF,$05,$39
+ $C9C2 DEFB $05,$1A,$05,$23,$07,$00,$04,$38
+ $C9CA DEFB $07,$35,$0A,$00,$06,$1D,$06,$2F
+ $C9D2 DEFB $02,$00,$FF,$FF
+
+; related to address table
+b$C9D6 DEFB $05,$3D,$07,$35,$06,$00,$03,$38
+ $C9DE DEFB $06,$20,$02,$00,$FF,$FF
+
+; related to address table
+b$C9E4 DEFB $04,$21,$03,$35,$04,$0B,$07,$11
  $C9EC DEFB $09,$00,$05,$37,$05,$11,$04,$18
- $C9F4 DEFB $05,$09,$02,$00,$FF,$FF,$05,$22
- $C9FC DEFB $05,$35,$05,$2C,$0D,$00,$06,$0F
- $CA04 DEFB $03,$09,$02,$00,$FF,$FF,$05,$22
- $CA0C DEFB $05,$14,$05,$10,$0F,$00,$07,$35
- $CA14 DEFB $04,$23,$03,$34,$02,$00,$FF,$FF
- $CA1C DEFB $05,$35,$05,$38,$06,$37,$0B,$00
+ $C9F4 DEFB $05,$09,$02,$00,$FF,$FF
+
+; related to address table - when player lands on a platform
+b$C9FA DEFB $05,$22,$05,$35,$05,$2C,$0D,$00
+ $CA02 DEFB $06,$0F,$03,$09,$02,$00,$FF,$FF
+
+; related to address table
+b$CA0A DEFB $05,$22,$05,$14,$05,$10,$0F,$00
+ $CA12 DEFB $07,$35,$04,$23,$03,$34,$02,$00
+ $CA1A DEFB $FF,$FF
+
+; related to address table
+b$CA1C DEFB $05,$35,$05,$38,$06,$37,$0B,$00
  $CA24 DEFB $05,$10,$06,$1A,$04,$0B,$02,$00
- $CA2C DEFB $FF,$FF,$06,$27,$05,$17,$05,$2C
- $CA34 DEFB $0B,$00,$05,$10,$06,$0F,$04,$0B
- $CA3C DEFB $05,$1F,$07,$23,$09,$33,$02,$00
- $CA44 DEFB $FF,$FF,$05,$2D,$07,$29,$04,$00
- $CA4C DEFB $02,$1A,$04,$35,$04,$11,$02,$00
- $CA54 DEFB $FF,$FF,$05,$3D,$02,$18,$05,$11
- $CA5C DEFB $08,$00,$05,$0C,$04,$11,$02,$00
- $CA64 DEFB $FF,$FF,$05,$0D,$05,$1E,$05,$28
- $CA6C DEFB $09,$00,$05,$2E,$05,$17,$05,$0B
- $CA74 DEFB $02,$00,$FF,$FF,$06,$14,$0B,$00
- $CA7C DEFB $05,$1A,$05,$2C,$05,$15,$09,$00
- $CA84 DEFB $05,$07,$05,$28,$0A,$00,$04,$37
- $CA8C DEFB $04,$37,$05,$17,$04,$28,$04,$11
- $CA94 DEFB $05,$2E,$05,$2F,$09,$00,$05,$09
- $CA9C DEFB $04,$0E,$05,$07,$05,$2B,$05,$07
- $CAA4 DEFB $05,$0B,$04,$11,$07,$37,$09,$00
- $CAAC DEFB $05,$32,$05,$0F,$04,$08,$06,$13
- $CAB4 DEFB $0B,$00,$06,$07,$03,$22,$02,$00
- $CABC DEFB $FF,$FF,$05,$2D,$07,$35,$08,$00
- $CAC4 DEFB $05,$17,$05,$0B,$08,$00,$05,$0D
- $CACC DEFB $05,$06,$07,$10,$02,$00,$FF,$FF
- $CAD4 DEFB $05,$37,$05,$37,$07,$16,$05,$09
- $CADC DEFB $05,$33,$02,$00,$FF,$FF,$05,$39
- $CAE4 DEFB $06,$35,$05,$09,$05,$2D,$05,$0F
- $CAEC DEFB $05,$37,$09,$00,$05,$2A,$05,$14
- $CAF4 DEFB $08,$37,$02,$00,$FF,$FF,$06,$0C
- $CAFC DEFB $06,$0B,$05,$37,$03,$11,$04,$27
- $CB04 DEFB $03,$0F,$04,$29,$04,$25,$0A,$0F
- $CB0C DEFB $05,$0B,$06,$37,$02,$00,$FF,$FF
- $CB14 DEFB $05,$38,$05,$35,$09,$11,$05,$14
+ $CA2C DEFB $FF,$FF
+
+; related to address table
+b$CA2E DEFB $06,$27,$05,$17,$05,$2C,$0B,$00
+ $CA36 DEFB $05,$10,$06,$0F,$04,$0B,$05,$1F
+ $CA3E DEFB $07,$23,$09,$33,$02,$00,$FF,$FF
+
+; related to address table
+b$CA46 DEFB $05,$2D,$07,$29,$04,$00,$02,$1A
+ $CA4E DEFB $04,$35,$04,$11,$02,$00,$FF,$FF
+
+; related to address table
+b$CA56 DEFB $05,$3D,$02,$18,$05,$11,$08,$00
+ $CA5E DEFB $05,$0C,$04,$11,$02,$00,$FF,$FF
+
+; related to address table
+b$CA66 DEFB $05,$0D,$05,$1E,$05,$28,$09,$00
+ $CA6E DEFB $05,$2E,$05,$17,$05,$0B,$02,$00
+ $CA76 DEFB $FF,$FF
+
+; related to address table
+b$CA78 DEFB $06,$14,$0B,$00,$05,$1A,$05,$2C
+ $CA80 DEFB $05,$15,$09,$00,$05,$07,$05,$28
+ $CA88 DEFB $0A,$00,$04,$37,$04,$37,$05,$17
+ $CA90 DEFB $04,$28,$04,$11,$05,$2E,$05,$2F
+ $CA98 DEFB $09,$00,$05,$09,$04,$0E,$05,$07
+ $CAA0 DEFB $05,$2B,$05,$07,$05,$0B,$04,$11
+ $CAA8 DEFB $07,$37,$09,$00,$05,$32,$05,$0F
+ $CAB0 DEFB $04,$08,$06,$13,$0B,$00,$06,$07
+ $CAB8 DEFB $03,$22,$02,$00,$FF,$FF
+
+; related to address table
+b$CABE DEFB $05,$2D,$07,$35,$08,$00,$05,$17
+ $CAC6 DEFB $05,$0B,$08,$00,$05,$0D,$05,$06
+ $CACE DEFB $07,$10,$02,$00,$FF,$FF
+
+; related to address table
+b$CAD4 DEFB $05,$37,$05,$37,$07,$16,$05,$09
+ $CADC DEFB $05,$33,$02,$00,$FF,$FF
+
+; related to address table
+b$CAE2 DEFB $05,$39,$06,$35,$05,$09,$05,$2D
+ $CAEA DEFB $05,$0F,$05,$37,$09,$00,$05,$2A
+ $CAF2 DEFB $05,$14,$08,$37,$02,$00,$FF,$FF
+
+; related to address table
+b$CAFA DEFB $06,$0C,$06,$0B,$05,$37,$03,$11
+ $CB02 DEFB $04,$27,$03,$0F,$04,$29,$04,$25
+ $CB0A DEFB $0A,$0F,$05,$0B,$06,$37,$02,$00
+ $CB12 DEFB $FF,$FF
+
+; related to address table
+b$CB14 DEFB $05,$38,$05,$35,$09,$11,$05,$14
  $CB1C DEFB $05,$00,$05,$38,$05,$35,$09,$11
- $CB24 DEFB $05,$14,$02,$00,$FF,$FF,$05,$09
- $CB2C DEFB $05,$2D,$04,$14,$07,$33,$09,$00
- $CB34 DEFB $05,$2E,$05,$17,$05,$0B,$02,$00
- $CB3C DEFB $FF,$FF,$05,$09,$05,$2D,$04,$14
- $CB44 DEFB $07,$33,$09,$00,$05,$0D,$05,$1F
- $CB4C DEFB $02,$00,$FF,$FF,$05,$09,$05,$2D
- $CB54 DEFB $04,$14,$07,$33,$09,$00,$05,$1D
- $CB5C DEFB $04,$27,$05,$13,$02,$00,$FF,$FF
- $CB64 DEFB $05,$09,$05,$2D,$04,$14,$07,$33
+ $CB24 DEFB $05,$14,$02,$00,$FF,$FF
+
+; related to address table
+b$CB2A DEFB $05,$09,$05,$2D,$04,$14,$07,$33
+ $CB32 DEFB $09,$00,$05,$2E,$05,$17,$05,$0B
+ $CB3A DEFB $02,$00,$FF,$FF
+
+; related to address table
+b$CB3E DEFB $05,$09,$05,$2D,$04,$14,$07,$33
+ $CB46 DEFB $09,$00,$05,$0D,$05,$1F,$02,$00
+ $CB4E DEFB $FF,$FF
+
+; related to address table
+b$CB50 DEFB $05,$09,$05,$2D,$04,$14,$07,$33
+ $CB58 DEFB $09,$00,$05,$1D,$04,$27,$05,$13
+ $CB60 DEFB $02,$00,$FF,$FF
+
+; related to address table
+b$CB64 DEFB $05,$09,$05,$2D,$04,$14,$07,$33
  $CB6C DEFB $09,$00,$05,$28,$05,$3A,$02,$00
- $CB74 DEFB $FF,$FF,$06,$35,$09,$00,$05,$05
- $CB7C DEFB $02,$00,$FF,$FF,$05,$3B,$09,$00
- $CB84 DEFB $05,$19,$07,$1E,$08,$00,$06,$27
- $CB8C DEFB $09,$07,$02,$21,$09,$31,$02,$00
- $CB94 DEFB $FF,$FF,$05,$0B,$07,$17,$06,$11
- $CB9C DEFB $09,$00,$06,$22,$04,$1E,$04,$21
- $CBA4 DEFB $09,$00,$05,$07,$07,$38,$08,$28
- $CBAC DEFB $02,$00,$FF,$FF,$06,$39,$08,$3B
- $CBB4 DEFB $04,$15,$06,$00,$06,$2D,$05,$1E
- $CBBC DEFB $03,$29,$06,$00,$0B,$00,$FF,$FF
+ $CB74 DEFB $FF,$FF
+
+; related to address table
+b$CB76 DEFB $06,$35,$09,$00,$05,$05,$02,$00
+ $CB7E DEFB $FF,$FF
+
+; related to address table
+b$CB80 DEFB $05,$3B,$09,$00,$05,$19,$07,$1E
+ $CB88 DEFB $08,$00,$06,$27,$09,$07,$02,$21
+ $CB90 DEFB $09,$31,$02,$00,$FF,$FF
+
+; related to address table
+b$CB96 DEFB $05,$0B,$07,$17,$06,$11,$09,$00
+ $CB9E DEFB $06,$22,$04,$1E,$04,$21,$09,$00
+ $CBA6 DEFB $05,$07,$07,$38,$08,$28,$02,$00
+ $CBAE DEFB $FF,$FF
+
+; related to address table
+b$CBB0 DEFB $06,$39,$08,$3B,$04,$15,$06,$00
+ $CBB8 DEFB $06,$2D,$05,$1E,$03,$29,$06,$00
+ $CBC0 DEFB $0B,$00,$FF,$FF
 
 ; Unused
 s$CBC4 DEFS $3354

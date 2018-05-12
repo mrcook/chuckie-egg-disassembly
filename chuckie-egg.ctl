@@ -135,8 +135,8 @@ D $736F Strange that 00 means "play music" - probably need a more appropriate la
 @ $736F label=MUSIC_PLAY_STATE
 b $7370
 b $7371 Unused?
-b $7373
-w $7374
+b $7373 Current player level?
+w $7374 An address related to the current level?
 s $7376 Unused
 b $8223 Unknown and unused?
 s $8225 Really unused?
@@ -223,7 +223,7 @@ D $88E0 #HTML[#UDG$88E0(font_gfx_registered_symbol)]
 b $88E8 Font: Copyright symbol graphic
 D $88E8 #HTML[#UDG$88E8(font_gfx_copyright_symbol)]
 @ $88E8 label=FONT_COPYRIGHT_SYMBOL
-b $88F0 Unknown graphics/data
+b $88F0 Used but unknown (graphics?) data
 b $8968 "A+F CHUCKIE EGG" text graphic
 D $8968 Use as the default name in the high score table. #HTML[#UDGARRAY8;$8968-$89A7-8(text_highscore_default_name)]
 @ $8968 label=GFX_TEXT_HIGHSCORE_DEFAULT_NAME
@@ -614,7 +614,6 @@ c $A921 Possible pause routine
 c $A929 Animated transition #1 (1 square)
   $A93B,3 Set $732C to `$03`
 c $A960 Called when farmer dies
-  $A965,2 POKE @A965 to 0 (`NOP`) and @A966 to 201 (`RET`) to prevent music from being player
 c $A968 Animated transition #2 (4 squares)
   $A96B,5 Set $732C to `$09`
   $A9C5,5 Set $732C to `$04`
@@ -729,7 +728,10 @@ c $AE9C Called just before showing new level
   $B0B5,3 Point #REGhl to input type #1 (default).
   $B0B8,8 Update the game input control keys with selected input type stored in #REGhl.
   $B0C6,3 Get CURRENT_PLAYER
+  $B102,10 Players score is a multiple of 10,000 points?
   $B10F,3 Get CURRENT_PLAYER
+  $B112,7 Calculate address of lives variable for current player, and assign to #REGhl
+  $B11A,1 Load #REGa with remaining lives of current player
   $B12A,3 UPDATE_SCREEN_GFX
 c $B130 Update colours?
   $B135,3 Point #REGhl to start of ATTRIBUTE_FILE.
@@ -774,7 +776,33 @@ t $C8B0 Source code remnants
 D $C8B0 The source code here corresponds to the code at ????.
 c $C8C9 This seems to be a return table...where does it end?
 @ $C8C9 label=RETURN_TABLE
-b $C8DC Does this contain code, data, or is just unused?
+b $C8DC Address table for data blocks
+@ $C8DC label=DATA_ADDRESS_TABLE
+  $C8DC,46,2
+b $C90A Does this contain code, data, or is just unused?
+b $C9D6 related to address table
+b $C9E4 related to address table
+b $C9FA related to address table - when player lands on a platform
+b $CA0A related to address table
+b $CA1C related to address table
+b $CA2E related to address table
+b $CA46 related to address table
+b $CA56 related to address table
+b $CA66 related to address table
+b $CA78 related to address table
+b $CABE related to address table
+b $CAD4 related to address table
+b $CAE2 related to address table
+b $CAFA related to address table
+b $CB14 related to address table
+b $CB2A related to address table
+b $CB3E related to address table
+b $CB50 related to address table
+b $CB64 related to address table
+b $CB76 related to address table
+b $CB80 related to address table
+b $CB96 related to address table
+b $CBB0 related to address table
 s $CBC4 Unused
 s $FF18 NOTE: snapshot from FUSE has data here.
 i $FF58 RESERVED MEMORY for User defined graphics (UDG)
