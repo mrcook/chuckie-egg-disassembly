@@ -1,6 +1,6 @@
 @start
 @org=$A410
-; Level Buffer
+; Level Buffer (empty level)
 ;
 ; Screen map data is copied to this buffer at the start of each new level. Each
 ; byte represents a tile ID, with 20 tile GFX in total.
@@ -3670,7 +3670,7 @@ c$A3A7 LD A,B        ;
  $A3C1 CP (HL)       ;
  $A3C2 JR Z,$A3E6    ;
  $A3C4 LD (HL),A     ;
- $A3C5 LD A,($733B)  ;
+ $A3C5 LD A,($733B)  ; Get CURRENT_PLAYER
  $A3C8 ADD A,$EF     ;
  $A3CA LD H,$6E      ;
  $A3CC LD L,A        ;
@@ -3975,8 +3975,7 @@ c$A59D LD IXh,$02    ;
  $A5E2 JR C,$A5DF    ; }
  $A5E4 LD L,B        ; NUMBER_OF_PLAYERS (#REGl) = #REGb
  $A5E5 LD H,$01      ; CURRENT_PLAYER (#REGh) = $01
- $A5E7 LD ($733A),HL ; Set total and current player(s). Note: $733B is
-                     ; CURRENT_PLAYER
+ $A5E7 LD ($733A),HL ; Set total NUMBER_OF_PLAYERS and CURRENT_PLAYER
  $A5EA LD B,$F0      ; {scroll text off screen
 *$A5EC LD HL,$4861   ;
  $A5EF CALL $AB7B    ;
@@ -4012,16 +4011,16 @@ c$A59D LD IXh,$02    ;
 ; Routine at A62C
 ;
 ; Used by the routine at #R$A6FE.
-c$A62C LD A,($733A)  ; NUMBER_OF_PLAYERS
+c$A62C LD A,($733A)  ; Get NUMBER_OF_PLAYERS
  $A62F DEC A         ;
  $A630 JR Z,$A653    ;
- $A632 LD A,($733B)  ; {Does some stuff with CURRENT_PLAYER value
+ $A632 LD A,($733B)  ; Get CURRENT_PLAYER
  $A635 ADD A,$19     ;
  $A637 CALL $9CEB    ;
  $A63A LD BC,$AD49   ;
- $A63D LD A,($733B)  ;
+ $A63D LD A,($733B)  ; Get CURRENT_PLAYER
  $A640 ADD A,$30     ;
- $A642 LD ($AD50),A  ; }
+ $A642 LD ($AD50),A  ;
  $A645 LD C,$08      ;
  $A647 LD DE,$AD49   ; #REGde points to address for "player 1" text
  $A64A CALL $A9CE    ;
@@ -4031,7 +4030,7 @@ c$A62C LD A,($733A)  ; NUMBER_OF_PLAYERS
  $A656 CALL $A960    ;
  $A659 LD BC,$0006   ;
  $A65C LD HL,$6EC8   ;
- $A65F LD A,($733B)  ;
+ $A65F LD A,($733B)  ; Get CURRENT_PLAYER
 *$A662 ADD HL,BC     ;
  $A663 DEC A         ;
  $A664 JR NZ,$A662   ;
@@ -4061,7 +4060,7 @@ c$A62C LD A,($733A)  ; NUMBER_OF_PLAYERS
  $A698 CALL $A968    ;
  $A69B LD BC,$0006   ;
  $A69E LD HL,$6EC8   ;
- $A6A1 LD A,($733B)  ; CURRENT_PLAYER
+ $A6A1 LD A,($733B)  ; Get CURRENT_PLAYER
 *$A6A4 ADD HL,BC     ;
  $A6A5 DEC A         ;
  $A6A6 JR NZ,$A6A4   ;
@@ -4138,14 +4137,14 @@ c$A6FE LD HL,$AE6A   ;
 *$A72D LD HL,$61A8   ; {copy LEVEL data to LEVEL_BUFFER
  $A730 LD BC,$02A0   ;
  $A733 PUSH HL       ;
- $A734 POP DE        ;
- $A735 LD A,($733B)  ;
+ $A734 POP DE        ; }
+ $A735 LD A,($733B)  ; Get CURRENT_PLAYER
 *$A738 ADD HL,BC     ;
  $A739 DEC A         ;
  $A73A JR NZ,$A738   ;
  $A73C EX DE,HL      ;
- $A73D LDIR          ; }
- $A73F LD A,($733B)  ; CURRENT_PLAYER
+ $A73D LDIR          ;
+ $A73F LD A,($733B)  ; Get CURRENT_PLAYER
  $A742 LD E,A        ;
  $A743 LD D,$00      ;
  $A745 LD HL,$6EE6   ;
@@ -4161,20 +4160,20 @@ c$A6FE LD HL,$AE6A   ;
  $A755 DEC (HL)      ; POKE to 182 (`OR (HL)`) to get infinite LIVES
  $A756 JR NZ,$A768   ;
  $A758 LD C,$12      ;
- $A75A LD A,($733A)  ;
+ $A75A LD A,($733A)  ; Get NUMBER_OF_PLAYERS
  $A75D DEC A         ;
  $A75E JR NZ,$A762   ;
  $A760 LD C,$09      ;
 *$A762 LD DE,$AD3F   ; Point #REGde to GAME_OVER_TEXT
  $A765 CALL $A9CE    ;
 *$A768 LD B,$05      ;
-*$A76A LD HL,($733A) ;
+*$A76A LD HL,($733A) ; Load #REGhl to NUMBER_OF_PLAYERS and CURRENT_PLAYER
  $A76D LD A,H        ;
  $A76E CP L          ;
  $A76F JR NZ,$A772   ;
  $A771 XOR A         ;
 *$A772 INC A         ;
- $A773 LD ($733B),A  ; CURRENT_PLAYER
+ $A773 LD ($733B),A  ; Set CURRENT_PLAYER
  $A776 LD HL,$6EEF   ;
  $A779 LD E,A        ;
  $A77A LD D,$00      ;
@@ -4194,7 +4193,7 @@ c$A6FE LD HL,$AE6A   ;
  $A791 SBC HL,BC     ;
  $A793 LD A,(HL)     ;
  $A794 LD ($6EE6),A  ;
- $A797 LD A,($733B)  ; CURRENT_PLAYER
+ $A797 LD A,($733B)  ; Get CURRENT_PLAYER
  $A79A INC BC        ;
  $A79B LD HL,$6EC8   ;
 *$A79E ADD HL,BC     ;
@@ -4202,7 +4201,7 @@ c$A6FE LD HL,$AE6A   ;
  $A7A0 JR NZ,$A79E   ;
  $A7A2 LD DE,$6EC8   ;
  $A7A5 LDIR          ;
- $A7A7 LD A,($733B)  ; CURRENT_PLAYER
+ $A7A7 LD A,($733B)  ; Get CURRENT_PLAYER
  $A7AA LD HL,$61A8   ; {copy LEVEL data to LEVEL_BUFFER
  $A7AD LD BC,$02A0   ;
 *$A7B0 ADD HL,BC     ;
@@ -4906,7 +4905,7 @@ c$AB7B PUSH DE       ;
  $AB9C POP DE        ;
  $AB9D RET           ;
 
-; Clears the screen to black: from bottom to top.
+; Clears the entire screen to black: from bottom to top.
 ;
 ; Used by the routines at #R$A420, #R$A4C8, #R$A6FE and #R$AA49.
 @label=CLEAR_SCREEN
@@ -5140,7 +5139,7 @@ b$AE6A DEFB $02,$08
 ; Called just before showing new level
 ;
 ; Used by the routine at #R$A62C.
-c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
+c$AE9C LD HL,$5AFF     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $AE9F LD BC,$1B00     ; some or all of the screen
 *$AEA2 LD (HL),$00     ;
  $AEA4 DEC HL          ;
@@ -5201,7 +5200,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $AF08 LD ($7342),A    ;
  $AF0B ADD A,$9E       ;
  $AF0D LD ($9784),A    ;
- $AF10 LD A,($733B)    ;
+ $AF10 LD A,($733B)    ; Get CURRENT_PLAYER
  $AF13 ADD A,$9E       ;
  $AF15 LD ($976B),A    ;
  $AF18 LD HL,$1700     ;
@@ -5221,7 +5220,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $AF33 DJNZ $AF2D      ;
  $AF35 LD HL,$3FFE     ;
  $AF38 LD ($733D),HL   ;
- $AF3B LD A,($733A)    ;
+ $AF3B LD A,($733A)    ; Get NUMBER_OF_PLAYERS
  $AF3E LD HL,$6ECE     ; {Copy 6 bytes
 *$AF41 LD DE,$6EC8     ;
  $AF44 LD BC,$0006     ;
@@ -5240,7 +5239,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $AF5D JR NZ,$AF41     ;
  $AF5F LD BC,$0006     ;
  $AF62 LD HL,$6EC8     ;
- $AF65 LD A,($733B)    ;
+ $AF65 LD A,($733B)    ; Get CURRENT_PLAYER
 *$AF68 ADD HL,BC       ;
  $AF69 DEC A           ;
  $AF6A JR NZ,$AF68     ;
@@ -5281,7 +5280,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $AFB0 LD ($736B),HL   ;
  $AFB3 LD H,$16        ;
  $AFB5 LD L,$05        ;
- $AFB7 LD A,($733A)    ;
+ $AFB7 LD A,($733A)    ; Get NUMBER_OF_PLAYERS
  $AFBA LD B,A          ;
  $AFBB LD DE,$6EF0     ;
 *$AFBE PUSH HL         ;
@@ -5327,7 +5326,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $B008 LD HL,$0005     ;
  $B00B LD BC,$0601     ;
 *$B00E LD D,$0F        ;
- $B010 LD A,($733B)    ;
+ $B010 LD A,($733B)    ; Get CURRENT_PLAYER
  $B013 CP C            ;
  $B014 JR NZ,$B018     ;
  $B016 LD D,$17        ;
@@ -5337,7 +5336,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $B01D ADD A,$07       ;
  $B01F LD L,A          ;
  $B020 INC C           ;
- $B021 LD A,($733A)    ;
+ $B021 LD A,($733A)    ; Get NUMBER_OF_PLAYERS
  $B024 CP C            ;
  $B025 JR NC,$B00E     ;
  $B027 LD HL,$61A8     ;
@@ -5408,7 +5407,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $B0BE LDIR            ; }
  $B0C0 LD BC,$0007     ;
  $B0C3 LD HL,$3FFE     ;
- $B0C6 LD A,($733B)    ;
+ $B0C6 LD A,($733B)    ; Get CURRENT_PLAYER
 *$B0C9 ADD HL,BC       ;
  $B0CA DEC A           ;
  $B0CB JR NZ,$B0C9     ;
@@ -5444,7 +5443,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to end of ATTRIBUTE_FILE, then blank
  $B10A JR NZ,$B107     ;
  $B10C DEC D           ;
  $B10D JR NZ,$B104     ;
- $B10F LD A,($733B)    ;
+ $B10F LD A,($733B)    ; Get CURRENT_PLAYER
  $B112 LD L,A          ;
  $B113 LD H,$00        ;
  $B115 LD DE,$6EEF     ;

@@ -6,7 +6,7 @@
 ; Chuckie Egg was designed and developed by Nigel Alderton
 @ $61A8 start
 @ $61A8 org=$A410
-b $61A8 Level Buffer
+b $61A8 Level Buffer (empty level)
 D $61A8 Screen map data is copied to this buffer at the start of each new level. Each byte represents a tile ID, with 20 tile GFX in total. #TABLE(default,centre,:w) { =h Byte | =h Tile } { 00 | Blank Tile } { 01 | Ladder #1 (left) } { 02 | Ladder #2 (right) } { 03 | Egg } { 04 | Corn } { 05 | Floor } { A8 | Birdcage: handle #1 } { A9 | Birdcage: handle #2 } { AA | Birdcage: #01 (top) } { AB | Birdcage: #02 (top) } { AC | Birdcage: #03 (top) } { AD | Birdcage: #04 (top) } { AE | Birdcage: #05 (middle) } { AF | Birdcage: #06 (middle) } { B0 | Birdcage: #07 (middle) } { B1 | Birdcage: #08 (middle) } { B2 | Birdcage: #09 (bottom) } { B3 | Birdcage: #10 (bottom) } { B4 | Birdcage: #11 (bottom) } { B5 | Birdcage: #12 (bottom) } TABLE#
 @ $61A8 label=LEVEL_BUFFER
   $61A8,672,32
@@ -470,6 +470,7 @@ c $A399 Unused code?
 c $A3A2 Unused code?
 s $A3A5 Unused
 c $A3A7 Farmer collects an egg/corn...also at start of level.
+  $A3C5,3 Get CURRENT_PLAYER
   $A3E3,3 UPDATE_SCREEN_GFX
 b $A40F Unused?
 c $A410 The game has just loaded
@@ -545,7 +546,7 @@ D $A59D Routine to start a new game, first asking for number of players!
   $A5DD,7 INCrement #REGb until it equals #REGa; the NUMBER_OF_PLAYERS
   $A5E4,1 NUMBER_OF_PLAYERS (#REGl) = #REGb
   $A5E5,2 CURRENT_PLAYER (#REGh) = $01
-  $A5E7,3 Set total and current player(s). Note: $733B is CURRENT_PLAYER
+  $A5E7,3 Set total NUMBER_OF_PLAYERS and CURRENT_PLAYER
   $A5EA,10 scroll text off screen
   $A5F6,3 Load #REGde with LEVEL_BUFFER address.
   $A5F9,3 Load #REGbc with size of level data.
@@ -557,11 +558,13 @@ D $A59D Routine to start a new game, first asking for number of players!
   $A615,7 Reset all cleared levels counters: from address $6EEB for 5 bytes
   $A61C,7 Reset all player lives to 5: from address $6EF0 for 4 bytes
 c $A62C
-  $A62C,3 NUMBER_OF_PLAYERS
-  $A632,19 Does some stuff with CURRENT_PLAYER value
+  $A62C,3 Get NUMBER_OF_PLAYERS
+  $A632,3 Get CURRENT_PLAYER
+  $A63D,3 Get CURRENT_PLAYER
   $A647,3 #REGde points to address for "player 1" text
+  $A65F,3 Get CURRENT_PLAYER
   $A672,3 POKE @A672 to 202 (`JP Z`) to jump to next level on death
-  $A6A1,3 CURRENT_PLAYER
+  $A6A1,3 Get CURRENT_PLAYER
   $A6D9,3 #REGde is loaded with "level " text
   $A6E1,3 Load #REGde with LEVEL_BUFFER address
   $A6E4,3 Load #REGbc with value of 672 (size of level data)
@@ -573,12 +576,15 @@ c $A6FE Farmer has died!
   $A710,3 CLEAR_SCREEN
   $A725,3 Point #REGde to OUT_OF_TIME_TEXT
   $A72D,18 copy LEVEL data to LEVEL_BUFFER
-  $A73F,3 CURRENT_PLAYER
+  $A735,3 Get CURRENT_PLAYER
+  $A73F,3 Get CURRENT_PLAYER
   $A755,1 POKE to 182 (`OR (HL)`) to get infinite LIVES
+  $A75A,3 Get NUMBER_OF_PLAYERS
   $A762,3 Point #REGde to GAME_OVER_TEXT
-  $A773,3 CURRENT_PLAYER
-  $A797,3 CURRENT_PLAYER
-  $A7A7,3 CURRENT_PLAYER
+  $A76A,3 Load #REGhl to NUMBER_OF_PLAYERS and CURRENT_PLAYER
+  $A773,3 Set CURRENT_PLAYER
+  $A797,3 Get CURRENT_PLAYER
+  $A7A7,3 Get CURRENT_PLAYER
   $A7AA,15 copy LEVEL data to LEVEL_BUFFER
 c $A7BC Related to animation #1
   $A7C2,11 Point #REGhl to DISPLAY_FILE and reset first 18 bytes
@@ -658,7 +664,7 @@ c $AB70 The above RST $28 returns here!
   $AB79,2 PLAY_TUNE
 c $AB7B Scroll the ticket text across the screen
 @ $AB7B label=SCROLL_TICKER_TEXT
-c $AB9E Clears the screen to black: from bottom to top.
+c $AB9E Clears the entire screen to black: from bottom to top.
 @ $AB9E label=CLEAR_SCREEN
 c $ABAD Displays scoreboard with heading and names/scores list
 @ $ABAD label=DISPLAY_SCOREBOARD
@@ -704,19 +710,27 @@ D $AE6A Notes for the tune; byte 0: length, byte 1: pitch
 @ $AE6A label=DEATH_TUNE
   $AE6A,50,2
 c $AE9C Called just before showing new level
-  $AE9C,14 Point #REGhl to end of ATTRIBUTE_FILE, then blank some or all of the screen
+  $AE9C,14 Point #REGhl to "end" of ATTRIBUTE_FILE, then blank some or all of the screen
   $AEB2,3 UPDATE_SCREEN_GFX
   $AECA,1 WARNING! opcode: DAA
+  $AF10,3 Get CURRENT_PLAYER
   $AF21,3 UPDATE_SCREEN_GFX
   $AF2E,3 UPDATE_SCREEN_GFX
+  $AF3B,3 Get NUMBER_OF_PLAYERS
   $AF3E,11 Copy 6 bytes
+  $AF65,3 Get CURRENT_PLAYER
+  $AFB7,3 Get NUMBER_OF_PLAYERS
   $AFCD,3 UPDATE_SCREEN_GFX
+  $B010,3 Get CURRENT_PLAYER
+  $B021,3 Get NUMBER_OF_PLAYERS
   $B0A6,3 Set #REGa to current GAME_STATE.
   $B0A9,2 Is it set to input type selection?
   $B0AB,5 Point #REGhl to input type #2.
   $B0B0,5 Point #REGhl to input type #3.
   $B0B5,3 Point #REGhl to input type #1 (default).
   $B0B8,8 Update the game input control keys with selected input type stored in #REGhl.
+  $B0C6,3 Get CURRENT_PLAYER
+  $B10F,3 Get CURRENT_PLAYER
   $B12A,3 UPDATE_SCREEN_GFX
 c $B130 Update colours?
   $B135,3 Point #REGhl to start of ATTRIBUTE_FILE.
