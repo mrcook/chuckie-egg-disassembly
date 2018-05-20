@@ -793,9 +793,8 @@ b $C610 Level 8 layout data - see LEVEL_BUFFER for byte map
   $C610,672,32
 t $C8B0 Source code remnants?
 D $C8B0 The source code here corresponds to the code at ????.
-b $C8C8 An address table for accessing data starting at $C92C.
+w $C8C8 An address table for accessing data starting at $C92C.
 @ $C8C8 label=ADDRESS_LOOKUP_TABLE
-  $C8C8,64,2
 s $C90A unused?
 b $C92C related to address lookup table
 b $C938 related to address lookup table
