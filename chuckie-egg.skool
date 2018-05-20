@@ -2703,24 +2703,25 @@ c$9CC2 PUSH AF       ;
  $9CE8 POP AF        ;
  $9CE9 RETI          ;
 
-; Called during level draw/clear.
+; Get address value from the ADDRESS_LOOKUP_TABLE
 ;
 ; Used by the routines at #R$A389, #R$A420, #R$A4C8, #R$A62C, #R$A828, #R$AAE4
 ; and #R$B14F.
-c$9CEB LD B,A        ;
+@label=GET_LOOKUP_TABLE_ADDRESS
+c$9CEB LD B,A        ; Current known values for #REGa are between $01 and $21.
  $9CEC LD A,($7373)  ;
  $9CEF CP $FF        ;
  $9CF1 RET NZ        ;
- $9CF2 LD HL,$C8C6   ;
-*$9CF5 INC HL        ;
+ $9CF2 LD HL,$C8C6   ; {Point #REGhl to $C8C8 ($C8C6+2), then increment until
+*$9CF5 INC HL        ; we get the desired address in the ADDRESS_LOOKUP_TABLE.
  $9CF6 INC HL        ;
- $9CF7 DJNZ $9CF5    ;
- $9CF9 LD E,(HL)     ;
+ $9CF7 DJNZ $9CF5    ; }
+ $9CF9 LD E,(HL)     ; {Load #REGde with address from lookup table
  $9CFA INC HL        ;
- $9CFB LD D,(HL)     ;
- $9CFC LD ($7374),DE ;
+ $9CFB LD D,(HL)     ; }
+ $9CFC LD ($7374),DE ; Save address to $7374
  $9D00 LD A,$01      ;
- $9D02 LD ($7373),A  ;
+ $9D02 LD ($7373),A  ; Set $7373 to $01
  $9D05 RET           ;
 
 ; Unused
@@ -3602,33 +3603,23 @@ c$A37F LD HL,($72D8)  ;
 
 ; Farmer lands on a platform?
 ;
-; Used by the routine at #R$A278.
-c$A389 LD A,R        ;
- $A38B AND $07       ;
+; Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
+c$A389 LD A,R        ; {Load #REGb with #Regr (related to memory refresh), then
+ $A38B AND $07       ; after processing #REGb will have a value between 1-8.
  $A38D INC A         ;
  $A38E LD B,A        ;
- $A38F LD HL,$A398   ;
-*$A392 INC HL        ;
- $A393 DJNZ $A392    ;
- $A395 LD A,(HL)     ;
- $A396 JP $9CEB      ;
+ $A38F LD HL,$A398   ; }
+*$A392 INC HL        ; {Increment #REGhl to required address, and assign #REGa.
+ $A393 DJNZ $A392    ; Note #REGhl starts at $A399 ($A398+1).
+ $A395 LD A,(HL)     ; }
+ $A396 JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
-; Unused code?
-c$A399 INC B         ;
- $A39A LD B,$09      ;
- $A39C DEC C         ;
- $A39D LD (DE),A     ;
- $A39E LD D,$04      ;
- $A3A0 DEC C         ;
- $A3A1 RET           ;
+; Small lookup table used by #R$A389 to assign #Rega, for use with
+; GET_LOOKUP_TABLE_ADDRESS
+b$A399 DEFB $04,$06,$09,$0D,$12,$16,$04,$0D
 
-; Unused code?
-c$A3A2 LD C,A        ;
- $A3A3 INC B         ;
- $A3A4 RET           ;
-
-; Unused
-s$A3A5 DEFS 2
+; Data block at A3A1
+b$A3A1 DEFB $C9,$4F,$04,$C9,$00,$00
 
 ; Farmer collects an egg/corn...also at start of level.
 ;
@@ -3749,7 +3740,7 @@ c$A420 CALL $AB9E    ; CLEAR_SCREEN
  $A45F JR NZ,$A46E   ; }
  $A461 CALL $AB60    ; else PLAY_TUNE
  $A464 LD A,$14      ;
- $A466 CALL $9CEB    ;
+ $A466 CALL $9CEB    ; GET_LOOKUP_TABLE_ADDRESS
  $A469 LD A,$01      ; {Set MUSIC_PLAY_STATE to "stopped"
  $A46B LD ($736F),A  ; }
 ; This entry point is used by the routine at #R$AA49.
@@ -3842,7 +3833,7 @@ c$A4C8 CALL $AB9E    ; CLEAR_SCREEN
  $A50B LD (HL),$0A   ; }
  $A50D CALL $A960    ;
  $A510 LD A,$18      ;
- $A512 CALL $9CEB    ;
+ $A512 CALL $9CEB    ; GET_LOOKUP_TABLE_ADDRESS
 
 ; Scroll ticker text for instructions screen
 ;
@@ -3996,7 +3987,7 @@ c$A62C LD A,($733A)  ; Get NUMBER_OF_PLAYERS
  $A630 JR Z,$A653    ;
  $A632 LD A,($733B)  ; Get CURRENT_PLAYER
  $A635 ADD A,$19     ;
- $A637 CALL $9CEB    ;
+ $A637 CALL $9CEB    ; GET_LOOKUP_TABLE_ADDRESS
  $A63A LD BC,$AD49   ;
  $A63D LD A,($733B)  ; Get CURRENT_PLAYER
  $A640 ADD A,$30     ;
@@ -4311,7 +4302,7 @@ c$A828 LD IXh,B      ;
  $A884 CALL $AA37    ; }
  $A887 CALL $A960    ;
  $A88A LD A,$07      ;
- $A88C CALL $9CEB    ;
+ $A88C CALL $9CEB    ; GET_LOOKUP_TABLE_ADDRESS
  $A88F CALL $A960    ;
  $A892 POP HL        ;
  $A893 LD BC,$000A   ;
@@ -4732,16 +4723,16 @@ c$AADF DJNZ $AAD2    ;
 
 ; Called after death tune
 ;
-; Used by the routine at #R$A6FE.
-c$AAE4 LD A,R        ;
- $AAE6 LD HL,$ABE9   ; address $ABE9 not used, but data block starting at $ABEA
+; Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
+c$AAE4 LD A,R        ; {Load #REGb with #Regr (related to memory refresh), then
+ $AAE6 LD HL,$ABE9   ; after processing #REGb will have a value between 1-8.
  $AAE9 AND $07       ;
  $AAEB INC A         ;
- $AAEC LD B,A        ;
-*$AAED INC HL        ; #REGhl will be at least $ABEA here
- $AAEE DJNZ $AAED    ;
- $AAF0 LD A,(HL)     ;
- $AAF1 JP $9CEB      ;
+ $AAEC LD B,A        ; }
+*$AAED INC HL        ; {Increment #REGhl to required address, and assign #REGa.
+ $AAEE DJNZ $AAED    ; Note #REGhl starts at $ABEA ($ABE9+1).
+ $AAF0 LD A,(HL)     ; }
+ $AAF1 JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
 ; Redefine keys: get key
 ;
@@ -4937,15 +4928,9 @@ c$ABAD LD DE,$ABF2   ; Point #REGde to HIGH_SCORE_HEADING_TEXT
  $ABE7 JR NZ,$ABDE   ; }
  $ABE9 RET           ;
 
-; Not sure if this data is used directly, but the address is used (by #R$AAE4)
-; as a base to later data
-t$ABEA DEFB $01
- $ABEB DEFB $10
- $ABEC DEFB $13
- $ABED DEFB $17
- $ABEE DEFB $1E
- $ABEF DEFM " !"
- $ABF1 DEFB $01
+; Small lookup table used by #R$AAE4 to assign #Rega, for use with
+; GET_LOOKUP_TABLE_ADDRESS
+b$ABEA DEFB $01,$10,$13,$17,$1E,$20,$21,$01
 
 ; High score table heading text data
 @label=HIGH_SCORE_HEADING_TEXT
@@ -5468,18 +5453,24 @@ c$B130 PUSH HL       ;
 
 ; After death, screen is redrawn, before hens/farmer displayed
 ;
-; Used by the routine at #R$AE9C.
-c$B14F LD HL,$B15E   ;
- $B152 LD A,R        ;
+; Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
+;
+; .
+;
+; Does accessing #REGhl instruction before the #REGr have any importance? (see
+; https://www.worldofspectrum.org/faq/reference/z80reference.htm#RRegister)
+c$B14F LD HL,$B15E   ; {Load #REGb with #Regr (related to memory refresh), then
+ $B152 LD A,R        ; after processing #REGb will have a value between 1-8.
  $B154 AND $07       ;
  $B156 INC A         ;
- $B157 LD B,A        ;
-*$B158 INC HL        ; #REGhl is first incremented to $B15F before being used.
- $B159 DJNZ $B158    ;
- $B15B LD A,(HL)     ;
- $B15C JP $9CEB      ;
+ $B157 LD B,A        ; }
+*$B158 INC HL        ; {Increment #REGhl to required address, and assign #REGa.
+ $B159 DJNZ $B158    ; Note #REGhl starts at $B15F ($B15E+1).
+ $B15B LD A,(HL)     ; }
+ $B15C JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
-; Data block at B15F
+; Small lookup table used by #R$B14F to assign #Rega, for use with
+; GET_LOOKUP_TABLE_ADDRESS
 b$B15F DEFB $02,$08,$0A,$0B,$0C,$11,$11,$02
 
 ; Source code remnants
@@ -5821,39 +5812,28 @@ b$C610 DEFB $05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,
  $C870 DEFB $AA,$AB,$AC,$AD,$00,$00,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$03,$00,$00,$00,$00,$00,$00
  $C890 DEFB $00,$A8,$A9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-; Source code remnants
+; Source code remnants?
 ;
 ; The source code here corresponds to the code at ????.
 t$C8B0 DEFM "ALL CONV1"
  $C8B9 DEFB $0D
  $C8BA DEFM "V"
  $C8BB DEFB $60
- $C8BC DEFM "  LD A,(2948,"
+ $C8BC DEFM "  LD A,(2948"
 
-; This seems to be a return table...where does it end?
-@label=RETURN_TABLE
-c$C8C9 RET           ;
- $C8CA JR C,$C895    ;
- $C8CC LD C,H        ;
- $C8CD RET           ;
- $C8CE LD E,B        ;
- $C8CF RET           ;
- $C8D0 LD H,(HL)     ;
- $C8D1 RET           ;
- $C8D2 ADD A,B       ;
- $C8D3 RET           ;
- $C8D4 ADC A,H       ;
- $C8D5 RET           ;
- $C8D6 SBC A,H       ;
- $C8D7 RET           ;
- $C8D8 XOR H         ;
- $C8D9 RET           ;
- $C8DA RET NZ        ;
- $C8DB RET           ;
-
-; Address table for data blocks
-@label=DATA_ADDRESS_TABLE
-b$C8DC DEFB $D6,$C9
+; An address table for accessing data starting at $C92C.
+@label=ADDRESS_LOOKUP_TABLE
+b$C8C8 DEFB $2C,$C9
+ $C8CA DEFB $38,$C9
+ $C8CC DEFB $4C,$C9
+ $C8CE DEFB $58,$C9
+ $C8D0 DEFB $66,$C9
+ $C8D2 DEFB $80,$C9
+ $C8D4 DEFB $8C,$C9
+ $C8D6 DEFB $9C,$C9
+ $C8D8 DEFB $AC,$C9
+ $C8DA DEFB $C0,$C9
+ $C8DC DEFB $D6,$C9
  $C8DE DEFB $E4,$C9
  $C8E0 DEFB $FA,$C9
  $C8E2 DEFB $0A,$CA
@@ -5877,76 +5857,96 @@ b$C8DC DEFB $D6,$C9
  $C906 DEFB $96,$CB
  $C908 DEFB $B0,$CB
 
-; Does this contain code, data, or is just unused?
-b$C90A DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $C912 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $C91A DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $C922 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $C92A DEFB $00,$00,$06,$35,$05,$00,$04,$38
- $C932 DEFB $05,$35,$02,$00,$FF,$FF,$05,$3D
- $C93A DEFB $07,$35,$05,$00,$05,$28,$06,$3B
- $C942 DEFB $09,$00,$05,$0C,$05,$0D,$02,$00
- $C94A DEFB $FF,$FF,$06,$10,$05,$0C,$05,$37
- $C952 DEFB $03,$11,$02,$00,$FF,$FF,$03,$38
- $C95A DEFB $06,$06,$0E,$37,$05,$2D,$07,$13
- $C962 DEFB $02,$00,$FF,$FF,$05,$0B,$06,$07
- $C96A DEFB $05,$29,$07,$37,$05,$11,$08,$00
- $C972 DEFB $07,$2D,$05,$07,$05,$23,$03,$1E
- $C97A DEFB $05,$3E,$02,$00,$FF,$FF,$05,$20
- $C982 DEFB $08,$2B,$09,$1A,$05,$11,$02,$00
- $C98A DEFB $FF,$FF,$04,$39,$05,$06,$10,$00
- $C992 DEFB $05,$37,$06,$08,$05,$3A,$02,$00
- $C99A DEFB $FF,$FF,$03,$3F,$07,$13,$07,$00
- $C9A2 DEFB $06,$3E,$07,$33,$02,$0D,$02,$00
- $C9AA DEFB $FF,$FF,$09,$2E,$06,$07,$07,$3E
- $C9B2 DEFB $09,$00,$06,$21,$02,$1E,$05,$1E
- $C9BA DEFB $05,$0B,$02,$00,$FF,$FF,$05,$39
- $C9C2 DEFB $05,$1A,$05,$23,$07,$00,$04,$38
- $C9CA DEFB $07,$35,$0A,$00,$06,$1D,$06,$2F
- $C9D2 DEFB $02,$00,$FF,$FF
+; unused?
+s$C90A DEFS $22
 
-; related to address table
+; related to address lookup table
+b$C92C DEFB $06,$35,$05,$00,$04,$38,$05,$35
+ $C934 DEFB $02,$00,$FF,$FF
+
+; related to address lookup table
+b$C938 DEFB $05,$3D,$07,$35,$05,$00,$05,$28
+ $C940 DEFB $06,$3B,$09,$00,$05,$0C,$05,$0D
+ $C948 DEFB $02,$00,$FF,$FF
+
+; related to address lookup table
+b$C94C DEFB $06,$10,$05,$0C,$05,$37,$03,$11
+ $C954 DEFB $02,$00,$FF,$FF
+
+; related to address lookup table
+b$C958 DEFB $03,$38,$06,$06,$0E,$37,$05,$2D
+ $C960 DEFB $07,$13,$02,$00,$FF,$FF
+
+; related to address lookup table
+b$C966 DEFB $05,$0B,$06,$07,$05,$29,$07,$37
+ $C96E DEFB $05,$11,$08,$00,$07,$2D,$05,$07
+ $C976 DEFB $05,$23,$03,$1E,$05,$3E,$02,$00
+ $C97E DEFB $FF,$FF
+
+; related to address lookup table
+b$C980 DEFB $05,$20,$08,$2B,$09,$1A,$05,$11
+ $C988 DEFB $02,$00,$FF,$FF
+
+; related to address lookup table
+b$C98C DEFB $04,$39,$05,$06,$10,$00,$05,$37
+ $C994 DEFB $06,$08,$05,$3A,$02,$00,$FF,$FF
+
+; related to address lookup table
+b$C99C DEFB $03,$3F,$07,$13,$07,$00,$06,$3E
+ $C9A4 DEFB $07,$33,$02,$0D,$02,$00,$FF,$FF
+
+; related to address lookup table
+b$C9AC DEFB $09,$2E,$06,$07,$07,$3E,$09,$00
+ $C9B4 DEFB $06,$21,$02,$1E,$05,$1E,$05,$0B
+ $C9BC DEFB $02,$00,$FF,$FF
+
+; related to address lookup table
+b$C9C0 DEFB $05,$39,$05,$1A,$05,$23,$07,$00
+ $C9C8 DEFB $04,$38,$07,$35,$0A,$00,$06,$1D
+ $C9D0 DEFB $06,$2F,$02,$00,$FF,$FF
+
+; related to address lookup table
 b$C9D6 DEFB $05,$3D,$07,$35,$06,$00,$03,$38
  $C9DE DEFB $06,$20,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$C9E4 DEFB $04,$21,$03,$35,$04,$0B,$07,$11
  $C9EC DEFB $09,$00,$05,$37,$05,$11,$04,$18
  $C9F4 DEFB $05,$09,$02,$00,$FF,$FF
 
-; related to address table - when player lands on a platform
+; related to address lookup table - when player lands on a platform
 b$C9FA DEFB $05,$22,$05,$35,$05,$2C,$0D,$00
  $CA02 DEFB $06,$0F,$03,$09,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CA0A DEFB $05,$22,$05,$14,$05,$10,$0F,$00
  $CA12 DEFB $07,$35,$04,$23,$03,$34,$02,$00
  $CA1A DEFB $FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CA1C DEFB $05,$35,$05,$38,$06,$37,$0B,$00
  $CA24 DEFB $05,$10,$06,$1A,$04,$0B,$02,$00
  $CA2C DEFB $FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CA2E DEFB $06,$27,$05,$17,$05,$2C,$0B,$00
  $CA36 DEFB $05,$10,$06,$0F,$04,$0B,$05,$1F
  $CA3E DEFB $07,$23,$09,$33,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CA46 DEFB $05,$2D,$07,$29,$04,$00,$02,$1A
  $CA4E DEFB $04,$35,$04,$11,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CA56 DEFB $05,$3D,$02,$18,$05,$11,$08,$00
  $CA5E DEFB $05,$0C,$04,$11,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CA66 DEFB $05,$0D,$05,$1E,$05,$28,$09,$00
  $CA6E DEFB $05,$2E,$05,$17,$05,$0B,$02,$00
  $CA76 DEFB $FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CA78 DEFB $06,$14,$0B,$00,$05,$1A,$05,$2C
  $CA80 DEFB $05,$15,$09,$00,$05,$07,$05,$28
  $CA88 DEFB $0A,$00,$04,$37,$04,$37,$05,$17
@@ -5957,67 +5957,67 @@ b$CA78 DEFB $06,$14,$0B,$00,$05,$1A,$05,$2C
  $CAB0 DEFB $04,$08,$06,$13,$0B,$00,$06,$07
  $CAB8 DEFB $03,$22,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CABE DEFB $05,$2D,$07,$35,$08,$00,$05,$17
  $CAC6 DEFB $05,$0B,$08,$00,$05,$0D,$05,$06
  $CACE DEFB $07,$10,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CAD4 DEFB $05,$37,$05,$37,$07,$16,$05,$09
  $CADC DEFB $05,$33,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CAE2 DEFB $05,$39,$06,$35,$05,$09,$05,$2D
  $CAEA DEFB $05,$0F,$05,$37,$09,$00,$05,$2A
  $CAF2 DEFB $05,$14,$08,$37,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CAFA DEFB $06,$0C,$06,$0B,$05,$37,$03,$11
  $CB02 DEFB $04,$27,$03,$0F,$04,$29,$04,$25
  $CB0A DEFB $0A,$0F,$05,$0B,$06,$37,$02,$00
  $CB12 DEFB $FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CB14 DEFB $05,$38,$05,$35,$09,$11,$05,$14
  $CB1C DEFB $05,$00,$05,$38,$05,$35,$09,$11
  $CB24 DEFB $05,$14,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CB2A DEFB $05,$09,$05,$2D,$04,$14,$07,$33
  $CB32 DEFB $09,$00,$05,$2E,$05,$17,$05,$0B
  $CB3A DEFB $02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CB3E DEFB $05,$09,$05,$2D,$04,$14,$07,$33
  $CB46 DEFB $09,$00,$05,$0D,$05,$1F,$02,$00
  $CB4E DEFB $FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CB50 DEFB $05,$09,$05,$2D,$04,$14,$07,$33
  $CB58 DEFB $09,$00,$05,$1D,$04,$27,$05,$13
  $CB60 DEFB $02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CB64 DEFB $05,$09,$05,$2D,$04,$14,$07,$33
  $CB6C DEFB $09,$00,$05,$28,$05,$3A,$02,$00
  $CB74 DEFB $FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CB76 DEFB $06,$35,$09,$00,$05,$05,$02,$00
  $CB7E DEFB $FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CB80 DEFB $05,$3B,$09,$00,$05,$19,$07,$1E
  $CB88 DEFB $08,$00,$06,$27,$09,$07,$02,$21
  $CB90 DEFB $09,$31,$02,$00,$FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CB96 DEFB $05,$0B,$07,$17,$06,$11,$09,$00
  $CB9E DEFB $06,$22,$04,$1E,$04,$21,$09,$00
  $CBA6 DEFB $05,$07,$07,$38,$08,$28,$02,$00
  $CBAE DEFB $FF,$FF
 
-; related to address table
+; related to address lookup table
 b$CBB0 DEFB $06,$39,$08,$3B,$04,$15,$06,$00
  $CBB8 DEFB $06,$2D,$05,$1E,$03,$29,$06,$00
  $CBC0 DEFB $0B,$00,$FF,$FF

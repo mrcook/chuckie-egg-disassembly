@@ -419,7 +419,13 @@ c $9CA4 This routine produces a sound, formed of a square wave.
 @ $9CA4 label=MAKE_SOUND
 s $9CB5 Unused
 c $9CC2 Called from an INTERUPT, and basically every game loop?
-c $9CEB Called during level draw/clear.
+c $9CEB Get address value from the ADDRESS_LOOKUP_TABLE
+@ $9CEB label=GET_LOOKUP_TABLE_ADDRESS
+  $9CEB,1 Current known values for #REGa are between $01 and $21.
+  $9CF2,7 Point #REGhl to $C8C8 ($C8C6+2), then increment until we get the desired address in the ADDRESS_LOOKUP_TABLE.
+  $9CF9,3 Load #REGde with address from lookup table
+  $9CFC,4 Save address to $7374
+  $9D02,3 Set $7373 to $01
 s $9D06 Unused
 c $9D08
 s $9DF1 Unused
@@ -465,9 +471,12 @@ c $A2B5
 c $A30C Farmer jumping/falling related routine.
 c $A37F
 c $A389 Farmer lands on a platform?
-c $A399 Unused code?
-c $A3A2 Unused code?
-s $A3A5 Unused
+D $A389 Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
+  $A389,9 Load #REGb with #Regr (related to memory refresh), then after processing #REGb will have a value between 1-8.
+  $A392,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $A399 ($A398+1).
+  $A396 GET_LOOKUP_TABLE_ADDRESS
+b $A399 Small lookup table used by #R$A389 to assign #Rega, for use with GET_LOOKUP_TABLE_ADDRESS
+b $A3A1
 c $A3A7 Farmer collects an egg/corn...also at start of level.
   $A3C5,3 Get CURRENT_PLAYER
   $A3E3,3 UPDATE_SCREEN_GFX
@@ -490,6 +499,7 @@ D $A420 Note: this routine is very similar to the DISPLAY_SCREEN_INSTRUCTIONS ro
   $A458,3 Point #REGhl to THEME_TUNE data
   $A45B,6 If MUSIC_PLAY_STATE is "stopped" then Jump
   $A461,3 else PLAY_TUNE
+  $A466,3 GET_LOOKUP_TABLE_ADDRESS
   $A469,5 Set MUSIC_PLAY_STATE to "stopped"
 @ $A46E label=SET_TICKER_TEXT_COLOUR
   $A46E,3 Point #REGhl to last line of ATTRIBUTE_FILE.
@@ -516,6 +526,7 @@ D $A4C8 Note: this routine is very similar to the DISPLAY_SCREEN_HOME routine.
   $A4FE,7 I saw nothing change visually on the screen.
   $A505,5 Set $732C to `$57`
   $A50A,3 Set GAME_STATE to $0A - Instructions screen?
+  $A512 GET_LOOKUP_TABLE_ADDRESS
 c $A515 Scroll ticker text for instructions screen
 D $A515 Note: first half of this routine is very similar SCROLL_TEXT_1 routine.
 @ $A515 label=SCROLL_TEXT_2
@@ -559,6 +570,7 @@ D $A59D Routine to start a new game, first asking for number of players!
 c $A62C
   $A62C,3 Get NUMBER_OF_PLAYERS
   $A632,3 Get CURRENT_PLAYER
+  $A637,3 GET_LOOKUP_TABLE_ADDRESS
   $A63D,3 Get CURRENT_PLAYER
   $A647,3 #REGde points to address for "player 1" text
   $A65F,3 Get CURRENT_PLAYER
@@ -601,6 +613,7 @@ c $A828 Player enters their name on the highscore table?
   $A873,9 Highlight the "Player 1" text in magenta ($03)
   $A87C,6 Highlight the "well done..." message in green (INC A = $04)
   $A882,5 Highlight the "enter initials..." message in red ($02)
+  $A88C,3 GET_LOOKUP_TABLE_ADDRESS
   $A8A6,3 UPDATE_SCREEN_GFX
   $A8A9,3 reads SYSVAR_KSTATE_4
   $A8B1,3 reads SYSVAR_KSTATE_4
@@ -643,8 +656,10 @@ c $AA49 Redefine keys wizard - read new keys
 c $AABA
 c $AADF Some kind of pause routine?
 c $AAE4 Called after death tune
-  $AAE6,3 address $ABE9 not used, but data block starting at $ABEA
-  $AAED,1 #REGhl will be at least $ABEA here
+D $AAE4 Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
+  $AAE4,9 Load #REGb with #Regr (related to memory refresh), then after processing #REGb will have a value between 1-8.
+  $AAED,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $ABEA ($ABE9+1).
+  $AAF1 GET_LOOKUP_TABLE_ADDRESS
 c $AAF4 Redefine keys: get key
 @ $AAF4 label=REDEFINE_KEYS_GET_KEY
   $AAFE,15 Read keyboard
@@ -671,7 +686,7 @@ c $ABAD Displays scoreboard with heading and names/scores list
   $ABC0,3 set #REGde to high score table
   $ABC8,3 UPDATE_SCREEN_GFX
   $ABD6,19 update screen colours
-t $ABEA Not sure if this data is used directly, but the address is used (by #R$AAE4) as a base to later data
+b $ABEA Small lookup table used by #R$AAE4 to assign #Rega, for use with GET_LOOKUP_TABLE_ADDRESS
 t $ABF2 High score table heading text data
 @ $ABF2 label=HIGH_SCORE_HEADING_TEXT
 t $AC02 Wizard instructions for redefining the keys
@@ -736,8 +751,12 @@ c $AE9C Called just before showing new level
 c $B130 Update colours?
   $B135,3 Point #REGhl to start of ATTRIBUTE_FILE.
 c $B14F After death, screen is redrawn, before hens/farmer displayed
-  $B158,1 #REGhl is first incremented to $B15F before being used.
-b $B15F
+D $B14F Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
+N $B14F Does accessing #REGhl instruction before the #REGr have any importance? (see https://www.worldofspectrum.org/faq/reference/z80reference.htm#RRegister)
+  $B14F,9 Load #REGb with #Regr (related to memory refresh), then after processing #REGb will have a value between 1-8.
+  $B158,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $B15F ($B15E+1).
+  $B15C GET_LOOKUP_TABLE_ADDRESS
+b $B15F Small lookup table used by #R$B14F to assign #Rega, for use with GET_LOOKUP_TABLE_ADDRESS
 t $B167 Source code remnants
 D $B167 The source code here corresponds to the code at #R$A58A...maybe!
 B $B171,1 is a double quote character
@@ -772,37 +791,45 @@ b $C370 Level 7 layout data - see LEVEL_BUFFER for byte map
 b $C610 Level 8 layout data - see LEVEL_BUFFER for byte map
 @ $C610 label=LEVEL_8
   $C610,672,32
-t $C8B0 Source code remnants
+t $C8B0 Source code remnants?
 D $C8B0 The source code here corresponds to the code at ????.
-c $C8C9 This seems to be a return table...where does it end?
-@ $C8C9 label=RETURN_TABLE
-b $C8DC Address table for data blocks
-@ $C8DC label=DATA_ADDRESS_TABLE
-  $C8DC,46,2
-b $C90A Does this contain code, data, or is just unused?
-b $C9D6 related to address table
-b $C9E4 related to address table
-b $C9FA related to address table - when player lands on a platform
-b $CA0A related to address table
-b $CA1C related to address table
-b $CA2E related to address table
-b $CA46 related to address table
-b $CA56 related to address table
-b $CA66 related to address table
-b $CA78 related to address table
-b $CABE related to address table
-b $CAD4 related to address table
-b $CAE2 related to address table
-b $CAFA related to address table
-b $CB14 related to address table
-b $CB2A related to address table
-b $CB3E related to address table
-b $CB50 related to address table
-b $CB64 related to address table
-b $CB76 related to address table
-b $CB80 related to address table
-b $CB96 related to address table
-b $CBB0 related to address table
+b $C8C8 An address table for accessing data starting at $C92C.
+@ $C8C8 label=ADDRESS_LOOKUP_TABLE
+  $C8C8,64,2
+s $C90A unused?
+b $C92C related to address lookup table
+b $C938 related to address lookup table
+b $C94C related to address lookup table
+b $C958 related to address lookup table
+b $C966 related to address lookup table
+b $C980 related to address lookup table
+b $C98C related to address lookup table
+b $C99C related to address lookup table
+b $C9AC related to address lookup table
+b $C9C0 related to address lookup table
+b $C9D6 related to address lookup table
+b $C9E4 related to address lookup table
+b $C9FA related to address lookup table - when player lands on a platform
+b $CA0A related to address lookup table
+b $CA1C related to address lookup table
+b $CA2E related to address lookup table
+b $CA46 related to address lookup table
+b $CA56 related to address lookup table
+b $CA66 related to address lookup table
+b $CA78 related to address lookup table - related to playing music?
+b $CABE related to address lookup table
+b $CAD4 related to address lookup table
+b $CAE2 related to address lookup table
+b $CAFA related to address lookup table
+b $CB14 related to address lookup table
+b $CB2A related to address lookup table
+b $CB3E related to address lookup table
+b $CB50 related to address lookup table
+b $CB64 related to address lookup table
+b $CB76 related to address lookup table
+b $CB80 related to address lookup table
+b $CB96 related to address lookup table
+b $CBB0 related to address lookup table
 s $CBC4 Unused
 s $FF18 NOTE: snapshot from FUSE has data here.
 i $FF58 RESERVED MEMORY for User defined graphics (UDG)
