@@ -50,9 +50,8 @@ b $6EF2 Remaining lives for player 3.
 b $6EF3 Remaining lives for player 4.
 @ $6EF3 label=P4_LIVES
 s $6EF4 Unused by game.
-b $72A0 Animation Buffer #2
-D $72A0 Buffer used for animating a sprite (?)
-@ $72A0 label=ANIMBUF2
+s $72A0 Duck sprite buffer
+@ $72A0 label=DUCK_SPRITE_BUFFER
 b $72D8 Farmer's current position? (perhaps X)
 @ $72D8 label=POSITION_A
 b $72D9 Farmer's current position? (perhaps Y)
@@ -60,9 +59,9 @@ b $72D9 Farmer's current position? (perhaps Y)
 b $72DA
 b $72DB
 b $72DC
-b $72DD Animation Buffer #3
-D $72DD Buffer used for animating a sprite?
-@ $72DD label=ANIMBUF3
+s $72DD Duck sprite/background composition buffer
+D $72DD Current background tiles are loaded then the duck sprite data is merged.
+@ $72DD label=DUCK_SPRITE_BACKGROUND_BUFFER
 b $7325
 b $7326
 b $7327
@@ -112,7 +111,7 @@ b $7346 Bonus remaining for level
 D $7346 This may not be correct!
 @ $7346 label=BONUS_REMAINING
 b $7347
-b $7348
+b $7348 Variable used for the duck
 b $7349
 b $734A
 b $734B
@@ -267,9 +266,8 @@ b $8B30 "TYPE" heading graphic for instructions screen (32x8)
 D $8B30 #HTML[#UDGARRAY4;$8B30-$8B4F-8(instructions_heading_type)]
 @ $8B30 label=INSTRUCTIONS_HEADING_TYPE
 s $8B50 Unknown, unused?
-b $8DF0 Farmer sprites graphic data (but things are not quite right)
-D $8DF0 #HTML[#UDGARRAY1;$8DF0-$8EEF-8(farmer_sprites)]
-@ $8DF0 label=SPRITES_FARMER
+b $8DF0 Duck sprites graphic data (but things are not quite right)
+@ $8DF0 label=DUCK_SPRITES
 b $8EF0 Hen sprites graphic data: right with mouth open (8x32)
 D $8EF0 #HTML[#UDGARRAY1;$8EF0-$8F0F-8(hen_sprites_right_mouth)]
 @ $8EF0 label=SPRITES_HEN_RIGHT_MOUTH
@@ -282,7 +280,7 @@ D $8F30 #HTML[#UDGARRAY1;$8F30-$8F4F-8(hen_sprites_left_mouth)]
 b $8F50 Hen sprites graphic data: left (8x32)
 D $8F50 #HTML[#UDGARRAY1;$8F50-$8F6F-8(hen_sprites_left)]
 @ $8F50 label=SPRITES_HEN_LEFT
-s $8F70 Unused space?
+b $8F70 Data here is copied to $72A0
 b $8F90 Farmer sprites graphic data: climbing stairs (but things are not quite right)
 D $8F90 #HTML[#UDGARRAY1;$8F90-$900F-8(farmer_sprites_climbing)]
 @ $8F90 label=SPRITES_FARMER_WALK
@@ -319,7 +317,7 @@ c $9265
 c $9298 Routine to restore (POP) all #REGde, #REGhl, #REGbc registers
 @ $9298 label=RESTORE_16BIT_REGISTERS
 c $929C Update Robot Hens?
-  $929C,1 POKE to 201 (`RET`) to vaniquish Robot Hens
+  $929C,1 POKE to 201 (`RET`) to vanquish Robot Hens
 c $92C2
 c $935F
   $9398,3 set #REGhl to last byte of GFX_TILE_BLANK
@@ -377,7 +375,7 @@ c $9858
 c $98E6
   $98EF,1 POKE to 0 (`NOP`) to get infinite TIME
   $98FC,1 POKE to 0 (`NOP`) to make giant duck very slow
-  $98FD,2 POKE to 24 (`JR nnnn`) to vaniquish giant duck
+  $98FD,2 POKE to 24 (`JR nnnn`) to vanquish giant duck
   $9925,1 POKE to 0 (`NOP`) to get infinite BONUS
   $9938,1 POKE to `0` (NOP) to slow Robot Hens
   $9958,2 JUMP keypress
@@ -388,13 +386,22 @@ c $9A17
 c $9A2C Unused code?
 c $9A38 Unused code?
 b $9A47 Unused?
-c $9A4C
-  $9A53,3 set #REGhl=SPRITES_FARMER
-  $9A69,16 draw SPRITES_FARMER in ANIMBUF2?
-  $9ABB,3 set #REGhl=GFX_TILE_BLANK
+c $9A4C Draw the giant duck (maybe also check for collision with farmer)
+  $9A53,3 Point #REGhl to the DUCK_SPRITES data
+  $9A69,16 Copy current sprite from DUCK_SPRITES to the DUCK_SPRITE_BUFFER
+  $9A80,19 Rotate bytes in the DUCK_SPRITE_BUFFER...why?
+  $9A95,4 Point #REGix to beginning of DUCK_SPRITE_BACKGROUND_BUFFER
+  $9A9A,3 Point #REGhl to beginning of LEVEL_BUFFER
+  $9ABB Point #REGhl to one of the GFX tiles (offset from GFX_TILE_BLANK)
+  $9AD1,13 Copy GFX tile data to the DUCK_SPRITE_BACKGROUND_BUFFER
+  $9AF8,2 Jump back until DUCK_SPRITE_BACKGROUND_BUFFER is holds all tile data.
+  $9B05,19 Copy the 48 bytes of DUCK_SPRITE_BACKGROUND_BUFFER to DUCK_SPRITE_BUFFER, merging with the current duck sprite data there.
   $9B1A,3 Load #REGhl with start of DISPLAY_FILE.
   $9B1D,3 Load #REGbc with value of 2048 (1/3 of screen)
-c $9BDE Something to do with updatng colours?
+  $9B4E,35 Draw duck sprite to screen
+  $9B90,14 Update duck sprite colours to $06: INK=yellow, PAPER=black, BRIGHT=0.
+c $9BDE Calculates current position of duck in ATTRIBUTE_FILE.
+@ $9BDE label=DUCK_ATTR_FILE_POSITION
   $9BE6,3 Point #REGhl to start of ATTRIBUTE_FILE.
 s $9BFF Unused
 c $9C40 Called when needing to draw a level...works on 1/3 of screen at a time?
@@ -472,10 +479,10 @@ c $A30C Farmer jumping/falling related routine.
 c $A37F
 c $A389 Farmer lands on a platform?
 D $A389 Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
-  $A389,9 Load #REGb with #Regr (related to memory refresh), then after processing #REGb will have a value between 1-8.
+  $A389,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $A392,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $A399 ($A398+1).
   $A396 GET_LOOKUP_TABLE_ADDRESS
-b $A399 Small lookup table used by #R$A389 to assign #Rega, for use with GET_LOOKUP_TABLE_ADDRESS
+b $A399 Small lookup table used by #R$A389 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 b $A3A1
 c $A3A7 Farmer collects an egg/corn...also at start of level.
   $A3C5,3 Get CURRENT_PLAYER
@@ -520,7 +527,7 @@ D $A4C8 Note: this routine is very similar to the DISPLAY_SCREEN_HOME routine.
   $A4C8,3 CLEAR_SCREEN
   $A4D3,3 UPDATE_SCREEN_GFX
   $A4E4,3 Point #REGhl to start of ATTRIBUTE_FILE.
-  $A4E9,7 Print intructions headings
+  $A4E9,7 Print instructions headings
   $A4F0,7 Print "KEYS" box
   $A4F7,7 Print "KEY TYPES" text
   $A4FE,7 I saw nothing change visually on the screen.
@@ -657,7 +664,7 @@ c $AABA
 c $AADF Some kind of pause routine?
 c $AAE4 Called after death tune
 D $AAE4 Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
-  $AAE4,9 Load #REGb with #Regr (related to memory refresh), then after processing #REGb will have a value between 1-8.
+  $AAE4,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $AAED,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $ABEA ($ABE9+1).
   $AAF1 GET_LOOKUP_TABLE_ADDRESS
 c $AAF4 Redefine keys: get key
@@ -686,7 +693,7 @@ c $ABAD Displays scoreboard with heading and names/scores list
   $ABC0,3 set #REGde to high score table
   $ABC8,3 UPDATE_SCREEN_GFX
   $ABD6,19 update screen colours
-b $ABEA Small lookup table used by #R$AAE4 to assign #Rega, for use with GET_LOOKUP_TABLE_ADDRESS
+b $ABEA Small lookup table used by #R$AAE4 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 t $ABF2 High score table heading text data
 @ $ABF2 label=HIGH_SCORE_HEADING_TEXT
 t $AC02 Wizard instructions for redefining the keys
@@ -753,10 +760,10 @@ c $B130 Update colours?
 c $B14F After death, screen is redrawn, before hens/farmer displayed
 D $B14F Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
 N $B14F Does accessing #REGhl instruction before the #REGr have any importance? (see https://www.worldofspectrum.org/faq/reference/z80reference.htm#RRegister)
-  $B14F,9 Load #REGb with #Regr (related to memory refresh), then after processing #REGb will have a value between 1-8.
+  $B14F,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $B158,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $B15F ($B15E+1).
   $B15C GET_LOOKUP_TABLE_ADDRESS
-b $B15F Small lookup table used by #R$B14F to assign #Rega, for use with GET_LOOKUP_TABLE_ADDRESS
+b $B15F Small lookup table used by #R$B14F to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 t $B167 Source code remnants
 D $B167 The source code here corresponds to the code at #R$A58A...maybe!
 B $B171,1 is a double quote character

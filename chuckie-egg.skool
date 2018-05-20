@@ -124,17 +124,9 @@ b$6EF3 DEFB $00
 ; Unused by game.
 s$6EF4 DEFS $03AC
 
-; Animation Buffer #2
-;
-; Buffer used for animating a sprite (?)
-@label=ANIMBUF2
-b$72A0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72A8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72B0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72B8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72C0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72C8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72D0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+; Duck sprite buffer
+@label=DUCK_SPRITE_BUFFER
+s$72A0 DEFS $38
 
 ; Farmer's current position? (perhaps X)
 @label=POSITION_A
@@ -153,19 +145,11 @@ b$72DB DEFB $00
 ; Data block at 72DC
 b$72DC DEFB $00
 
-; Animation Buffer #3
+; Duck sprite/background composition buffer
 ;
-; Buffer used for animating a sprite?
-@label=ANIMBUF3
-b$72DD DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72E5 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72ED DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72F5 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $72FD DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $7305 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $730D DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $7315 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $731D DEFB $00,$00,$00,$00,$00,$00,$00,$00
+; Current background tiles are loaded then the duck sprite data is merged.
+@label=DUCK_SPRITE_BACKGROUND_BUFFER
+s$72DD DEFS $48
 
 ; Data block at 7325
 b$7325 DEFB $00
@@ -303,7 +287,7 @@ b$7346 DEFB $00
 ; Data block at 7347
 b$7347 DEFB $00
 
-; Data block at 7348
+; Variable used for the duck
 b$7348 DEFB $00
 
 ; Data block at 7349
@@ -925,10 +909,8 @@ b$8B30 DEFB $00,$FE,$10,$10,$10,$10,$00,$FF
 ; Unknown, unused?
 s$8B50 DEFS $02A0
 
-; Farmer sprites graphic data (but things are not quite right)
-;
-; #HTML[#UDGARRAY1;$8DF0-$8EEF-8(farmer_sprites)]
-@label=SPRITES_FARMER
+; Duck sprites graphic data (but things are not quite right)
+@label=DUCK_SPRITES
 b$8DF0 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
  $8DF8 DEFB $3F,$FC,$03,$40,$03,$C0,$01,$80
  $8E00 DEFB $03,$E0,$06,$F0,$06,$F0,$06,$E0
@@ -998,8 +980,11 @@ b$8F50 DEFB $1E,$00,$37,$00,$FF,$00,$1F,$00
  $8F60 DEFB $38,$78,$39,$0E,$3E,$F3,$3E,$FD
  $8F68 DEFB $1F,$FE,$0F,$FE,$07,$FC,$01,$F0
 
-; Unused space?
-s$8F70 DEFS $20
+; Data here is copied to $72A0
+b$8F70 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $8F78 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $8F80 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $8F88 DEFB $00,$00,$00,$00,$00,$00,$00,$00
 
 ; Farmer sprites graphic data: climbing stairs (but things are not quite right)
 ;
@@ -1375,7 +1360,7 @@ c$9298 POP DE        ;
 ; Update Robot Hens?
 ;
 ; Used by the routines at #R$911E, #R$9178, #R$91F3 and #R$9265.
-c$929C PUSH BC       ; POKE to 201 (`RET`) to vaniquish Robot Hens
+c$929C PUSH BC       ; POKE to 201 (`RET`) to vanquish Robot Hens
  $929D PUSH DE       ;
  $929E PUSH AF       ;
  $929F PUSH HL       ;
@@ -2126,7 +2111,7 @@ c$98E6 LD A,($7347)    ;
  $98F6 CALL $A1B8      ;
 *$98F9 LD HL,$734C     ;
  $98FC DEC (HL)        ; POKE to 0 (`NOP`) to make giant duck very slow
- $98FD JR NZ,$9904     ; POKE to 24 (`JR nnnn`) to vaniquish giant duck
+ $98FD JR NZ,$9904     ; POKE to 24 (`JR nnnn`) to vanquish giant duck
  $98FF LD (HL),$0C     ;
  $9901 CALL $A0C8      ;
 *$9904 LD HL,$733C     ;
@@ -2299,7 +2284,7 @@ c$9A38 DEC B         ;
 ; Unused?
 b$9A47 DEFB $00,$00,$00,$00,$00
 
-; Routine at 9A4C
+; Draw the giant duck (maybe also check for collision with farmer)
 ;
 ; Used by the routines at #R$9D08, #R$9E98, #R$A0C8, #R$A278 and #R$A37F.
 c$9A4C PUSH AF       ;
@@ -2308,7 +2293,7 @@ c$9A4C PUSH AF       ;
  $9A4F PUSH IX       ;
  $9A51 PUSH HL       ;
  $9A52 LD C,L        ;
- $9A53 LD HL,$8DF0   ; set #REGhl=SPRITES_FARMER
+ $9A53 LD HL,$8DF0   ; Point #REGhl to the DUCK_SPRITES data
  $9A56 LD E,A        ;
  $9A57 XOR A         ;
  $9A58 RL E          ;
@@ -2323,8 +2308,8 @@ c$9A4C PUSH AF       ;
  $9A66 RLA           ;
  $9A67 LD D,A        ;
  $9A68 ADD HL,DE     ;
- $9A69 LD DE,$72A0   ; {draw SPRITES_FARMER in ANIMBUF2?
- $9A6C LD B,$10      ;
+ $9A69 LD DE,$72A0   ; {Copy current sprite from DUCK_SPRITES to the
+ $9A6C LD B,$10      ; DUCK_SPRITE_BUFFER
  $9A6E XOR A         ;
 *$9A6F LDI           ;
  $9A71 LDI           ;
@@ -2337,7 +2322,7 @@ c$9A4C PUSH AF       ;
  $9A7B AND C         ;
  $9A7C CP $00        ;
  $9A7E JR Z,$9A93    ;
-*$9A80 LD B,$10      ;
+*$9A80 LD B,$10      ; {Rotate bytes in the DUCK_SPRITE_BUFFER...why?
  $9A82 LD HL,$72A0   ;
 *$9A85 SRL (HL)      ;
  $9A87 INC HL        ;
@@ -2347,12 +2332,13 @@ c$9A4C PUSH AF       ;
  $9A8D INC HL        ;
  $9A8E DJNZ $9A85    ;
  $9A90 DEC A         ;
- $9A91 JR NZ,$9A80   ;
+ $9A91 JR NZ,$9A80   ; }
 *$9A93 POP HL        ;
  $9A94 PUSH HL       ;
- $9A95 LD IX,$72DD   ;
+ $9A95 LD IX,$72DD   ; Point #REGix to beginning of
+                     ; DUCK_SPRITE_BACKGROUND_BUFFER
  $9A99 EX DE,HL      ;
- $9A9A LD HL,$61A8   ;
+ $9A9A LD HL,$61A8   ; Point #REGhl to beginning of LEVEL_BUFFER
  $9A9D LD A,D        ;
  $9A9E AND $F8       ;
  $9AA0 LD B,$00      ;
@@ -2371,8 +2357,8 @@ c$9A4C PUSH AF       ;
  $9AB6 EX DE,HL      ;
  $9AB7 LD BC,$0303   ;
 *$9ABA PUSH BC       ;
- $9ABB LD HL,$84F0   ; set #REGhl=GFX_TILE_BLANK
- $9ABE LD A,(DE)     ;
+ $9ABB LD HL,$84F0   ; {Point #REGhl to one of the GFX tiles (offset from
+ $9ABE LD A,(DE)     ; GFX_TILE_BLANK)
  $9ABF LD B,$00      ;
  $9AC1 SLA A         ;
  $9AC3 RL B          ;
@@ -2382,14 +2368,14 @@ c$9A4C PUSH AF       ;
  $9ACB RL B          ;
  $9ACD LD C,A        ;
  $9ACE ADD HL,BC     ;
- $9ACF LD B,$08      ;
-*$9AD1 LD A,(HL)     ;
- $9AD2 LD (IX+$00),A ;
+ $9ACF LD B,$08      ; }
+*$9AD1 LD A,(HL)     ; {Copy GFX tile data to the
+ $9AD2 LD (IX+$00),A ; DUCK_SPRITE_BACKGROUND_BUFFER
  $9AD5 INC IX        ;
  $9AD7 INC IX        ;
  $9AD9 INC IX        ;
  $9ADB INC HL        ;
- $9ADC DJNZ $9AD1    ;
+ $9ADC DJNZ $9AD1    ; }
  $9ADE LD B,$17      ;
 *$9AE0 DEC IX        ;
  $9AE2 DJNZ $9AE0    ;
@@ -2405,7 +2391,8 @@ c$9A4C PUSH AF       ;
  $9AF4 EX DE,HL      ;
  $9AF5 LD B,$03      ;
  $9AF7 DEC C         ;
- $9AF8 JR NZ,$9ABA   ;
+ $9AF8 JR NZ,$9ABA   ; Jump back until DUCK_SPRITE_BACKGROUND_BUFFER is holds
+                     ; all tile data.
  $9AFA POP HL        ;
  $9AFB PUSH HL       ;
  $9AFC LD A,H        ;
@@ -2414,9 +2401,9 @@ c$9A4C PUSH AF       ;
  $9B01 LD H,A        ;
  $9B02 SLA A         ;
  $9B04 ADD A,H       ;
- $9B05 LD C,A        ;
- $9B06 LD B,$00      ;
- $9B08 LD HL,$72DD   ;
+ $9B05 LD C,A        ; {Copy the 48 bytes of DUCK_SPRITE_BACKGROUND_BUFFER to
+ $9B06 LD B,$00      ; DUCK_SPRITE_BUFFER, merging with the current duck sprite
+ $9B08 LD HL,$72DD   ; data there.
  $9B0B LD DE,$72A0   ;
  $9B0E ADD HL,BC     ;
  $9B0F LD B,$30      ;
@@ -2425,7 +2412,7 @@ c$9A4C PUSH AF       ;
  $9B13 LD (DE),A     ;
  $9B14 INC DE        ;
  $9B15 INC HL        ;
- $9B16 DJNZ $9B11    ;
+ $9B16 DJNZ $9B11    ; }
  $9B18 POP DE        ;
  $9B19 PUSH DE       ;
  $9B1A LD HL,$4000   ; Load #REGhl with start of DISPLAY_FILE.
@@ -2459,7 +2446,7 @@ c$9A4C PUSH AF       ;
  $9B48 EX DE,HL      ;
  $9B49 LD B,$10      ;
  $9B4B LD HL,$72A0   ;
-*$9B4E LD A,(HL)     ;
+*$9B4E LD A,(HL)     ; {Draw duck sprite to screen
  $9B4F LD (DE),A     ;
  $9B50 INC HL        ;
  $9B51 INC E         ;
@@ -2486,7 +2473,7 @@ c$9A4C PUSH AF       ;
  $9B6B LD A,D        ;
  $9B6C ADD A,$08     ;
  $9B6E LD D,A        ;
-*$9B6F DJNZ $9B4E    ;
+*$9B6F DJNZ $9B4E    ; }
  $9B71 POP HL        ;
  $9B72 PUSH HL       ;
  $9B73 LD C,$03      ;
@@ -2505,15 +2492,15 @@ c$9A4C PUSH AF       ;
 *$9B89 DEC B         ;
 *$9B8A CALL $9BDE    ;
  $9B8D LD DE,$0020   ;
-*$9B90 LD IXl,C      ;
- $9B92 PUSH HL       ;
+*$9B90 LD IXl,C      ; {Update duck sprite colours to $06: INK=yellow,
+ $9B92 PUSH HL       ; PAPER=black, BRIGHT=0.
 *$9B93 LD (HL),$06   ;
  $9B95 INC HL        ;
  $9B96 DEC IXl       ;
  $9B98 JR NZ,$9B93   ;
  $9B9A POP HL        ;
  $9B9B ADD HL,DE     ;
- $9B9C DJNZ $9B90    ;
+ $9B9C DJNZ $9B90    ; }
  $9B9E LD HL,$7348   ;
  $9BA1 LD A,($72D8)  ;
  $9BA4 ADD A,$08     ;
@@ -2554,9 +2541,10 @@ c$9A4C PUSH AF       ;
  $9BDC POP AF        ;
  $9BDD RET           ;
 
-; Something to do with updatng colours?
+; Calculates current position of duck in ATTRIBUTE_FILE.
 ;
 ; Used by the routine at #R$9A4C.
+@label=DUCK_ATTR_FILE_POSITION
 c$9BDE PUSH AF       ;
  $9BDF PUSH DE       ;
  $9BE0 LD A,$BF      ;
@@ -3604,7 +3592,7 @@ c$A37F LD HL,($72D8)  ;
 ; Farmer lands on a platform?
 ;
 ; Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
-c$A389 LD A,R        ; {Load #REGb with #Regr (related to memory refresh), then
+c$A389 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $A38B AND $07       ; after processing #REGb will have a value between 1-8.
  $A38D INC A         ;
  $A38E LD B,A        ;
@@ -3614,7 +3602,7 @@ c$A389 LD A,R        ; {Load #REGb with #Regr (related to memory refresh), then
  $A395 LD A,(HL)     ; }
  $A396 JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
-; Small lookup table used by #R$A389 to assign #Rega, for use with
+; Small lookup table used by #R$A389 to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
 b$A399 DEFB $04,$06,$09,$0D,$12,$16,$04,$0D
 
@@ -3815,7 +3803,7 @@ c$A4C8 CALL $AB9E    ; CLEAR_SCREEN
  $A4E2 JR NZ,$A4D0   ;
  $A4E4 LD HL,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
  $A4E7 LD B,$20      ;
- $A4E9 LD C,$06      ; {Print intructions headings
+ $A4E9 LD C,$06      ; {Print instructions headings
  $A4EB LD A,$05      ;
  $A4ED CALL $AA37    ; }
  $A4F0 LD C,$09      ; {Print "KEYS" box
@@ -4724,7 +4712,7 @@ c$AADF DJNZ $AAD2    ;
 ; Called after death tune
 ;
 ; Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
-c$AAE4 LD A,R        ; {Load #REGb with #Regr (related to memory refresh), then
+c$AAE4 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $AAE6 LD HL,$ABE9   ; after processing #REGb will have a value between 1-8.
  $AAE9 AND $07       ;
  $AAEB INC A         ;
@@ -4928,7 +4916,7 @@ c$ABAD LD DE,$ABF2   ; Point #REGde to HIGH_SCORE_HEADING_TEXT
  $ABE7 JR NZ,$ABDE   ; }
  $ABE9 RET           ;
 
-; Small lookup table used by #R$AAE4 to assign #Rega, for use with
+; Small lookup table used by #R$AAE4 to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
 b$ABEA DEFB $01,$10,$13,$17,$1E,$20,$21,$01
 
@@ -5459,7 +5447,7 @@ c$B130 PUSH HL       ;
 ;
 ; Does accessing #REGhl instruction before the #REGr have any importance? (see
 ; https://www.worldofspectrum.org/faq/reference/z80reference.htm#RRegister)
-c$B14F LD HL,$B15E   ; {Load #REGb with #Regr (related to memory refresh), then
+c$B14F LD HL,$B15E   ; {Load #REGb with #REGr (related to memory refresh), then
  $B152 LD A,R        ; after processing #REGb will have a value between 1-8.
  $B154 AND $07       ;
  $B156 INC A         ;
@@ -5469,7 +5457,7 @@ c$B14F LD HL,$B15E   ; {Load #REGb with #Regr (related to memory refresh), then
  $B15B LD A,(HL)     ; }
  $B15C JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
-; Small lookup table used by #R$B14F to assign #Rega, for use with
+; Small lookup table used by #R$B14F to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
 b$B15F DEFB $02,$08,$0A,$0B,$0C,$11,$11,$02
 
