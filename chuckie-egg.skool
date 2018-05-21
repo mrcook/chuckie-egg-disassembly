@@ -909,7 +909,7 @@ b$8B30 DEFB $00,$FE,$10,$10,$10,$10,$00,$FF
 ; Unknown, unused?
 s$8B50 DEFS $02A0
 
-; Duck sprites graphic data (but things are not quite right)
+; Duck sprites data (but things are not quite right)
 @label=DUCK_SPRITES
 b$8DF0 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
  $8DF8 DEFB $3F,$FC,$03,$40,$03,$C0,$01,$80
@@ -944,37 +944,37 @@ b$8DF0 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
  $8EE0 DEFB $07,$C0,$0F,$60,$0C,$E0,$07,$E0
  $8EE8 DEFB $03,$C0,$0A,$20,$04,$40,$00,$00
 
-; Hen sprites graphic data: right with mouth open (8x32)
+; Ostrich sprites data: right with mouth open (8x32)
 ;
-; #HTML[#UDGARRAY1;$8EF0-$8F0F-8(hen_sprites_right_mouth)]
-@label=SPRITES_HEN_RIGHT_MOUTH
+; #HTML[#UDGARRAY1;$8EF0-$8F0F-8(ostrich_sprites_right_mouth)]
+@label=SPRITES_OSTRICH_RIGHT_MOUTH
 b$8EF0 DEFB $00,$79,$00,$EE,$00,$FC,$00,$FA
  $8EF8 DEFB $00,$71,$00,$70,$00,$30,$00,$38
  $8F00 DEFB $1E,$1C,$7F,$9C,$FF,$FC,$BF,$7C
  $8F08 DEFB $4F,$78,$70,$F0,$3F,$E0,$0F,$80
 
-; Hen sprites graphic data: right (8x32)
+; Ostrich sprites data: right (8x32)
 ;
-; #HTML[#UDGARRAY1;$8F10-$8F2F-8(hen_sprites_right)]
-@label=SPRITES_HEN_RIGHT
+; #HTML[#UDGARRAY1;$8F10-$8F2F-8(ostrich_sprites_right)]
+@label=SPRITES_OSTRICH_RIGHT
 b$8F10 DEFB $00,$78,$00,$EC,$00,$FF,$00,$F8
  $8F18 DEFB $00,$70,$00,$70,$00,$30,$00,$38
  $8F20 DEFB $1E,$1C,$70,$9C,$CF,$7C,$BF,$7C
  $8F28 DEFB $7F,$F8,$7F,$F0,$3F,$E0,$0F,$80
 
-; Hen sprites graphic data: left with mouth open (8x32)
+; Ostrich sprites data: left with mouth open (8x32)
 ;
-; #HTML[#UDGARRAY1;$8F30-$8F4F-8(hen_sprites_left_mouth)]
-@label=SPRITES_HEN_LEFT_MOUTH
+; #HTML[#UDGARRAY1;$8F30-$8F4F-8(ostrich_sprites_left_mouth)]
+@label=SPRITES_OSTRICH_LEFT_MOUTH
 b$8F30 DEFB $9E,$00,$77,$00,$3F,$00,$5F,$00
  $8F38 DEFB $8E,$00,$0E,$00,$0C,$00,$1C,$00
  $8F40 DEFB $38,$78,$39,$FE,$3F,$FF,$3E,$FD
  $8F48 DEFB $1E,$F2,$0F,$0E,$07,$FC,$01,$F0
 
-; Hen sprites graphic data: left (8x32)
+; Ostrich sprites data: left (8x32)
 ;
-; #HTML[#UDGARRAY1;$8F50-$8F6F-8(hen_sprites_left)]
-@label=SPRITES_HEN_LEFT
+; #HTML[#UDGARRAY1;$8F50-$8F6F-8(ostrich_sprites_left)]
+@label=SPRITES_OSTRICH_LEFT
 b$8F50 DEFB $1E,$00,$37,$00,$FF,$00,$1F,$00
  $8F58 DEFB $0E,$00,$0E,$00,$0C,$00,$1C,$00
  $8F60 DEFB $38,$78,$39,$0E,$3E,$F3,$3E,$FD
@@ -986,7 +986,7 @@ b$8F70 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $8F80 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $8F88 DEFB $00,$00,$00,$00,$00,$00,$00,$00
 
-; Farmer sprites graphic data: climbing stairs (but things are not quite right)
+; Farmer sprites data: climbing stairs (but things are not quite right)
 ;
 ; #HTML[#UDGARRAY1;$8F90-$900F-8(farmer_sprites_climbing)]
 @label=SPRITES_FARMER_WALK
@@ -1007,28 +1007,28 @@ b$8F90 DEFB $00,$00,$02,$40,$03,$C0,$03,$C0
  $9000 DEFB $1F,$F8,$0F,$F0,$07,$E0,$07,$E0
  $9008 DEFB $02,$40,$0E,$70,$00,$00,$00,$00
 
-; Robot Hen sprites graphic data: facing left (8x32)
+; Ostrich sprites data: facing left (8x32)
 ;
 ; #HTML[#UDGARRAY1;$9010-$902F-8(emu_sprites_left)]
-@label=SPRITES_ROBOT_HEN_LEFT
+@label=SPRITES_OSTRICH_LEFT
 b$9010 DEFB $30,$00,$D0,$00,$30,$00,$20,$00
  $9018 DEFB $40,$00,$40,$00,$C0,$00,$CE,$00
  $9020 DEFB $FF,$00,$FF,$00,$7F,$00,$3E,$00
  $9028 DEFB $08,$00,$08,$00,$08,$00,$18,$00
 
-; Robot Hen sprites graphic data: facing right (8x32)
+; Ostrich sprites data: facing right (8x32)
 ;
 ; #HTML[#UDGARRAY1;$9030-$904F-8(emu_sprites_right)]
-@label=SPRITES_ROBOT_HEN_RIGHT
+@label=SPRITES_OSTRICH_RIGHT
 b$9030 DEFB $0C,$00,$0B,$00,$0C,$00,$04,$00
  $9038 DEFB $02,$00,$02,$00,$03,$00,$73,$00
  $9040 DEFB $FF,$00,$FF,$00,$FE,$00,$7C,$00
  $9048 DEFB $10,$00,$10,$00,$10,$00,$18,$00
 
-; Robot Hen sprites graphic data: climbing (8x32 x2)
+; Ostrich sprites data: climbing (8x32 x2)
 ;
 ; #HTML[#UDGARRAY1;$9050-$908F-8(emu_sprites_climbing)]
-@label=SPRITES_ROBOT_HEN_CLIMBING
+@label=SPRITES_OSTRICH_CLIMBING
 b$9050 DEFB $01,$80,$03,$C0,$03,$C0,$01,$80
  $9058 DEFB $01,$80,$01,$80,$07,$E0,$0F,$F0
  $9060 DEFB $0F,$F0,$0F,$F0,$07,$E0,$02,$40
@@ -1038,19 +1038,19 @@ b$9050 DEFB $01,$80,$03,$C0,$03,$C0,$01,$80
  $9080 DEFB $0F,$F0,$0F,$F0,$07,$E0,$02,$40
  $9088 DEFB $06,$40,$00,$40,$00,$40,$00,$60
 
-; Robot Hen sprites graphic data: walking left (8x32)
+; Ostrich sprites data: walking left (8x32)
 ;
 ; #HTML[#UDGARRAY1;$9090-$90AF-8(emu_sprites_left_walk)]
-@label=SPRITES_ROBOT_HEN_LEFT_WALK
+@label=SPRITES_OSTRICH_LEFT_WALK
 b$9090 DEFB $0B,$00,$05,$00,$0B,$00,$02,$00
  $9098 DEFB $04,$00,$04,$00,$0C,$00,$0C,$E0
  $90A0 DEFB $0F,$F0,$0F,$F0,$07,$F0,$03,$E0
  $90A8 DEFB $01,$80,$0A,$40,$04,$20,$00,$40
 
-; Robot Hen sprites graphic data: walking walk (8x32)
+; Ostrich sprites data: walking walk (8x32)
 ;
 ; #HTML[#UDGARRAY1;$90B0-$90CF-8(emu_sprites_right_walk)]
-@label=SPRITES_ROBOT_HEN_RIGHT_WALK
+@label=SPRITES_OSTRICH_RIGHT_WALK
 b$90B0 DEFB $00,$D0,$00,$A0,$00,$D0,$00,$40
  $90B8 DEFB $00,$20,$00,$20,$00,$30,$07,$30
  $90C0 DEFB $0F,$F0,$0F,$F0,$0F,$E0,$07,$C0
@@ -1357,10 +1357,10 @@ c$9298 POP DE        ;
  $929A POP BC        ;
  $929B RET           ;
 
-; Update Robot Hens?
+; Update Ostriches?
 ;
 ; Used by the routines at #R$911E, #R$9178, #R$91F3 and #R$9265.
-c$929C PUSH BC       ; POKE to 201 (`RET`) to vanquish Robot Hens
+c$929C PUSH BC       ; POKE to 201 (`RET`) to vanquish Ostriches
  $929D PUSH DE       ;
  $929E PUSH AF       ;
  $929F PUSH HL       ;
@@ -2137,7 +2137,7 @@ c$98E6 LD A,($7347)    ;
  $992F LD HL,$0402     ;
  $9932 CALL $9CA4      ;
 *$9935 LD HL,$736B     ;
- $9938 DEC (HL)        ; POKE to `0` (NOP) to slow Robot Hens
+ $9938 DEC (HL)        ; POKE to `0` (NOP) to slow Ostriches
  $9939 JR NZ,$9949     ;
  $993B LD C,$03        ;
  $993D LD A,($6EEB)    ;
@@ -5439,7 +5439,7 @@ c$B130 PUSH HL       ;
  $B14D POP HL        ;
  $B14E RET           ;
 
-; After death, screen is redrawn, before hens/farmer displayed
+; After death, screen is redrawn, before ostriches/farmer displayed
 ;
 ; Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
 ;

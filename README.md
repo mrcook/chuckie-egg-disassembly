@@ -7,7 +7,7 @@ A disassembly of the classic 8-bit computer game [Chuckie Egg](https://en.wikipe
 
 ## The Game
 
-Chuckie Egg is an addictive platformer in which you have to navigate your hero, Hen-House Harry, around each level collecting all 12 eggs, and as much corn as you can, all while avoiding the nasty hens and crazy duck.
+Chuckie Egg is an addictive platformer in which you have to navigate your hero, Hen-House Harry, around each level collecting all 12 eggs, and as much corn as you can, all while avoiding the nasty ostriches and crazy duck.
 
     Who'd  have  thought  a  country  farmyard
     could be so stressful? You must collect the
@@ -18,7 +18,7 @@ Chuckie Egg is an addictive platformer in which you have to navigate your hero, 
 
 The game consists of eight unique levels, which rotate indefinitely.
 
-After completing all 8 levels you play them again while being pursued by the giant uncaged duck - thankfully there are no hens around for this run. If you make it to the third pass, then both the hens and duck are after you! There are additional hens to contend with for the fourth pass, and finally for the fifth time, the duck and hens move at a greater speed.
+After completing all 8 levels you play them again while being pursued by the giant uncaged duck - thankfully there are no ostriches around for this run. If you make it to the third pass, then both the ostriches and duck are after you! There are additional ostriches to contend with for the fourth pass, and finally for the fifth time, the duck and ostriches move at a greater speed.
 
 Once you complete all 40 levels, you get to replay the last eight indefinitely.
 

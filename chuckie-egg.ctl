@@ -266,39 +266,39 @@ b $8B30 "TYPE" heading graphic for instructions screen (32x8)
 D $8B30 #HTML[#UDGARRAY4;$8B30-$8B4F-8(instructions_heading_type)]
 @ $8B30 label=INSTRUCTIONS_HEADING_TYPE
 s $8B50 Unknown, unused?
-b $8DF0 Duck sprites graphic data (but things are not quite right)
+b $8DF0 Duck sprites data (but things are not quite right)
 @ $8DF0 label=DUCK_SPRITES
-b $8EF0 Hen sprites graphic data: right with mouth open (8x32)
-D $8EF0 #HTML[#UDGARRAY1;$8EF0-$8F0F-8(hen_sprites_right_mouth)]
-@ $8EF0 label=SPRITES_HEN_RIGHT_MOUTH
-b $8F10 Hen sprites graphic data: right (8x32)
-D $8F10 #HTML[#UDGARRAY1;$8F10-$8F2F-8(hen_sprites_right)]
-@ $8F10 label=SPRITES_HEN_RIGHT
-b $8F30 Hen sprites graphic data: left with mouth open (8x32)
-D $8F30 #HTML[#UDGARRAY1;$8F30-$8F4F-8(hen_sprites_left_mouth)]
-@ $8F30 label=SPRITES_HEN_LEFT_MOUTH
-b $8F50 Hen sprites graphic data: left (8x32)
-D $8F50 #HTML[#UDGARRAY1;$8F50-$8F6F-8(hen_sprites_left)]
-@ $8F50 label=SPRITES_HEN_LEFT
+b $8EF0 Ostrich sprites data: right with mouth open (8x32)
+D $8EF0 #HTML[#UDGARRAY1;$8EF0-$8F0F-8(ostrich_sprites_right_mouth)]
+@ $8EF0 label=SPRITES_OSTRICH_RIGHT_MOUTH
+b $8F10 Ostrich sprites data: right (8x32)
+D $8F10 #HTML[#UDGARRAY1;$8F10-$8F2F-8(ostrich_sprites_right)]
+@ $8F10 label=SPRITES_OSTRICH_RIGHT
+b $8F30 Ostrich sprites data: left with mouth open (8x32)
+D $8F30 #HTML[#UDGARRAY1;$8F30-$8F4F-8(ostrich_sprites_left_mouth)]
+@ $8F30 label=SPRITES_OSTRICH_LEFT_MOUTH
+b $8F50 Ostrich sprites data: left (8x32)
+D $8F50 #HTML[#UDGARRAY1;$8F50-$8F6F-8(ostrich_sprites_left)]
+@ $8F50 label=SPRITES_OSTRICH_LEFT
 b $8F70 Data here is copied to $72A0
-b $8F90 Farmer sprites graphic data: climbing stairs (but things are not quite right)
+b $8F90 Farmer sprites data: climbing stairs (but things are not quite right)
 D $8F90 #HTML[#UDGARRAY1;$8F90-$900F-8(farmer_sprites_climbing)]
 @ $8F90 label=SPRITES_FARMER_WALK
-b $9010 Robot Hen sprites graphic data: facing left (8x32)
+b $9010 Ostrich sprites data: facing left (8x32)
 D $9010 #HTML[#UDGARRAY1;$9010-$902F-8(emu_sprites_left)]
-@ $9010 label=SPRITES_ROBOT_HEN_LEFT
-b $9030 Robot Hen sprites graphic data: facing right (8x32)
+@ $9010 label=SPRITES_OSTRICH_LEFT
+b $9030 Ostrich sprites data: facing right (8x32)
 D $9030 #HTML[#UDGARRAY1;$9030-$904F-8(emu_sprites_right)]
-@ $9030 label=SPRITES_ROBOT_HEN_RIGHT
-b $9050 Robot Hen sprites graphic data: climbing (8x32 x2)
+@ $9030 label=SPRITES_OSTRICH_RIGHT
+b $9050 Ostrich sprites data: climbing (8x32 x2)
 D $9050 #HTML[#UDGARRAY1;$9050-$908F-8(emu_sprites_climbing)]
-@ $9050 label=SPRITES_ROBOT_HEN_CLIMBING
-b $9090 Robot Hen sprites graphic data: walking left (8x32)
+@ $9050 label=SPRITES_OSTRICH_CLIMBING
+b $9090 Ostrich sprites data: walking left (8x32)
 D $9090 #HTML[#UDGARRAY1;$9090-$90AF-8(emu_sprites_left_walk)]
-@ $9090 label=SPRITES_ROBOT_HEN_LEFT_WALK
-b $90B0 Robot Hen sprites graphic data: walking walk (8x32)
+@ $9090 label=SPRITES_OSTRICH_LEFT_WALK
+b $90B0 Ostrich sprites data: walking walk (8x32)
 D $90B0 #HTML[#UDGARRAY1;$90B0-$90CF-8(emu_sprites_right_walk)]
-@ $90B0 label=SPRITES_ROBOT_HEN_RIGHT_WALK
+@ $90B0 label=SPRITES_OSTRICH_RIGHT_WALK
 b $90D0 Some odd graphics/data...unusued?
 c $911E Runs from start of level, after everything has been rendered.
   $9128,9 Increment value stored @736C, then set its MSB(?) to $00
@@ -316,8 +316,8 @@ c $9265
   $9294,3 Pop all to #REGhl rather than #REGde, #REGhl, #REGbc.
 c $9298 Routine to restore (POP) all #REGde, #REGhl, #REGbc registers
 @ $9298 label=RESTORE_16BIT_REGISTERS
-c $929C Update Robot Hens?
-  $929C,1 POKE to 201 (`RET`) to vanquish Robot Hens
+c $929C Update Ostriches?
+  $929C,1 POKE to 201 (`RET`) to vanquish Ostriches
 c $92C2
 c $935F
   $9398,3 set #REGhl to last byte of GFX_TILE_BLANK
@@ -377,7 +377,7 @@ c $98E6
   $98FC,1 POKE to 0 (`NOP`) to make giant duck very slow
   $98FD,2 POKE to 24 (`JR nnnn`) to vanquish giant duck
   $9925,1 POKE to 0 (`NOP`) to get infinite BONUS
-  $9938,1 POKE to `0` (NOP) to slow Robot Hens
+  $9938,1 POKE to `0` (NOP) to slow Ostriches
   $9958,2 JUMP keypress
   $9975,24 Load bytes into @72D8 + 77, 78, 79, 80, 82, and 125.
 c $99DC Jump point
@@ -757,7 +757,7 @@ c $AE9C Called just before showing new level
   $B12A,3 UPDATE_SCREEN_GFX
 c $B130 Update colours?
   $B135,3 Point #REGhl to start of ATTRIBUTE_FILE.
-c $B14F After death, screen is redrawn, before hens/farmer displayed
+c $B14F After death, screen is redrawn, before ostriches/farmer displayed
 D $B14F Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
 N $B14F Does accessing #REGhl instruction before the #REGr have any importance? (see https://www.worldofspectrum.org/faq/reference/z80reference.htm#RRegister)
   $B14F,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
