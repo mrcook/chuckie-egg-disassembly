@@ -1,10 +1,9 @@
-> $61A8 @retain
-> $61A8 ; SkoolKit disassembly for Chuckie Egg
-> $61A8 ; (https://github.com/mrcook/chuckie-egg-disassembly/)
-> $61A8 ;
-> $61A8 ; Copyright (c) 2018 Michael R. Cook (this disassembly)
-> $61A8 ; Copyright (c) 1984 A&F Software (Chuckie Egg)
-> $61A8 ; Chuckie Egg was designed and developed by Nigel Alderton
+; SkoolKit disassembly for Chuckie Egg
+; (https://github.com/mrcook/chuckie-egg-disassembly/)
+;
+; Copyright (c) 2018 Michael R. Cook (this disassembly)
+; Copyright (c) 1984 A&F Software (Chuckie Egg)
+; Chuckie Egg was designed and developed by Nigel Alderton
 @ $61A8 start
 @ $61A8 org=$A410
 s $61A8 Level Buffer (empty level)
@@ -320,8 +319,9 @@ c $9298 Routine to restore (POP) all #REGde, #REGhl, #REGbc registers
 c $929C Update Ostriches?
   $929C,1 POKE to 201 (`RET`) to vanquish Ostriches
 c $92C2
+@ $92F6 ssub=LD HL,$8F90+$7E ; Point #REGhl to end of SPRITES_FARMER_WALK
 c $935F
-  $9398,3 set #REGhl to last byte of GFX_TILE_BLANK
+@ $9398 ssub=LD HL,$84F0+$07 ; Point #REGhl to last byte of GFX_TILE_BLANK
 c $93DD
   $93E5,3 Point #REGhl to start of ATTRIBUTE_FILE.
 c $93FE Backup/restore #REGaf, so routine can be called safely.
@@ -430,7 +430,8 @@ c $9CC2 Called from an INTERUPT, and basically every game loop?
 c $9CEB Get address value from the ADDRESS_LOOKUP_TABLE
 @ $9CEB label=GET_LOOKUP_TABLE_ADDRESS
   $9CEB,1 Current known values for #REGa are between $01 and $21.
-  $9CF2,7 Point #REGhl to $C8C8 ($C8C6+2), then increment until we get the desired address in the ADDRESS_LOOKUP_TABLE.
+@ $9CF2 ssub=LD HL,$C8C8-$02 ; Point #REGhl to ADDRESS_LOOKUP_TABLE - 2 bytes
+  $9CF5,4 Increment #REGhl until we get the desired address.
   $9CF9,3 Load #REGde with address from lookup table
   $9CFC,4 Save address to $7374
   $9D02,3 Set $7373 to $01
@@ -450,8 +451,6 @@ c $9E98
 s $9F3F Unused
 c $9F60
   $9F8D,17 LEFT/RIGHT keypress
-b $9F9E Copied to $AD58, however this byte is not set anywhere in the code.
-c $9F9F
 c $9FB5
 s $9FDF Unused
 c $A014
@@ -481,7 +480,8 @@ c $A37F
 c $A389 Farmer lands on a platform?
 D $A389 Note: exactly same as $AAE4, $B14F, except for #REGhl address.
   $A389,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
-  $A392,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $A399 ($A398+1).
+@ $A38F ssub=LD HL,$A399-$01
+  $A392,4 Increment #REGhl to required address, and assign #REGa.
   $A396 GET_LOOKUP_TABLE_ADDRESS
 b $A399 Small lookup table used by $A389 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 b $A3A1
@@ -575,20 +575,23 @@ D $A59D Routine to start a new game, first asking for number of players!
   $A60E,7 Reset all egg counters to $0C (12...why?): from address $6EE6 for 5 bytes
   $A615,7 Reset all cleared levels counters: from address $6EEB for 5 bytes
   $A61C,7 Reset all player lives to 5: from address $6EF0 for 4 bytes
+@ $A623 ssub=LD HL,$9F60+$3E ; Address is toward the end of a routine, so we need a big offset.
 c $A62C
   $A62C,3 Get NUMBER_OF_PLAYERS
   $A632,3 Get CURRENT_PLAYER
   $A637,3 GET_LOOKUP_TABLE_ADDRESS
+@ $A63A ssub=LD BC,$AD3F+$0A ; Point #REGbc to the address of "p" from "player 1"
   $A63D,3 Get CURRENT_PLAYER
-  $A647,3 #REGde points to address for "player 1" text
+@ $A647 ssub=LD DE,$AD3F+$0A ; Point #REGde to the address of "p" from "player 1"
   $A65F,3 Get CURRENT_PLAYER
   $A672,3 POKE @A672 to 202 (`JP Z`) to jump to next level on death
   $A6A1,3 Get CURRENT_PLAYER
+@ $A6CD ssub=LD ($AD58+$01),A ; Update LSB of address.
   $A6D9,3 #REGde is loaded with "level " text
   $A6E1,3 Load #REGde with LEVEL_BUFFER address
   $A6E4,3 Load #REGbc with value of 672 (size of level data)
-  $A6E7,3 NOTE: $B110 is not read from. First, 672 is added to the address.
-  $A6F0,1 $B110 + $02A0 = LEVEL_1 address, which is where the reading starts.
+@ $A6E7 ssub=LD HL,$B3B0-$02A0 ; Point #REGhl to LEVEL_1-$02A0 (672 bytes).
+  $A6F0,1 Add $02A0 (672) to #REGhl, to start read from LEVEL_1 address.
 c $A6FE Farmer has died!
 @ $A6FE label=KILL_FARMER
   $A701,3 PLAY_TUNE
@@ -608,11 +611,16 @@ c $A6FE Farmer has died!
 c $A7BC Related to animation #1
   $A7C2,11 Point #REGhl to DISPLAY_FILE and reset first 18 bytes
   $A7D6,12 Increment value in (#REGhl) by $30 for 24 bytes.
+@ $A7E9 ssub=LD ($AD67+$0B),A ; Change player number in high score text.
   $A7FF,10 check if a score has been entered on scoreboard?
 c $A80C Called before loading main screen or highscores?
+@ $A811 ssub=LD DE,$97AF+$0A ; Point #REGde to first score value ("001000") on SCOREBOARD.
 c $A828 Player enters their name on the highscore table?
 @ $A828 label=ENTER_NEW_HIGH_SCORE_NAME
-  $A83B,8 Seems to move a highscore to different position. NOTE: LDDR decrements HL/DE, unlike LDIR, which increments them
+@ $A82A ssub=LD HL,$97AF+$90 ; Point #REGhl to last score entry (-1 byte) on SCOREBOARD.
+@ $A83B ssub=LD DE,$97AF+$9F
+@ $A83E ssub=LD HL,$97AF+$8F
+  $A841,2 LDDR decrements HL/DE, unlike LDIR, which increments.
   $A844,7 Does this clear the name for the selected highscore?
   $A859,3 Point #REGde to NEW_HIGH_SCORE_TEXT
   $A862,3 UPDATE_SCREEN_GFX
@@ -662,11 +670,13 @@ c $AA49 Redefine keys wizard - read new keys
   $AA74,3 UPDATE_SCREEN_GFX
   $AA80,10 Update colour attributes to $04
 c $AABA
+@ $AABA ssub=LD HL,$8268-$01 ; Point #REGhl to KEY_INPUT_TYPE_3 - 1 byte
 c $AADF Some kind of pause routine?
 c $AAE4 Called after death tune
 D $AAE4 Note: exactly same as $A389, $B14F, except for #REGhl address.
   $AAE4,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
-  $AAED,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $ABEA ($ABE9+1).
+@ $AAE6 ssub=LD HL,$ABEA-$01
+  $AAED,4 Increment #REGhl to required address, and assign #REGa.
   $AAF1 GET_LOOKUP_TABLE_ADDRESS
 c $AAF4 Redefine keys: get key
 @ $AAF4 label=REDEFINE_KEYS_GET_KEY
@@ -675,7 +685,7 @@ c $AB0D Redefine keys: print the key you just pressed?
 @ $AB0D label=REDEFINE_KEYS_PRINT_KEY
 c $AB19 Print redefine key direction label?
 @ $AB19 label=REDEFINE_KEYS_PRINT_DIRECTION
-  $AB33,3 end of REDEFINE_KEYS_WIZARD_TEXT
+@ $AB33 ssub=LD HL,$AC02+$4C ; Point #REGhl to first address after "jump" in REDEFINE_KEYS_WIZARD_TEXT
   $AB51,3 UPDATE_SCREEN_GFX
 c $AB60 Play the theme tune.
 @ $AB60 label=PLAY_TUNE
@@ -694,7 +704,6 @@ c $ABAD Displays scoreboard with heading and names/scores list
   $ABC0,3 set #REGde to high score table
   $ABC8,3 UPDATE_SCREEN_GFX
   $ABD6,19 update screen colours
-c $ABE9 address here used for accessing following data block.
 b $ABEA Small lookup table used by $AAE4 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 t $ABF2 High score table heading text data
 @ $ABF2 label=HIGH_SCORE_HEADING_TEXT
@@ -716,8 +725,7 @@ t $AD3F "game over player 1 " text data
 @ $AD3F label=GAME_OVER_TEXT
 t $AD52 "level" text (for current level?)
 @ $AD52 label=LEVEL_TEXT
-b $AD58 This and the following byte are used together as an address.
-b $AD59 Used as an address with the above byte.
+w $AD58 Used as an address.
 t $AD5A "OUT OF TIME !" text data
 @ $AD5A label=OUT_OF_TIME_TEXT
 t $AD67 Congratulate player on new high score, and instructions.
@@ -762,8 +770,9 @@ c $B130 Update colours?
 c $B14F After death, screen is redrawn, before ostriches/farmer displayed
 D $B14F Note: exactly same as $A389, $AAE4, except for #REGhl address.
 N $B14F Does accessing #REGhl instruction before the #REGr have any importance? (see "R Register" https://www.worldofspectrum.org/faq/reference/z80reference.htm)
-  $B14F,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
-  $B158,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $B15F ($B15E+1).
+@ $B14F ssub=LD HL,$B15F-$01
+  $B152,6 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
+  $B158,4 Increment #REGhl to required address, and assign #REGa.
   $B15C GET_LOOKUP_TABLE_ADDRESS
 b $B15F Small lookup table used by $B14F to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 t $B167 Source code remnants

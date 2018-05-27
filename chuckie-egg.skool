@@ -1,4 +1,3 @@
-@retain
 ; SkoolKit disassembly for Chuckie Egg
 ; (https://github.com/mrcook/chuckie-egg-disassembly/)
 ;
@@ -1428,6 +1427,7 @@ c$92C2 POP HL        ;
  $92F0 SLA C         ;
  $92F2 SLA C         ;
  $92F4 RL B          ;
+@ssub=LD HL,$8F90+$7E ; Point #REGhl to end of SPRITES_FARMER_WALK
  $92F6 LD HL,$900E   ;
  $92F9 ADD HL,BC     ;
  $92FA EX DE,HL      ;
@@ -1540,7 +1540,8 @@ c$935F LD IXl,$02    ;
  $9392 SLA A         ;
  $9394 SLA A         ;
  $9396 SLA A         ;
- $9398 LD HL,$84F7   ; set #REGhl to last byte of GFX_TILE_BLANK
+@ssub=LD HL,$84F0+$07 ; Point #REGhl to last byte of GFX_TILE_BLANK
+ $9398 LD HL,$84F7   ;
  $939B LD B,$00      ;
  $939D LD C,A        ;
  $939E ADD HL,BC     ;
@@ -2708,8 +2709,9 @@ c$9CEB LD B,A        ; Current known values for #REGa are between $01 and $21.
  $9CEC LD A,($7373)  ;
  $9CEF CP $FF        ;
  $9CF1 RET NZ        ;
- $9CF2 LD HL,$C8C6   ; {Point #REGhl to $C8C8 ($C8C6+2), then increment until
-*$9CF5 INC HL        ; we get the desired address in the ADDRESS_LOOKUP_TABLE.
+@ssub=LD HL,$C8C8-$02 ; Point #REGhl to ADDRESS_LOOKUP_TABLE - 2 bytes
+ $9CF2 LD HL,$C8C6   ;
+*$9CF5 INC HL        ; {Increment #REGhl until we get the desired address.
  $9CF6 INC HL        ;
  $9CF7 DJNZ $9CF5    ; }
  $9CF9 LD E,(HL)     ; {Load #REGde with address from lookup table
@@ -3037,12 +3039,8 @@ c$9F60 LD A,($72D9)  ;
  $9F9A DEC HL        ;
  $9F9B LD A,(HL)     ;
  $9F9C CP $05        ; }
-
-; Copied to $AD58, however this byte is not set anywhere in the code.
-b$9F9E DEFB $D0
-
-; Routine at 9F9F
-c$9F9F AND A         ;
+ $9F9E RET NC        ;
+ $9F9F AND A         ;
  $9FA0 SBC HL,BC     ;
  $9FA2 LD A,(HL)     ;
  $9FA3 CP $05        ;
@@ -3604,9 +3602,10 @@ c$A389 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $A38B AND $07       ; after processing #REGb will have a value between 1-8.
  $A38D INC A         ;
  $A38E LD B,A        ;
+@ssub=LD HL,$A399-$01
  $A38F LD HL,$A398   ; }
-*$A392 INC HL        ; {Increment #REGhl to required address, and assign #REGa.
- $A393 DJNZ $A392    ; Note #REGhl starts at $A399 ($A398+1).
+*$A392 INC HL        ; {Increment #REGhl to required address, and assign
+ $A393 DJNZ $A392    ; #REGa.
  $A395 LD A,(HL)     ; }
  $A396 JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
@@ -3971,6 +3970,7 @@ c$A59D LD IXh,$02    ;
 *$A61E LD (HL),$05   ; bytes
  $A620 INC HL        ;
  $A621 DJNZ $A61E    ; }
+@ssub=LD HL,$9F60+$3E ; Address is toward the end of a routine, so we need a big offset.
  $A623 LD HL,$9F9E   ;
  $A626 LD ($AD58),HL ;
  $A629 CALL $A960    ;
@@ -3984,12 +3984,14 @@ c$A62C LD A,($733A)  ; Get NUMBER_OF_PLAYERS
  $A632 LD A,($733B)  ; Get CURRENT_PLAYER
  $A635 ADD A,$19     ;
  $A637 CALL $9CEB    ; GET_LOOKUP_TABLE_ADDRESS
+@ssub=LD BC,$AD3F+$0A ; Point #REGbc to the address of "p" from "player 1"
  $A63A LD BC,$AD49   ;
  $A63D LD A,($733B)  ; Get CURRENT_PLAYER
  $A640 ADD A,$30     ;
  $A642 LD ($AD50),A  ;
  $A645 LD C,$08      ;
- $A647 LD DE,$AD49   ; #REGde points to address for "player 1" text
+@ssub=LD DE,$AD3F+$0A ; Point #REGde to the address of "p" from "player 1"
+ $A647 LD DE,$AD49   ;
  $A64A CALL $A9CE    ;
  $A64D LD BC,$0000   ;
  $A650 CALL $A921    ;
@@ -4051,6 +4053,7 @@ c$A62C LD A,($733A)  ; Get NUMBER_OF_PLAYERS
  $A6C8 INC B         ;
  $A6C9 JR $A6C4      ;
 *$A6CB ADD A,$A8     ;
+@ssub=LD ($AD58+$01),A ; Update LSB of address.
  $A6CD LD ($AD59),A  ;
  $A6D0 LD A,B        ;
  $A6D1 AND A         ;
@@ -4062,13 +4065,13 @@ c$A62C LD A,($733A)  ; Get NUMBER_OF_PLAYERS
  $A6DE CALL $A9CE    ;
  $A6E1 LD DE,$61A8   ; Load #REGde with LEVEL_BUFFER address
  $A6E4 LD BC,$02A0   ; Load #REGbc with value of 672 (size of level data)
- $A6E7 LD HL,$B110   ; NOTE: $B110 is not read from. First, 672 is added to the
-                     ; address.
+@ssub=LD HL,$B3B0-$02A0 ; Point #REGhl to LEVEL_1-$02A0 (672 bytes).
+ $A6E7 LD HL,$B110   ;
  $A6EA LD A,($6EEB)  ;
  $A6ED AND $07       ;
  $A6EF INC A         ;
-*$A6F0 ADD HL,BC     ; $B110 + $02A0 = LEVEL_1 address, which is where the
-                     ; reading starts.
+*$A6F0 ADD HL,BC     ; Add $02A0 (672) to #REGhl, to start read from LEVEL_1
+                     ; address.
  $A6F1 DEC A         ;
  $A6F2 JR NZ,$A6F0   ;
  $A6F4 LDIR          ;
@@ -4202,6 +4205,7 @@ c$A7BC LD IXh,$02    ;
  $A7E2 LD A,$01      ;
  $A7E4 LD HL,$6ECE   ;
 *$A7E7 ADD A,$30     ;
+@ssub=LD ($AD67+$0B),A ; Change player number in high score text.
  $A7E9 LD ($AD72),A  ;
  $A7EC SUB $30       ;
  $A7EE CALL $A80C    ;
@@ -4227,6 +4231,7 @@ c$A80C PUSH BC       ;
  $A80D PUSH AF       ;
  $A80E PUSH HL       ;
  $A80F LD B,$0A      ;
+@ssub=LD DE,$97AF+$0A ; Point #REGde to first score value ("001000") on SCOREBOARD.
  $A811 LD DE,$97B9   ;
 *$A814 CALL $AA0C    ;
  $A817 DEC A         ;
@@ -4247,6 +4252,7 @@ c$A80C PUSH BC       ;
 ; Used by the routine at #R$A80C.
 @label=ENTER_NEW_HIGH_SCORE_NAME
 c$A828 LD IXh,B      ;
+@ssub=LD HL,$97AF+$90 ; Point #REGhl to last score entry (-1 byte) on SCOREBOARD.
  $A82A LD HL,$983F   ;
  $A82D DEC B         ;
  $A82E JR Z,$A844    ;
@@ -4256,9 +4262,11 @@ c$A828 LD IXh,B      ;
  $A837 DJNZ $A836    ;
  $A839 PUSH HL       ;
  $A83A POP BC        ;
- $A83B LD DE,$984E   ; {Seems to move a highscore to different position. NOTE:
- $A83E LD HL,$983E   ; LDDR decrements HL/DE, unlike LDIR, which increments
- $A841 LDDR          ; them}
+@ssub=LD DE,$97AF+$9F
+ $A83B LD DE,$984E   ;
+@ssub=LD HL,$97AF+$8F
+ $A83E LD HL,$983E   ;
+ $A841 LDDR          ; LDDR decrements HL/DE, unlike LDIR, which increments.
  $A843 INC HL        ;
 *$A844 LD B,$0A      ; {Does this clear the name for the selected highscore?
 *$A846 LD (HL),$00   ;
@@ -4680,6 +4688,7 @@ c$AA49 CALL $AB9E    ; CLEAR_SCREEN
 ; Routine at AABA
 ;
 ; Used by the routine at #R$AB19.
+@ssub=LD HL,$8268-$01 ; Point #REGhl to KEY_INPUT_TYPE_3 - 1 byte
 c$AABA LD HL,$8267   ;
  $AABD LD B,$00      ;
 *$AABF INC HL        ;
@@ -4721,12 +4730,13 @@ c$AADF DJNZ $AAD2    ;
 ;
 ; Note: exactly same as $A389, $B14F, except for #REGhl address.
 c$AAE4 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
+@ssub=LD HL,$ABEA-$01
  $AAE6 LD HL,$ABE9   ; after processing #REGb will have a value between 1-8.
  $AAE9 AND $07       ;
  $AAEB INC A         ;
  $AAEC LD B,A        ; }
-*$AAED INC HL        ; {Increment #REGhl to required address, and assign #REGa.
- $AAEE DJNZ $AAED    ; Note #REGhl starts at $ABEA ($ABE9+1).
+*$AAED INC HL        ; {Increment #REGhl to required address, and assign
+ $AAEE DJNZ $AAED    ; #REGa.
  $AAF0 LD A,(HL)     ; }
  $AAF1 JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
@@ -4783,7 +4793,8 @@ c$AB19 PUSH AF       ;
  $AB2C LD B,E        ;
  $AB2D LD (IX+$00),L ;
  $AB30 LD (IX+$01),H ;
- $AB33 LD HL,$AC4E   ; end of REDEFINE_KEYS_WIZARD_TEXT
+@ssub=LD HL,$AC02+$4C ; Point #REGhl to first address after "jump" in REDEFINE_KEYS_WIZARD_TEXT
+ $AB33 LD HL,$AC4E   ;
  $AB36 LD DE,$0005   ;
 *$AB39 ADD HL,DE     ;
  $AB3A DJNZ $AB39    ;
@@ -4922,9 +4933,7 @@ c$ABAD LD DE,$ABF2   ; Point #REGde to HIGH_SCORE_HEADING_TEXT
  $ABE5 ADD HL,DE     ;
  $ABE6 DEC C         ;
  $ABE7 JR NZ,$ABDE   ; }
-
-; address here used for accessing following data block.
-c$ABE9 RET           ;
+ $ABE9 RET           ;
 
 ; Small lookup table used by $AAE4 to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
@@ -4992,11 +5001,8 @@ t$AD3F DEFM "game over player 1 "
 @label=LEVEL_TEXT
 t$AD52 DEFM "level "
 
-; This and the following byte are used together as an address.
-b$AD58 DEFB $9E
-
-; Used as an address with the above byte.
-b$AD59 DEFB $9F
+; Used as an address.
+w$AD58 DEFW $9F9E
 
 ; "OUT OF TIME !" text data
 @label=OUT_OF_TIME_TEXT
@@ -5457,13 +5463,14 @@ c$B130 PUSH HL       ;
 ;
 ; Does accessing #REGhl instruction before the #REGr have any importance? (see
 ; "R Register" https://www.worldofspectrum.org/faq/reference/z80reference.htm)
-c$B14F LD HL,$B15E   ; {Load #REGb with #REGr (related to memory refresh), then
- $B152 LD A,R        ; after processing #REGb will have a value between 1-8.
- $B154 AND $07       ;
+@ssub=LD HL,$B15F-$01
+c$B14F LD HL,$B15E   ;
+ $B152 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
+ $B154 AND $07       ; after processing #REGb will have a value between 1-8.
  $B156 INC A         ;
  $B157 LD B,A        ; }
-*$B158 INC HL        ; {Increment #REGhl to required address, and assign #REGa.
- $B159 DJNZ $B158    ; Note #REGhl starts at $B15F ($B15E+1).
+*$B158 INC HL        ; {Increment #REGhl to required address, and assign
+ $B159 DJNZ $B158    ; #REGa.
  $B15B LD A,(HL)     ; }
  $B15C JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
