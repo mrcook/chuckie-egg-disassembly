@@ -7,7 +7,12 @@ the Internet Archive.
 [Poke:infiniteLives:Infinite Lives]
 To get infinite lives:
 
-POKE #R42837(42837),182
+POKE #R42837(42837),0
+
+Alternate POKEs:
+
+1. POKE #R42837(42837),182
+2. POKE #R42837(42837),190
 
 
 [Poke:infiniteTime:Infinite Time]
@@ -37,8 +42,8 @@ POKE #R28403(28403),N
 Mute death tune on dying:
 
 ; mute the music
-POKE #R42001(42001),033
-POKE #R42753(42753),033
+POKE #R42001(42001),33
+POKE #R42753(42753),33
 
 ; change the long delay to about 1 second
 POKE #R43365(43365),0
@@ -51,26 +56,26 @@ Pass level instead of dying:
 POKE #R42610(42610),202
 
 
-[Poke:slowBird:Very slow big bird]
-Make the big bird very slow:
+[Poke:slowDuck:Very slow big duck]
+Make the big duck very slow:
 
 POKE #R39164(39164),000
 
 
-[Poke:noBird:No big bird]
-Make the big bird disappear:
+[Poke:noDuck:No big duck]
+Make the big duck disappear:
 
 POKE #R39165(39165),024
 
 
-[Poke:slowRobotHens:Slow Robot Hens]
-Make the Robot Hens slower:
+[Poke:slowRobotOstrich:Slow Robot Ostrich]
+Make the Robot Ostrich slower:
 
 POKE #R39224(39224),0
 
 
-[Poke:noRobotHens:No Robot Hens]
-Make the Robot Hens disappear:
+[Poke:noRobotOstrich:No Robot Ostrich]
+Make the Robot Ostrich disappear:
 
 POKE #R37532(37532),201
 
