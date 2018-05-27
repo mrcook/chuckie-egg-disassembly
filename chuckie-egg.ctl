@@ -1,9 +1,10 @@
-; SkoolKit disassembly for Chuckie Egg
-; (https://github.com/mrcook/chuckie-egg-disassembly/)
-;
-; Copyright (c) 2018 Michael R. Cook (this disassembly)
-; Copyright (c) 1984 A&F Software (Chuckie Egg)
-; Chuckie Egg was designed and developed by Nigel Alderton
+> $61A8 @retain
+> $61A8 ; SkoolKit disassembly for Chuckie Egg
+> $61A8 ; (https://github.com/mrcook/chuckie-egg-disassembly/)
+> $61A8 ;
+> $61A8 ; Copyright (c) 2018 Michael R. Cook (this disassembly)
+> $61A8 ; Copyright (c) 1984 A&F Software (Chuckie Egg)
+> $61A8 ; Chuckie Egg was designed and developed by Nigel Alderton
 @ $61A8 start
 @ $61A8 org=$A410
 s $61A8 Level Buffer (empty level)
