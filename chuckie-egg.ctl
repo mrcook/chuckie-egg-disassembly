@@ -267,20 +267,20 @@ b $8B30 "TYPE" heading graphic for instructions screen (32x8)
 D $8B30 #HTML[#UDGARRAY4;$8B30-$8B4F-8(instructions_heading_type)]
 @ $8B30 label=INSTRUCTIONS_HEADING_TYPE
 s $8B50 Unknown, unused?
-b $8DF0 Duck sprites data (but things are not quite right)
-@ $8DF0 label=DUCK_SPRITES
-b $8EF0 Ostrich sprites data: right with mouth open (8x32)
-D $8EF0 #HTML[#UDGARRAY1;$8EF0-$8F0F-8(ostrich_sprites_right_mouth)]
-@ $8EF0 label=SPRITES_OSTRICH_RIGHT_MOUTH
-b $8F10 Ostrich sprites data: right (8x32)
-D $8F10 #HTML[#UDGARRAY1;$8F10-$8F2F-8(ostrich_sprites_right)]
-@ $8F10 label=SPRITES_OSTRICH_RIGHT
-b $8F30 Ostrich sprites data: left with mouth open (8x32)
-D $8F30 #HTML[#UDGARRAY1;$8F30-$8F4F-8(ostrich_sprites_left_mouth)]
-@ $8F30 label=SPRITES_OSTRICH_LEFT_MOUTH
-b $8F50 Ostrich sprites data: left (8x32)
-D $8F50 #HTML[#UDGARRAY1;$8F50-$8F6F-8(ostrich_sprites_left)]
-@ $8F50 label=SPRITES_OSTRICH_LEFT
+b $8DF0 Duck body sprites data (but things are not quite right)
+@ $8DF0 label=SPRITES_DUCK_BODY
+b $8EF0 Duck head sprites data: right with mouth open (8x32)
+D $8EF0 #HTML[#UDGARRAY1;$8EF0-$8F0F-8(sprites_duck_head_right_mouth)]
+@ $8EF0 label=SPRITES_DUCK_HEAD_RIGHT_MOUTH
+b $8F10 Duck head sprites data: right (8x32)
+D $8F10 #HTML[#UDGARRAY1;$8F10-$8F2F-8(sprites_duck_head_right)]
+@ $8F10 label=SPRITES_DUCK_HEAD_RIGHT
+b $8F30 Duck head sprites data: left with mouth open (8x32)
+D $8F30 #HTML[#UDGARRAY1;$8F30-$8F4F-8(sprites_duck_head_left_mouth)]
+@ $8F30 label=SPRITES_DUCK_HEAD_LEFT_MOUTH
+b $8F50 Duck head sprites data: left (8x32)
+D $8F50 #HTML[#UDGARRAY1;$8F50-$8F6F-8(sprites_duck_head_left)]
+@ $8F50 label=SPRITES_DUCK_HEAD_LEFT
 b $8F70 Data here is copied to $72A0
 b $8F90 Farmer sprites data: climbing stairs (but things are not quite right)
 D $8F90 #HTML[#UDGARRAY1;$8F90-$900F-8(farmer_sprites_climbing)]
