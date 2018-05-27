@@ -401,6 +401,7 @@ c $9A4C Draw the giant duck (maybe also check for collision with farmer)
   $9B1D,3 Load #REGbc with value of 2048 (1/3 of screen)
   $9B4E,35 Draw duck sprite to screen
   $9B90,14 Update duck sprite colours to $06: INK=yellow, PAPER=black, BRIGHT=0.
+@ $9BCB keep
 c $9BDE Calculates current position of duck in ATTRIBUTE_FILE.
 @ $9BDE label=DUCK_ATTR_FILE_POSITION
   $9BE6,3 Point #REGhl to start of ATTRIBUTE_FILE.
@@ -478,12 +479,12 @@ c $A2B5
 c $A30C Farmer jumping/falling related routine.
 c $A37F
 c $A389 Farmer lands on a platform?
-D $A389 Note: exactly same as $AAE4, $B14F, except for #REGhl address.
+D $A389 Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
   $A389,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
 @ $A38F ssub=LD HL,$A399-$01
   $A392,4 Increment #REGhl to required address, and assign #REGa.
   $A396 GET_LOOKUP_TABLE_ADDRESS
-b $A399 Small lookup table used by $A389 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
+b $A399 Small lookup table used by #R$A389 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 b $A3A1
 c $A3A7 Farmer collects an egg/corn...also at start of level.
   $A3C5,3 Get CURRENT_PLAYER
@@ -582,6 +583,7 @@ c $A62C
   $A637,3 GET_LOOKUP_TABLE_ADDRESS
 @ $A63A ssub=LD BC,$AD3F+$0A ; Point #REGbc to the address of "p" from "player 1"
   $A63D,3 Get CURRENT_PLAYER
+@ $A642 ssub=LD ($AD3F+$11),A ; Replace player number in GAME_OVER_TEXT with #REGa.
 @ $A647 ssub=LD DE,$AD3F+$0A ; Point #REGde to the address of "p" from "player 1"
   $A65F,3 Get CURRENT_PLAYER
   $A672,3 POKE @A672 to 202 (`JP Z`) to jump to next level on death
@@ -669,11 +671,12 @@ c $AA49 Redefine keys wizard - read new keys
   $AA64,3 UPDATE_SCREEN_GFX
   $AA74,3 UPDATE_SCREEN_GFX
   $AA80,10 Update colour attributes to $04
+@ $AA9A ssub=LD BC,$83F0+$06 ; Point #REGbc to "q" character in MSG_KEY_TYPES
 c $AABA
 @ $AABA ssub=LD HL,$8268-$01 ; Point #REGhl to KEY_INPUT_TYPE_3 - 1 byte
 c $AADF Some kind of pause routine?
 c $AAE4 Called after death tune
-D $AAE4 Note: exactly same as $A389, $B14F, except for #REGhl address.
+D $AAE4 Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
   $AAE4,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
 @ $AAE6 ssub=LD HL,$ABEA-$01
   $AAED,4 Increment #REGhl to required address, and assign #REGa.
@@ -704,7 +707,7 @@ c $ABAD Displays scoreboard with heading and names/scores list
   $ABC0,3 set #REGde to high score table
   $ABC8,3 UPDATE_SCREEN_GFX
   $ABD6,19 update screen colours
-b $ABEA Small lookup table used by $AAE4 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
+b $ABEA Small lookup table used by #R$AAE4 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 t $ABF2 High score table heading text data
 @ $ABF2 label=HIGH_SCORE_HEADING_TEXT
 t $AC02 Wizard instructions for redefining the keys
@@ -768,24 +771,24 @@ c $AE9C Called just before showing new level
 c $B130 Update colours?
   $B135,3 Point #REGhl to start of ATTRIBUTE_FILE.
 c $B14F After death, screen is redrawn, before ostriches/farmer displayed
-D $B14F Note: exactly same as $A389, $AAE4, except for #REGhl address.
+D $B14F Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
 N $B14F Does accessing #REGhl instruction before the #REGr have any importance? (see "R Register" https://www.worldofspectrum.org/faq/reference/z80reference.htm)
 @ $B14F ssub=LD HL,$B15F-$01
   $B152,6 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $B158,4 Increment #REGhl to required address, and assign #REGa.
   $B15C GET_LOOKUP_TABLE_ADDRESS
-b $B15F Small lookup table used by $B14F to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
+b $B15F Small lookup table used by #R$B14F to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 t $B167 Source code remnants
-D $B167 The source code here corresponds to the code at $A58A...maybe!
+D $B167 The source code here corresponds to the code at end of #R$A566...maybe!
 B $B171,1 is a double quote character
-D $B173 The source code here corresponds to the code at $A58C.
+D $B173 The source code here corresponds to the code at #R$A58C.
 b $B200
 t $B307 Source code remnants
-D $B307 The source code here corresponds to the code at $A5C5.
+D $B307 The source code here corresponds to the code in middle of #R$A59D.
 c $B34C Note, label added because Pasmo was complaining.
 @ $B34C label=TMP_PASMO_LABEL
 t $B381 Source code remnants
-D $B381 The source code here corresponds to the code at $A5D7.
+D $B381 The source code here corresponds to the code in middle of #R$A59D.
 b $B3B0 Level 1 layout data - see LEVEL_BUFFER for byte map
 @ $B3B0 label=LEVEL_1
   $B3B0,672,32
@@ -812,7 +815,7 @@ b $C610 Level 8 layout data - see LEVEL_BUFFER for byte map
   $C610,672,32
 t $C8B0 Source code remnants?
 D $C8B0 The source code here corresponds to the code at ????.
-w $C8C8 An address table for accessing data starting at $C92C.
+w $C8C8 An address lookup table for accessing data blocks.
 @ $C8C8 label=ADDRESS_LOOKUP_TABLE
 s $C90A unused?
 b $C92C related to address lookup table

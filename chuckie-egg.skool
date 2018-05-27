@@ -2535,6 +2535,7 @@ c$9A4C PUSH AF       ;
  $9BC6 LD B,$05      ;
 *$9BC8 POP HL        ;
  $9BC9 DJNZ $9BC8    ;
+@keep
  $9BCB LD BC,$A410   ;
 *$9BCE POP HL        ;
  $9BCF PUSH HL       ;
@@ -3597,7 +3598,7 @@ c$A37F LD HL,($72D8)  ;
 
 ; Farmer lands on a platform?
 ;
-; Note: exactly same as $AAE4, $B14F, except for #REGhl address.
+; Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
 c$A389 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $A38B AND $07       ; after processing #REGb will have a value between 1-8.
  $A38D INC A         ;
@@ -3609,7 +3610,7 @@ c$A389 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $A395 LD A,(HL)     ; }
  $A396 JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
-; Small lookup table used by $A389 to assign #REGa, for use with
+; Small lookup table used by #R$A389 to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
 b$A399 DEFB $04,$06,$09,$0D,$12,$16,$04,$0D
 
@@ -3988,6 +3989,7 @@ c$A62C LD A,($733A)  ; Get NUMBER_OF_PLAYERS
  $A63A LD BC,$AD49   ;
  $A63D LD A,($733B)  ; Get CURRENT_PLAYER
  $A640 ADD A,$30     ;
+@ssub=LD ($AD3F+$11),A ; Replace player number in GAME_OVER_TEXT with #REGa.
  $A642 LD ($AD50),A  ;
  $A645 LD C,$08      ;
 @ssub=LD DE,$AD3F+$0A ; Point #REGde to the address of "p" from "player 1"
@@ -4665,6 +4667,7 @@ c$AA49 CALL $AB9E    ; CLEAR_SCREEN
  $AA91 LD A,$05      ;
  $AA93 LD IX,$8268   ;
  $AA97 LD HL,$592A   ;
+@ssub=LD BC,$83F0+$06 ; Point #REGbc to "q" character in MSG_KEY_TYPES
  $AA9A LD BC,$83F6   ;
  $AA9D LD DE,$0E16   ;
 *$AAA0 CALL $AB19    ;
@@ -4728,7 +4731,7 @@ c$AADF DJNZ $AAD2    ;
 
 ; Called after death tune
 ;
-; Note: exactly same as $A389, $B14F, except for #REGhl address.
+; Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
 c$AAE4 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
 @ssub=LD HL,$ABEA-$01
  $AAE6 LD HL,$ABE9   ; after processing #REGb will have a value between 1-8.
@@ -4935,7 +4938,7 @@ c$ABAD LD DE,$ABF2   ; Point #REGde to HIGH_SCORE_HEADING_TEXT
  $ABE7 JR NZ,$ABDE   ; }
  $ABE9 RET           ;
 
-; Small lookup table used by $AAE4 to assign #REGa, for use with
+; Small lookup table used by #R$AAE4 to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
 b$ABEA DEFB $01,$10,$13,$17,$1E,$20,$21,$01
 
@@ -5457,7 +5460,7 @@ c$B130 PUSH HL       ;
 
 ; After death, screen is redrawn, before ostriches/farmer displayed
 ;
-; Note: exactly same as $A389, $AAE4, except for #REGhl address.
+; Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
 ;
 ; .
 ;
@@ -5474,13 +5477,13 @@ c$B14F LD HL,$B15E   ;
  $B15B LD A,(HL)     ; }
  $B15C JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
-; Small lookup table used by $B14F to assign #REGa, for use with
+; Small lookup table used by #R$B14F to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
 b$B15F DEFB $02,$08,$0A,$0B,$0C,$11,$11,$02
 
 ; Source code remnants
 ;
-; The source code here corresponds to the code at $A58A...maybe!
+; The source code here corresponds to the code at end of #R$A566...maybe!
 t$B167 DEFM " JR C,C10"
  $B170 DEFB $0D
  $B171 DEFB $22              ; is a double quote character
@@ -5558,7 +5561,7 @@ b$B200 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
 
 ; Source code remnants
 ;
-; The source code here corresponds to the code at $A5C5.
+; The source code here corresponds to the code in middle of #R$A59D.
 t$B307 DEFM " CALL 40000"
  $B312 DEFB $0D
  $B313 DEFM "'"
@@ -5609,7 +5612,7 @@ c$B34C LD A,($72D8)  ;
 
 ; Source code remnants
 ;
-; The source code here corresponds to the code at $A5D7.
+; The source code here corresponds to the code in middle of #R$A59D.
 t$B381 DEFM " AND 15"
  $B388 DEFB $0D
  $B389 DEFM "'"
@@ -5827,7 +5830,7 @@ t$C8B0 DEFM "ALL CONV1"
  $C8BB DEFB $60
  $C8BC DEFM "  LD A,(2948"
 
-; An address table for accessing data starting at $C92C.
+; An address lookup table for accessing data blocks.
 @label=ADDRESS_LOOKUP_TABLE
 w$C8C8 DEFW $C92C
  $C8CA DEFW $C938
