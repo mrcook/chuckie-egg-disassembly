@@ -2639,7 +2639,7 @@ c$9C40 NOP           ; {Why are these NOPs? Are they ever changed?
  $9C8C POP HL        ; }
  $9C8D RET           ;
 
-; Unused code? Same as last 3 instructions of previous routine, at #R$9C8B.
+; Unused code? Same as last 3 instructions of previous routine, at $9C8B.
 c$9C8E POP BC        ;
  $9C8F POP HL        ;
  $9C90 RET           ;
@@ -3038,8 +3038,8 @@ c$9F60 LD A,($72D9)  ;
  $9F9B LD A,(HL)     ;
  $9F9C CP $05        ; }
 
-; Routine at 9F9E
-c$9F9E RET NC        ;
+; Copied to $AD58, however this byte is not set anywhere in the code.
+b$9F9E DEFB $D0
 
 ; Routine at 9F9F
 c$9F9F AND A         ;
@@ -3599,7 +3599,7 @@ c$A37F LD HL,($72D8)  ;
 
 ; Farmer lands on a platform?
 ;
-; Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
+; Note: exactly same as $AAE4, $B14F, except for #REGhl address.
 c$A389 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $A38B AND $07       ; after processing #REGb will have a value between 1-8.
  $A38D INC A         ;
@@ -3610,7 +3610,7 @@ c$A389 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $A395 LD A,(HL)     ; }
  $A396 JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
-; Small lookup table used by #R$A389 to assign #REGa, for use with
+; Small lookup table used by $A389 to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
 b$A399 DEFB $04,$06,$09,$0D,$12,$16,$04,$0D
 
@@ -4719,7 +4719,7 @@ c$AADF DJNZ $AAD2    ;
 
 ; Called after death tune
 ;
-; Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
+; Note: exactly same as $A389, $B14F, except for #REGhl address.
 c$AAE4 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $AAE6 LD HL,$ABE9   ; after processing #REGb will have a value between 1-8.
  $AAE9 AND $07       ;
@@ -4922,9 +4922,11 @@ c$ABAD LD DE,$ABF2   ; Point #REGde to HIGH_SCORE_HEADING_TEXT
  $ABE5 ADD HL,DE     ;
  $ABE6 DEC C         ;
  $ABE7 JR NZ,$ABDE   ; }
- $ABE9 RET           ;
 
-; Small lookup table used by #R$AAE4 to assign #REGa, for use with
+; address here used for accessing following data block.
+c$ABE9 RET           ;
+
+; Small lookup table used by $AAE4 to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
 b$ABEA DEFB $01,$10,$13,$17,$1E,$20,$21,$01
 
@@ -4990,10 +4992,10 @@ t$AD3F DEFM "game over player 1 "
 @label=LEVEL_TEXT
 t$AD52 DEFM "level "
 
-; Address $9F9E is stored here, which points to a single opcode: `RET NZ`.
+; This and the following byte are used together as an address.
 b$AD58 DEFB $9E
 
-; this value is updated
+; Used as an address with the above byte.
 b$AD59 DEFB $9F
 
 ; "OUT OF TIME !" text data
@@ -5449,12 +5451,12 @@ c$B130 PUSH HL       ;
 
 ; After death, screen is redrawn, before ostriches/farmer displayed
 ;
-; Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
+; Note: exactly same as $A389, $AAE4, except for #REGhl address.
 ;
 ; .
 ;
 ; Does accessing #REGhl instruction before the #REGr have any importance? (see
-; https://www.worldofspectrum.org/faq/reference/z80reference.htm#RRegister)
+; "R Register" https://www.worldofspectrum.org/faq/reference/z80reference.htm)
 c$B14F LD HL,$B15E   ; {Load #REGb with #REGr (related to memory refresh), then
  $B152 LD A,R        ; after processing #REGb will have a value between 1-8.
  $B154 AND $07       ;
@@ -5465,13 +5467,13 @@ c$B14F LD HL,$B15E   ; {Load #REGb with #REGr (related to memory refresh), then
  $B15B LD A,(HL)     ; }
  $B15C JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
-; Small lookup table used by #R$B14F to assign #REGa, for use with
+; Small lookup table used by $B14F to assign #REGa, for use with
 ; GET_LOOKUP_TABLE_ADDRESS
 b$B15F DEFB $02,$08,$0A,$0B,$0C,$11,$11,$02
 
 ; Source code remnants
 ;
-; The source code here corresponds to the code at #R$A58A...maybe!
+; The source code here corresponds to the code at $A58A...maybe!
 t$B167 DEFM " JR C,C10"
  $B170 DEFB $0D
  $B171 DEFB $22              ; is a double quote character
@@ -5549,7 +5551,7 @@ b$B200 DEFB $9C,$9C,$9C,$9C,$9C,$9C,$9C,$9C
 
 ; Source code remnants
 ;
-; The source code here corresponds to the code at #R$A5C5.
+; The source code here corresponds to the code at $A5C5.
 t$B307 DEFM " CALL 40000"
  $B312 DEFB $0D
  $B313 DEFM "'"
@@ -5566,9 +5568,10 @@ t$B307 DEFM " CALL 40000"
  $B349 DEFB $0D
  $B34A DEFM "'@"
 
-; Routine at B34C
+; Note, label added because Pasmo was complaining.
 ;
 ; Used by the routine at #R$98E6.
+@label=TMP_PASMO_LABEL
 c$B34C LD A,($72D8)  ;
  $B34F AND $07       ;
  $B351 RET Z         ;
@@ -5599,7 +5602,7 @@ c$B34C LD A,($72D8)  ;
 
 ; Source code remnants
 ;
-; The source code here corresponds to the code at #R$A5D7.
+; The source code here corresponds to the code at $A5D7.
 t$B381 DEFM " AND 15"
  $B388 DEFB $0D
  $B389 DEFM "'"

@@ -419,7 +419,7 @@ c $9C40 Called when needing to draw a level...works on 1/3 of screen at a time?
   $9C7C,1 Restore #REGhl with value in #REGde
   $9C7D,12 set #REGhl to GFX_TILE_BLANK, then update this section of the screen (address of #REGde) with all GFX tiles.
   $9C89,4 Restore 16-bit registers and RETurn
-c $9C8E Unused code? Same as last 3 instructions of previous routine, at #R$9C8B.
+c $9C8E Unused code? Same as last 3 instructions of previous routine, at $9C8B.
 s $9C91 Unused
 c $9C9C INTERUPT jump point
 s $9C9F Unused
@@ -450,7 +450,7 @@ c $9E98
 s $9F3F Unused
 c $9F60
   $9F8D,17 LEFT/RIGHT keypress
-c $9F9E
+b $9F9E Copied to $AD58, however this byte is not set anywhere in the code.
 c $9F9F
 c $9FB5
 s $9FDF Unused
@@ -479,11 +479,11 @@ c $A2B5
 c $A30C Farmer jumping/falling related routine.
 c $A37F
 c $A389 Farmer lands on a platform?
-D $A389 Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
+D $A389 Note: exactly same as $AAE4, $B14F, except for #REGhl address.
   $A389,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $A392,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $A399 ($A398+1).
   $A396 GET_LOOKUP_TABLE_ADDRESS
-b $A399 Small lookup table used by #R$A389 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
+b $A399 Small lookup table used by $A389 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 b $A3A1
 c $A3A7 Farmer collects an egg/corn...also at start of level.
   $A3C5,3 Get CURRENT_PLAYER
@@ -664,7 +664,7 @@ c $AA49 Redefine keys wizard - read new keys
 c $AABA
 c $AADF Some kind of pause routine?
 c $AAE4 Called after death tune
-D $AAE4 Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
+D $AAE4 Note: exactly same as $A389, $B14F, except for #REGhl address.
   $AAE4,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $AAED,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $ABEA ($ABE9+1).
   $AAF1 GET_LOOKUP_TABLE_ADDRESS
@@ -694,7 +694,8 @@ c $ABAD Displays scoreboard with heading and names/scores list
   $ABC0,3 set #REGde to high score table
   $ABC8,3 UPDATE_SCREEN_GFX
   $ABD6,19 update screen colours
-b $ABEA Small lookup table used by #R$AAE4 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
+c $ABE9 address here used for accessing following data block.
+b $ABEA Small lookup table used by $AAE4 to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 t $ABF2 High score table heading text data
 @ $ABF2 label=HIGH_SCORE_HEADING_TEXT
 t $AC02 Wizard instructions for redefining the keys
@@ -715,8 +716,8 @@ t $AD3F "game over player 1 " text data
 @ $AD3F label=GAME_OVER_TEXT
 t $AD52 "level" text (for current level?)
 @ $AD52 label=LEVEL_TEXT
-b $AD58 Address $9F9E is stored here, which points to a single opcode: `RET NZ`.
-b $AD59 this value is updated
+b $AD58 This and the following byte are used together as an address.
+b $AD59 Used as an address with the above byte.
 t $AD5A "OUT OF TIME !" text data
 @ $AD5A label=OUT_OF_TIME_TEXT
 t $AD67 Congratulate player on new high score, and instructions.
@@ -759,22 +760,23 @@ c $AE9C Called just before showing new level
 c $B130 Update colours?
   $B135,3 Point #REGhl to start of ATTRIBUTE_FILE.
 c $B14F After death, screen is redrawn, before ostriches/farmer displayed
-D $B14F Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
-N $B14F Does accessing #REGhl instruction before the #REGr have any importance? (see https://www.worldofspectrum.org/faq/reference/z80reference.htm#RRegister)
+D $B14F Note: exactly same as $A389, $AAE4, except for #REGhl address.
+N $B14F Does accessing #REGhl instruction before the #REGr have any importance? (see "R Register" https://www.worldofspectrum.org/faq/reference/z80reference.htm)
   $B14F,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $B158,4 Increment #REGhl to required address, and assign #REGa. Note #REGhl starts at $B15F ($B15E+1).
   $B15C GET_LOOKUP_TABLE_ADDRESS
-b $B15F Small lookup table used by #R$B14F to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
+b $B15F Small lookup table used by $B14F to assign #REGa, for use with GET_LOOKUP_TABLE_ADDRESS
 t $B167 Source code remnants
-D $B167 The source code here corresponds to the code at #R$A58A...maybe!
+D $B167 The source code here corresponds to the code at $A58A...maybe!
 B $B171,1 is a double quote character
-D $B173 The source code here corresponds to the code at #R$A58C.
+D $B173 The source code here corresponds to the code at $A58C.
 b $B200
 t $B307 Source code remnants
-D $B307 The source code here corresponds to the code at #R$A5C5.
-c $B34C
+D $B307 The source code here corresponds to the code at $A5C5.
+c $B34C Note, label added because Pasmo was complaining.
+@ $B34C label=TMP_PASMO_LABEL
 t $B381 Source code remnants
-D $B381 The source code here corresponds to the code at #R$A5D7.
+D $B381 The source code here corresponds to the code at $A5D7.
 b $B3B0 Level 1 layout data - see LEVEL_BUFFER for byte map
 @ $B3B0 label=LEVEL_1
   $B3B0,672,32
