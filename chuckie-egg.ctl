@@ -50,8 +50,8 @@ b $6EF2 Remaining lives for player 3.
 b $6EF3 Remaining lives for player 4.
 @ $6EF3 label=P4_LIVES
 s $6EF4 Unused by game.
-s $72A0 Duck sprite buffer
-@ $72A0 label=DUCK_SPRITE_BUFFER
+s $72A0 Sprite buffer
+@ $72A0 label=SPRITE_BUFFER
 b $72D8 Farmer's current position? (perhaps X)
 @ $72D8 label=POSITION_A
 b $72D9 Farmer's current position? (perhaps Y)
@@ -59,9 +59,9 @@ b $72D9 Farmer's current position? (perhaps Y)
 b $72DA
 b $72DB
 b $72DC
-s $72DD Duck sprite/background composition buffer
-D $72DD Current background tiles are loaded then the duck sprite data is merged.
-@ $72DD label=DUCK_SPRITE_BACKGROUND_BUFFER
+s $72DD Sprite/background composition buffer
+D $72DD Current background tiles are loaded then the sprite data is merged.
+@ $72DD label=SPRITE_BACKGROUND_BUFFER
 b $7325
 b $7326
 b $7327
@@ -381,23 +381,23 @@ c $9A17
 c $9A2C Unused code?
 c $9A38 Unused code?
 b $9A47 Unused?
-c $9A4C Draw the giant duck (maybe also check for collision with farmer)
-  $9A53,3 Point #REGhl to the DUCK_SPRITES data
-  $9A69,16 Copy current sprite from DUCK_SPRITES to the DUCK_SPRITE_BUFFER
-  $9A80,19 Rotate bytes in the DUCK_SPRITE_BUFFER...why?
-  $9A95,4 Point #REGix to beginning of DUCK_SPRITE_BACKGROUND_BUFFER
+c $9A4C Fetches and draws a sprite
+  $9A53,3 Point #REGhl to the start of the sprites data
+  $9A69,16 Copy current sprite to the SPRITE_BUFFER
+  $9A80,19 Rotate bytes in the SPRITE_BUFFER...why?
+  $9A95,4 Point #REGix to beginning of SPRITE_BACKGROUND_BUFFER
   $9A9A,3 Point #REGhl to beginning of LEVEL_BUFFER
   $9ABB Point #REGhl to one of the GFX tiles (offset from GFX_TILE_BLANK)
-  $9AD1,13 Copy GFX tile data to the DUCK_SPRITE_BACKGROUND_BUFFER
-  $9AF8,2 Jump back until DUCK_SPRITE_BACKGROUND_BUFFER is holds all tile data.
-  $9B05,19 Copy the 48 bytes of DUCK_SPRITE_BACKGROUND_BUFFER to DUCK_SPRITE_BUFFER, merging with the current duck sprite data there.
+  $9AD1,13 Copy GFX tile data to the SPRITE_BACKGROUND_BUFFER
+  $9AF8,2 Jump back until SPRITE_BACKGROUND_BUFFER is holds all tile data.
+  $9B05,19 Copy the 48 bytes of SPRITE_BACKGROUND_BUFFER to SPRITE_BUFFER, merging with the current sprite data there.
   $9B1A,3 Load #REGhl with start of DISPLAY_FILE.
   $9B1D,3 Load #REGbc with value of 2048 (1/3 of screen)
-  $9B4E,35 Draw duck sprite to screen
-  $9B90,14 Update duck sprite colours to $06: INK=yellow, PAPER=black, BRIGHT=0.
+  $9B4E,35 Draw sprite to screen
+  $9B90,14 Update sprite colours to $06: INK=yellow, PAPER=black, BRIGHT=0.
 @ $9BCB keep
-c $9BDE Calculates current position of duck in ATTRIBUTE_FILE.
-@ $9BDE label=DUCK_ATTR_FILE_POSITION
+c $9BDE Calculates current position of sprite in ATTRIBUTE_FILE.
+@ $9BDE label=SPRITE_POSITION_IN_ATTR_FILE
   $9BE6,3 Point #REGhl to start of ATTRIBUTE_FILE.
 s $9BFF Unused
 c $9C40 Called when needing to draw a level...works on 1/3 of screen at a time?

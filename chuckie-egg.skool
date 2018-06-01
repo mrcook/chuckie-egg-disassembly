@@ -131,8 +131,8 @@ b$6EF3 DEFB $00
 ; Unused by game.
 s$6EF4 DEFS $03AC
 
-; Duck sprite buffer
-@label=DUCK_SPRITE_BUFFER
+; Sprite buffer
+@label=SPRITE_BUFFER
 s$72A0 DEFS $38
 
 ; Farmer's current position? (perhaps X)
@@ -152,10 +152,10 @@ b$72DB DEFB $00
 ; Data block at 72DC
 b$72DC DEFB $00
 
-; Duck sprite/background composition buffer
+; Sprite/background composition buffer
 ;
-; Current background tiles are loaded then the duck sprite data is merged.
-@label=DUCK_SPRITE_BACKGROUND_BUFFER
+; Current background tiles are loaded then the sprite data is merged.
+@label=SPRITE_BACKGROUND_BUFFER
 s$72DD DEFS $48
 
 ; Data block at 7325
@@ -2276,7 +2276,7 @@ c$9A38 DEC B         ;
 ; Unused?
 b$9A47 DEFB $00,$00,$00,$00,$00
 
-; Draw the giant duck (maybe also check for collision with farmer)
+; Fetches and draws a sprite
 ;
 ; Used by the routines at #R$9D08, #R$9E98, #R$A0C8, #R$A278 and #R$A37F.
 c$9A4C PUSH AF       ;
@@ -2285,7 +2285,7 @@ c$9A4C PUSH AF       ;
  $9A4F PUSH IX       ;
  $9A51 PUSH HL       ;
  $9A52 LD C,L        ;
- $9A53 LD HL,$8DF0   ; Point #REGhl to the DUCK_SPRITES data
+ $9A53 LD HL,$8DF0   ; Point #REGhl to the start of the sprites data
  $9A56 LD E,A        ;
  $9A57 XOR A         ;
  $9A58 RL E          ;
@@ -2300,8 +2300,8 @@ c$9A4C PUSH AF       ;
  $9A66 RLA           ;
  $9A67 LD D,A        ;
  $9A68 ADD HL,DE     ;
- $9A69 LD DE,$72A0   ; {Copy current sprite from DUCK_SPRITES to the
- $9A6C LD B,$10      ; DUCK_SPRITE_BUFFER
+ $9A69 LD DE,$72A0   ; {Copy current sprite to the SPRITE_BUFFER
+ $9A6C LD B,$10      ;
  $9A6E XOR A         ;
 *$9A6F LDI           ;
  $9A71 LDI           ;
@@ -2314,7 +2314,7 @@ c$9A4C PUSH AF       ;
  $9A7B AND C         ;
  $9A7C CP $00        ;
  $9A7E JR Z,$9A93    ;
-*$9A80 LD B,$10      ; {Rotate bytes in the DUCK_SPRITE_BUFFER...why?
+*$9A80 LD B,$10      ; {Rotate bytes in the SPRITE_BUFFER...why?
  $9A82 LD HL,$72A0   ;
 *$9A85 SRL (HL)      ;
  $9A87 INC HL        ;
@@ -2327,8 +2327,7 @@ c$9A4C PUSH AF       ;
  $9A91 JR NZ,$9A80   ; }
 *$9A93 POP HL        ;
  $9A94 PUSH HL       ;
- $9A95 LD IX,$72DD   ; Point #REGix to beginning of
-                     ; DUCK_SPRITE_BACKGROUND_BUFFER
+ $9A95 LD IX,$72DD   ; Point #REGix to beginning of SPRITE_BACKGROUND_BUFFER
  $9A99 EX DE,HL      ;
  $9A9A LD HL,$61A8   ; Point #REGhl to beginning of LEVEL_BUFFER
  $9A9D LD A,D        ;
@@ -2361,8 +2360,8 @@ c$9A4C PUSH AF       ;
  $9ACD LD C,A        ;
  $9ACE ADD HL,BC     ;
  $9ACF LD B,$08      ; }
-*$9AD1 LD A,(HL)     ; {Copy GFX tile data to the
- $9AD2 LD (IX+$00),A ; DUCK_SPRITE_BACKGROUND_BUFFER
+*$9AD1 LD A,(HL)     ; {Copy GFX tile data to the SPRITE_BACKGROUND_BUFFER
+ $9AD2 LD (IX+$00),A ;
  $9AD5 INC IX        ;
  $9AD7 INC IX        ;
  $9AD9 INC IX        ;
@@ -2383,8 +2382,8 @@ c$9A4C PUSH AF       ;
  $9AF4 EX DE,HL      ;
  $9AF5 LD B,$03      ;
  $9AF7 DEC C         ;
- $9AF8 JR NZ,$9ABA   ; Jump back until DUCK_SPRITE_BACKGROUND_BUFFER is holds
-                     ; all tile data.
+ $9AF8 JR NZ,$9ABA   ; Jump back until SPRITE_BACKGROUND_BUFFER is holds all
+                     ; tile data.
  $9AFA POP HL        ;
  $9AFB PUSH HL       ;
  $9AFC LD A,H        ;
@@ -2393,9 +2392,9 @@ c$9A4C PUSH AF       ;
  $9B01 LD H,A        ;
  $9B02 SLA A         ;
  $9B04 ADD A,H       ;
- $9B05 LD C,A        ; {Copy the 48 bytes of DUCK_SPRITE_BACKGROUND_BUFFER to
- $9B06 LD B,$00      ; DUCK_SPRITE_BUFFER, merging with the current duck sprite
- $9B08 LD HL,$72DD   ; data there.
+ $9B05 LD C,A        ; {Copy the 48 bytes of SPRITE_BACKGROUND_BUFFER to
+ $9B06 LD B,$00      ; SPRITE_BUFFER, merging with the current sprite data
+ $9B08 LD HL,$72DD   ; there.
  $9B0B LD DE,$72A0   ;
  $9B0E ADD HL,BC     ;
  $9B0F LD B,$30      ;
@@ -2438,7 +2437,7 @@ c$9A4C PUSH AF       ;
  $9B48 EX DE,HL      ;
  $9B49 LD B,$10      ;
  $9B4B LD HL,$72A0   ;
-*$9B4E LD A,(HL)     ; {Draw duck sprite to screen
+*$9B4E LD A,(HL)     ; {Draw sprite to screen
  $9B4F LD (DE),A     ;
  $9B50 INC HL        ;
  $9B51 INC E         ;
@@ -2484,8 +2483,8 @@ c$9A4C PUSH AF       ;
 *$9B89 DEC B         ;
 *$9B8A CALL $9BDE    ;
  $9B8D LD DE,$0020   ;
-*$9B90 LD IXl,C      ; {Update duck sprite colours to $06: INK=yellow,
- $9B92 PUSH HL       ; PAPER=black, BRIGHT=0.
+*$9B90 LD IXl,C      ; {Update sprite colours to $06: INK=yellow, PAPER=black,
+ $9B92 PUSH HL       ; BRIGHT=0.
 *$9B93 LD (HL),$06   ;
  $9B95 INC HL        ;
  $9B96 DEC IXl       ;
@@ -2534,10 +2533,10 @@ c$9A4C PUSH AF       ;
  $9BDC POP AF        ;
  $9BDD RET           ;
 
-; Calculates current position of duck in ATTRIBUTE_FILE.
+; Calculates current position of sprite in ATTRIBUTE_FILE.
 ;
 ; Used by the routine at #R$9A4C.
-@label=DUCK_ATTR_FILE_POSITION
+@label=SPRITE_POSITION_IN_ATTR_FILE
 c$9BDE PUSH AF       ;
  $9BDF PUSH DE       ;
  $9BE0 LD A,$BF      ;
