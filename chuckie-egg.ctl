@@ -266,40 +266,34 @@ b $8B30 "TYPE" heading graphic for instructions screen (32x8)
 D $8B30 #HTML[#UDGARRAY4;$8B30-$8B4F-8(instructions_heading_type)]
 @ $8B30 label=INSTRUCTIONS_HEADING_TYPE
 s $8B50 Unknown, unused?
-b $8DF0 Duck body sprites data (but things are not quite right)
-@ $8DF0 label=SPRITES_DUCK_BODY
-b $8EF0 Duck head sprites data: right with mouth open (8x32)
-D $8EF0 #HTML[#UDGARRAY1;$8EF0-$8F0F-8(sprites_duck_head_right_mouth)]
-@ $8EF0 label=SPRITES_DUCK_HEAD_RIGHT_MOUTH
-b $8F10 Duck head sprites data: right (8x32)
-D $8F10 #HTML[#UDGARRAY1;$8F10-$8F2F-8(sprites_duck_head_right)]
-@ $8F10 label=SPRITES_DUCK_HEAD_RIGHT
-b $8F30 Duck head sprites data: left with mouth open (8x32)
-D $8F30 #HTML[#UDGARRAY1;$8F30-$8F4F-8(sprites_duck_head_left_mouth)]
-@ $8F30 label=SPRITES_DUCK_HEAD_LEFT_MOUTH
-b $8F50 Duck head sprites data: left (8x32)
-D $8F50 #HTML[#UDGARRAY1;$8F50-$8F6F-8(sprites_duck_head_left)]
-@ $8F50 label=SPRITES_DUCK_HEAD_LEFT
+b $8DF0 Farmer sprites animation data: right facing
+@ $8DF0 label=SPRITES_FARMER_RIGHT
+b $8E70 Farmer sprites animation data: left facing
+@ $8E70 label=SPRITES_FARMER_LEFT
+b $8EF0 Duck sprites animation data: right facing (2 of 16x16)
+@ $8EF0 label=SPRITES_DUCK_RIGHT
+b $8F30 Duck sprites animation data: left facing (2 of 16x16)
+@ $8F30 label=SPRITES_DUCK_LEFT
 b $8F70 Data here is copied to $72A0
-b $8F90 Farmer sprites data: climbing stairs (but things are not quite right)
-D $8F90 #HTML[#UDGARRAY1;$8F90-$900F-8(farmer_sprites_climbing)]
-@ $8F90 label=SPRITES_FARMER_WALK
-b $9010 Ostrich sprites data: facing left (8x32)
-D $9010 #HTML[#UDGARRAY1;$9010-$902F-8(emu_sprites_left)]
+b $8F90 Farmer sprites animation data: climbing stairs
+@ $8F90 label=SPRITES_FARMER_CLIMBING
+b $9010 Ostrich sprites data: left facing (16x16)
 @ $9010 label=SPRITES_OSTRICH_LEFT
-b $9030 Ostrich sprites data: facing right (8x32)
-D $9030 #HTML[#UDGARRAY1;$9030-$904F-8(emu_sprites_right)]
+b $9030 Ostrich sprites data: right facing (16x16)
 @ $9030 label=SPRITES_OSTRICH_RIGHT
-b $9050 Ostrich sprites data: climbing (8x32 x2)
-D $9050 #HTML[#UDGARRAY1;$9050-$908F-8(emu_sprites_climbing)]
+b $9050 Ostrich sprites animation data: climbing (2 of 16x16)
 @ $9050 label=SPRITES_OSTRICH_CLIMBING
-b $9090 Ostrich sprites data: walking left (8x32)
-D $9090 #HTML[#UDGARRAY1;$9090-$90AF-8(emu_sprites_left_walk)]
+b $9090 Ostrich sprites data: left walking (16x16)
 @ $9090 label=SPRITES_OSTRICH_LEFT_WALK
-b $90B0 Ostrich sprites data: walking walk (8x32)
-D $90B0 #HTML[#UDGARRAY1;$90B0-$90CF-8(emu_sprites_right_walk)]
+b $90B0 Ostrich sprites data: right walking (16x16)
 @ $90B0 label=SPRITES_OSTRICH_RIGHT_WALK
-b $90D0 Some odd graphics/data...unusued?
+b $90D0 Ostrich sprites data: eating left facing (16x16)
+@ $90D0 label=SPRITES_OSTRICH_EATING_LEFT
+b $90F0 Ostrich sprites data: eating right facing (16x16)
+@ $90F0 label=SPRITES_OSTRICH_EATING_RIGHT
+
+b $9110 Some odd graphics/data...unusued?
+
 c $911E Runs from start of level, after everything has been rendered.
   $9128,9 Increment value stored @736C, then set its MSB(?) to $00
   $9133,4 Jump if BIT 0 of the byte stored at address #REGhl is set.

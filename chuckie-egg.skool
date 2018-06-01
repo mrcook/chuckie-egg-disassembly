@@ -916,8 +916,8 @@ b$8B30 DEFB $00,$FE,$10,$10,$10,$10,$00,$FF
 ; Unknown, unused?
 s$8B50 DEFS $02A0
 
-; Duck body sprites data (but things are not quite right)
-@label=SPRITES_DUCK_BODY
+; Farmer sprites animation data: right facing
+@label=SPRITES_FARMER_RIGHT
 b$8DF0 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
  $8DF8 DEFB $3F,$FC,$03,$40,$03,$C0,$01,$80
  $8E00 DEFB $03,$E0,$06,$F0,$06,$F0,$06,$E0
@@ -934,7 +934,10 @@ b$8DF0 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
  $8E58 DEFB $3F,$FC,$03,$40,$03,$C0,$01,$80
  $8E60 DEFB $03,$E0,$06,$F0,$07,$30,$07,$E0
  $8E68 DEFB $03,$C0,$04,$50,$02,$20,$00,$00
- $8E70 DEFB $00,$00,$01,$C0,$03,$C0,$03,$C0
+
+; Farmer sprites animation data: left facing
+@label=SPRITES_FARMER_LEFT
+b$8E70 DEFB $00,$00,$01,$C0,$03,$C0,$03,$C0
  $8E78 DEFB $3F,$FC,$02,$C0,$03,$C0,$01,$80
  $8E80 DEFB $07,$C0,$0F,$60,$0F,$60,$07,$60
  $8E88 DEFB $03,$C0,$00,$80,$03,$80,$00,$00
@@ -951,38 +954,24 @@ b$8DF0 DEFB $00,$00,$03,$80,$03,$C0,$03,$C0
  $8EE0 DEFB $07,$C0,$0F,$60,$0C,$E0,$07,$E0
  $8EE8 DEFB $03,$C0,$0A,$20,$04,$40,$00,$00
 
-; Duck head sprites data: right with mouth open (8x32)
-;
-; #HTML[#UDGARRAY1;$8EF0-$8F0F-8(sprites_duck_head_right_mouth)]
-@label=SPRITES_DUCK_HEAD_RIGHT_MOUTH
+; Duck sprites animation data: right facing (2 of 16x16)
+@label=SPRITES_DUCK_RIGHT
 b$8EF0 DEFB $00,$79,$00,$EE,$00,$FC,$00,$FA
  $8EF8 DEFB $00,$71,$00,$70,$00,$30,$00,$38
  $8F00 DEFB $1E,$1C,$7F,$9C,$FF,$FC,$BF,$7C
  $8F08 DEFB $4F,$78,$70,$F0,$3F,$E0,$0F,$80
-
-; Duck head sprites data: right (8x32)
-;
-; #HTML[#UDGARRAY1;$8F10-$8F2F-8(sprites_duck_head_right)]
-@label=SPRITES_DUCK_HEAD_RIGHT
-b$8F10 DEFB $00,$78,$00,$EC,$00,$FF,$00,$F8
+ $8F10 DEFB $00,$78,$00,$EC,$00,$FF,$00,$F8
  $8F18 DEFB $00,$70,$00,$70,$00,$30,$00,$38
  $8F20 DEFB $1E,$1C,$70,$9C,$CF,$7C,$BF,$7C
  $8F28 DEFB $7F,$F8,$7F,$F0,$3F,$E0,$0F,$80
 
-; Duck head sprites data: left with mouth open (8x32)
-;
-; #HTML[#UDGARRAY1;$8F30-$8F4F-8(sprites_duck_head_left_mouth)]
-@label=SPRITES_DUCK_HEAD_LEFT_MOUTH
+; Duck sprites animation data: left facing (2 of 16x16)
+@label=SPRITES_DUCK_LEFT
 b$8F30 DEFB $9E,$00,$77,$00,$3F,$00,$5F,$00
  $8F38 DEFB $8E,$00,$0E,$00,$0C,$00,$1C,$00
  $8F40 DEFB $38,$78,$39,$FE,$3F,$FF,$3E,$FD
  $8F48 DEFB $1E,$F2,$0F,$0E,$07,$FC,$01,$F0
-
-; Duck head sprites data: left (8x32)
-;
-; #HTML[#UDGARRAY1;$8F50-$8F6F-8(sprites_duck_head_left)]
-@label=SPRITES_DUCK_HEAD_LEFT
-b$8F50 DEFB $1E,$00,$37,$00,$FF,$00,$1F,$00
+ $8F50 DEFB $1E,$00,$37,$00,$FF,$00,$1F,$00
  $8F58 DEFB $0E,$00,$0E,$00,$0C,$00,$1C,$00
  $8F60 DEFB $38,$78,$39,$0E,$3E,$F3,$3E,$FD
  $8F68 DEFB $1F,$FE,$0F,$FE,$07,$FC,$01,$F0
@@ -993,10 +982,8 @@ b$8F70 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $8F80 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $8F88 DEFB $00,$00,$00,$00,$00,$00,$00,$00
 
-; Farmer sprites data: climbing stairs (but things are not quite right)
-;
-; #HTML[#UDGARRAY1;$8F90-$900F-8(farmer_sprites_climbing)]
-@label=SPRITES_FARMER_WALK
+; Farmer sprites animation data: climbing stairs
+@label=SPRITES_FARMER_CLIMBING
 b$8F90 DEFB $00,$00,$02,$40,$03,$C0,$03,$C0
  $8F98 DEFB $3F,$FC,$03,$C0,$09,$80,$17,$E0
  $8FA0 DEFB $1F,$F0,$0F,$F8,$07,$E8,$07,$E8
@@ -1014,27 +1001,21 @@ b$8F90 DEFB $00,$00,$02,$40,$03,$C0,$03,$C0
  $9000 DEFB $1F,$F8,$0F,$F0,$07,$E0,$07,$E0
  $9008 DEFB $02,$40,$0E,$70,$00,$00,$00,$00
 
-; Ostrich sprites data: facing left (8x32)
-;
-; #HTML[#UDGARRAY1;$9010-$902F-8(emu_sprites_left)]
+; Ostrich sprites data: left facing (16x16)
 @label=SPRITES_OSTRICH_LEFT
 b$9010 DEFB $30,$00,$D0,$00,$30,$00,$20,$00
  $9018 DEFB $40,$00,$40,$00,$C0,$00,$CE,$00
  $9020 DEFB $FF,$00,$FF,$00,$7F,$00,$3E,$00
  $9028 DEFB $08,$00,$08,$00,$08,$00,$18,$00
 
-; Ostrich sprites data: facing right (8x32)
-;
-; #HTML[#UDGARRAY1;$9030-$904F-8(emu_sprites_right)]
+; Ostrich sprites data: right facing (16x16)
 @label=SPRITES_OSTRICH_RIGHT
 b$9030 DEFB $0C,$00,$0B,$00,$0C,$00,$04,$00
  $9038 DEFB $02,$00,$02,$00,$03,$00,$73,$00
  $9040 DEFB $FF,$00,$FF,$00,$FE,$00,$7C,$00
  $9048 DEFB $10,$00,$10,$00,$10,$00,$18,$00
 
-; Ostrich sprites data: climbing (8x32 x2)
-;
-; #HTML[#UDGARRAY1;$9050-$908F-8(emu_sprites_climbing)]
+; Ostrich sprites animation data: climbing (2 of 16x16)
 @label=SPRITES_OSTRICH_CLIMBING
 b$9050 DEFB $01,$80,$03,$C0,$03,$C0,$01,$80
  $9058 DEFB $01,$80,$01,$80,$07,$E0,$0F,$F0
@@ -1045,34 +1026,36 @@ b$9050 DEFB $01,$80,$03,$C0,$03,$C0,$01,$80
  $9080 DEFB $0F,$F0,$0F,$F0,$07,$E0,$02,$40
  $9088 DEFB $06,$40,$00,$40,$00,$40,$00,$60
 
-; Ostrich sprites data: walking left (8x32)
-;
-; #HTML[#UDGARRAY1;$9090-$90AF-8(emu_sprites_left_walk)]
+; Ostrich sprites data: left walking (16x16)
 @label=SPRITES_OSTRICH_LEFT_WALK
 b$9090 DEFB $0B,$00,$05,$00,$0B,$00,$02,$00
  $9098 DEFB $04,$00,$04,$00,$0C,$00,$0C,$E0
  $90A0 DEFB $0F,$F0,$0F,$F0,$07,$F0,$03,$E0
  $90A8 DEFB $01,$80,$0A,$40,$04,$20,$00,$40
 
-; Ostrich sprites data: walking walk (8x32)
-;
-; #HTML[#UDGARRAY1;$90B0-$90CF-8(emu_sprites_right_walk)]
+; Ostrich sprites data: right walking (16x16)
 @label=SPRITES_OSTRICH_RIGHT_WALK
 b$90B0 DEFB $00,$D0,$00,$A0,$00,$D0,$00,$40
  $90B8 DEFB $00,$20,$00,$20,$00,$30,$07,$30
  $90C0 DEFB $0F,$F0,$0F,$F0,$0F,$E0,$07,$C0
  $90C8 DEFB $01,$80,$02,$50,$04,$20,$02,$00
 
-; Some odd graphics/data...unusued?
+; Ostrich sprites data: eating left facing (16x16)
+@label=SPRITES_OSTRICH_EATING_LEFT
 b$90D0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $90D8 DEFB $00,$00,$00,$00,$70,$00,$58,$1E
  $90E0 DEFB $27,$FF,$51,$FF,$00,$7F,$10,$3E
  $90E8 DEFB $28,$08,$54,$08,$AA,$08,$00,$18
- $90F0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+
+; Ostrich sprites data: eating right facing (16x16)
+@label=SPRITES_OSTRICH_EATING_RIGHT
+b$90F0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $90F8 DEFB $00,$00,$00,$00,$00,$0E,$78,$1A
  $9100 DEFB $FF,$E4,$FF,$8A,$FE,$00,$7C,$08
  $9108 DEFB $10,$14,$10,$2A,$10,$55,$18,$00
- $9110 DEFB $00,$00,$00,$00,$00,$00,$0C,$00
+
+; Some odd graphics/data...unusued?
+b$9110 DEFB $00,$00,$00,$00,$00,$00,$0C,$00
  $9118 DEFB $0F,$00,$0F,$80,$1F,$C0
 
 ; Runs from start of level, after everything has been rendered.
