@@ -4,12 +4,11 @@
 # For a copy, see <https://opensource.org/licenses/MIT>.
 module SpriteFinder
   class Sprite
-    def initialize(width, height, bytes)
-      @width = width
-      @height = 8
-      @sprite = []
+    def initialize(width, height, pixels)
+      @chr_width = 2
+      @sprite = Array.new(height, '')
 
-      map_sprite(bytes)
+      map_sprite(width, pixels)
     end
 
     def pixel_rows
@@ -18,49 +17,18 @@ module SpriteFinder
 
     private
 
-    attr_reader :width, :height, :sprite
+    attr_reader :sprite, :chr_width
 
-    def map_sprite(bytes)
-      col = 1
-      tmps = Array.new(height, "")
-
-      bytes.each_slice(height) do |row|
-        row.each.with_index do |byte, i|
-          tmps[i] += add_pixels(byte)
-        end
-
-        if col == width
-          col = 1
-          tmps.each do |s|
-            sprite << s
-          end
-          tmps.map! { |s| s = "" }
-        else
-          col += 1
+    def map_sprite(width, pixels)
+      pixels.each_slice(width).with_index do |line, index|
+        line.each do |pixel|
+          sprite[index] += to_chr(pixel)
         end
       end
     end
 
-    def add_pixels(byte)
-      pixels = ''
-      to_bits(byte).each do |b|
-        if b == 1
-          pixels << '██'
-        else
-          pixels << '  '
-        end
-      end
-      pixels
-    end
-
-    def to_bits(byte)
-      pixels = "%08d" % byte.to_s(2)
-
-      row = []
-      pixels.each_byte do |px|
-          row << px.chr.to_i
-      end
-      row
+    def to_chr(pixel)
+      pixel == 1 ? '█' * chr_width : ' ' * chr_width
     end
   end
 end
