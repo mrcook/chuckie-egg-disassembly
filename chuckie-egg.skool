@@ -207,47 +207,29 @@ b$732C DEFB $00
 @label=GAME_STATE
 b$732D DEFB $00
 
-; Keyboard: UP key row address
-b$732E DEFB $00
-
-; Keyboard: UP key
+; Keyboard address for: UP key
 @label=KEY_UP
-b$732F DEFB $00
+w$732E DEFW $0000
 
-; Keyboard: DOWN key row address
-b$7330 DEFB $00
-
-; Keyboard: DOWN key
+; Keyboard address for: DOWN key
 @label=KEY_DOWN
-b$7331 DEFB $00
+w$7330 DEFW $0000
 
-; Keyboard: LEFT key row address
-b$7332 DEFB $00
-
-; Keyboard: LEFT key
+; Keyboard address for: LEFT key
 @label=KEY_LEFT
-b$7333 DEFB $00
+w$7332 DEFW $0000
 
-; Keyboard: RIGHT key row address
-b$7334 DEFB $00
-
-; Keyboard: RIGHT key
+; Keyboard address for: RIGHT key
 @label=KEY_RIGHT
-b$7335 DEFB $00
+w$7334 DEFW $0000
 
-; Keyboard: JUMP key row address
-b$7336 DEFB $00
-
-; Keyboard: JUMP key
+; Keyboard address for: JUMP key
 @label=KEY_JUMP
-b$7337 DEFB $00
+w$7336 DEFW $0000
 
-; Keyboard: unknown key row address
-b$7338 DEFB $00
-
-; Keyboard: unknown key
-@label=KEY_UNKNOWN
-b$7339 DEFB $00
+; Keyboard address for: Alternative JUMP key
+@label=KEY_ALT_JUMP
+w$7338 DEFW $0000
 
 ; Total number of players for the current game?
 ;
@@ -386,20 +368,32 @@ b$8231 DEFB $A8,$A9
 ; Really unused?
 s$8233 DEFS $1D
 
-; Keyboard input controls type #1
+; Keyboard Controls #1: 2, W, 9, 0, Z or M.
 @label=KEY_INPUT_TYPE_1
-b$8250 DEFB $1D,$F7,$1D,$FB,$1D,$EF,$1E,$EF
- $8258 DEFB $1D,$FE,$1B,$7F
+w$8250 DEFW $F71D
+ $8252 DEFW $FB1D
+ $8254 DEFW $EF1D
+ $8256 DEFW $EF1E
+ $8258 DEFW $FE1D
+ $825A DEFW $7F1B
 
-; Keyboard input controls type #2
+; Keyboard Controls #2: Cursor Keys, 4 or S.
 @label=KEY_INPUT_TYPE_2
-b$825C DEFB $17,$EF,$0F,$EF,$0F,$F7,$1B,$EF
- $8264 DEFB $17,$F7,$1D,$EF
+w$825C DEFW $EF17
+ $825E DEFW $EF0F
+ $8260 DEFW $F70F
+ $8262 DEFW $EF1B
+ $8264 DEFW $F717
+ $8266 DEFW $EF1D
 
-; Keyboard input controls type #3
+; Keyboard Controls #3: Q, A, O, P, M or 1.
 @label=KEY_INPUT_TYPE_3
-b$8268 DEFB $1E,$FB,$1E,$FD,$1D,$DF,$1E,$DF
- $8270 DEFB $1B,$7F,$1E,$F7
+w$8268 DEFW $FB1E
+ $826A DEFW $FD1E
+ $826C DEFW $DF1D
+ $826E DEFW $DF1E
+ $8270 DEFW $7F1B
+ $8272 DEFW $F71E
 
 ; Really unused?
 s$8274 DEFS $C2
@@ -2143,22 +2137,24 @@ c$98E6 LD A,($7347)    ;
  $994F LD A,($7325)    ;
  $9952 AND A           ;
  $9953 JR NZ,$99C1     ;
- $9955 LD A,($7337)    ;
- $9958 IN A,($FE)      ; JUMP keypress
+@ssub=LD A,($7336+$01)
+ $9955 LD A,($7337)    ; {JUMP keypress
+ $9958 IN A,($FE)      ;
  $995A AND $1F         ;
  $995C LD C,A          ;
  $995D LD A,($7336)    ;
  $9960 OR C            ;
  $9961 CP $1F          ;
- $9963 JR NZ,$9975     ;
- $9965 LD A,($7339)    ;
+ $9963 JR NZ,$9975     ; }
+@ssub=LD A,($7338+$01)
+ $9965 LD A,($7339)    ; {KEY_ALT_JUMP keypress
  $9968 IN A,($FE)      ;
  $996A AND $1F         ;
  $996C LD C,A          ;
  $996D LD A,($7338)    ;
  $9970 OR C            ;
  $9971 CP $1F          ;
- $9973 JR Z,$99C1      ;
+ $9973 JR Z,$99C1      ; }
 *$9975 LD IX,$72D8     ; {Load bytes into @72D8 + 77, 78, 79, 80, 82, and 125.
  $9979 LD (IX+$4D),$02 ;
  $997D LD (IX+$4F),$8C ;
@@ -2167,24 +2163,26 @@ c$98E6 LD A,($7347)    ;
  $9989 LD (IX+$7D),$00 ; }
  $998D LD D,$01        ;
  $998F LD E,$00        ;
- $9991 LD A,($7335)    ;
+@ssub=LD A,($7334+$01)
+ $9991 LD A,($7335)    ; {RIGHT keypress
  $9994 IN A,($FE)      ;
  $9996 AND $1F         ;
  $9998 LD C,A          ;
  $9999 LD A,($7334)    ;
  $999C OR C            ;
  $999D CP $1F          ;
- $999F JR NZ,$99B9     ;
+ $999F JR NZ,$99B9     ; }
  $99A1 LD D,$FF        ;
  $99A3 LD E,$04        ;
- $99A5 LD A,($7333)    ;
+@ssub=LD A,($7332+$01)
+ $99A5 LD A,($7333)    ; {LEFT keypress
  $99A8 IN A,($FE)      ;
  $99AA AND $1F         ;
  $99AC LD C,A          ;
  $99AD LD A,($7332)    ;
  $99B0 OR C            ;
  $99B1 CP $1F          ;
- $99B3 JR NZ,$99B9     ;
+ $99B3 JR NZ,$99B9     ; }
  $99B5 INC D           ;
  $99B6 LD E,(IX+$03)   ;
 *$99B9 LD (IX+$4E),D   ;
@@ -2735,14 +2733,15 @@ c$9D08 LD IX,$72D8     ;
  $9D30 SRL C           ;
  $9D32 ADD HL,BC       ;
  $9D33 LD BC,$0020     ;
- $9D36 LD A,($7333)    ;
+@ssub=LD A,($7332+$01)
+ $9D36 LD A,($7333)    ; {LEFT keypress
  $9D39 IN A,($FE)      ;
  $9D3B AND $1F         ;
  $9D3D LD D,A          ;
  $9D3E LD A,($7332)    ;
  $9D41 OR D            ;
  $9D42 CP $1F          ;
- $9D44 JR Z,$9D6F      ;
+ $9D44 JR Z,$9D6F      ; }
  $9D46 LD A,($72D8)    ;
  $9D49 DEC A           ;
  $9D4A JR Z,$9DAB      ;
@@ -2762,14 +2761,15 @@ c$9D08 LD IX,$72D8     ;
  $9D67 LD HL,$2805     ;
  $9D6A CALL $9CA4      ;
 *$9D6D JR $9DAF        ;
-*$9D6F LD A,($7335)    ;
+@ssub=LD A,($7334+$01)
+*$9D6F LD A,($7335)    ; {RIGHT keypress
  $9D72 IN A,($FE)      ;
  $9D74 AND $1F         ;
  $9D76 LD D,A          ;
  $9D77 LD A,($7334)    ;
  $9D7A OR D            ;
  $9D7B CP $1F          ;
- $9D7D JR Z,$9DAB      ;
+ $9D7D JR Z,$9DAB      ; }
  $9D7F LD A,($72D8)    ;
  $9D82 CP $EE          ;
  $9D84 JR NC,$9DAB     ;
@@ -2929,8 +2929,9 @@ c$9E98 LD IX,$72D8     ;
  $9EC3 LD A,(HL)       ;
  $9EC4 DEC A           ;
  $9EC5 JR NZ,$9EED     ;
- $9EC7 LD A,($732F)    ;
- $9ECA IN A,($FE)      ; {UP keypress
+@ssub=LD A,($732E+$01)
+ $9EC7 LD A,($732F)    ; {UP keypress
+ $9ECA IN A,($FE)      ;
  $9ECC AND $1F         ;
  $9ECE LD C,A          ;
  $9ECF LD A,($732E)    ;
@@ -2955,9 +2956,10 @@ c$9E98 LD IX,$72D8     ;
  $9EFB SBC HL,BC       ;
 *$9EFD LD A,(HL)       ;
  $9EFE DEC A           ;
- $9EFF JR NZ,$9F32     ;
- $9F01 LD A,($7331)    ; }
- $9F04 IN A,($FE)      ; {DOWN keypress
+ $9EFF JR NZ,$9F32     ; }
+@ssub=LD A,($7330+$01)
+ $9F01 LD A,($7331)    ; {DOWN keypress
+ $9F04 IN A,($FE)      ;
  $9F06 AND $1F         ;
  $9F08 LD C,A          ;
  $9F09 LD A,($7330)    ;
@@ -3011,8 +3013,9 @@ c$9F60 LD A,($72D9)  ;
  $9F84 SRL C         ;
  $9F86 ADD HL,BC     ;
  $9F87 LD BC,$0020   ;
- $9F8A LD A,($7333)  ;
- $9F8D IN A,($FE)    ; {LEFT/RIGHT keypress
+@ssub=LD A,($7332+$01)
+ $9F8A LD A,($7333)  ; {LEFT keypress
+ $9F8D IN A,($FE)    ;
  $9F8F AND $1F       ;
  $9F91 LD D,A        ;
  $9F92 LD A,($7332)  ;
@@ -3021,8 +3024,8 @@ c$9F60 LD A,($72D9)  ;
  $9F98 JR Z,$9FB5    ;
  $9F9A DEC HL        ;
  $9F9B LD A,(HL)     ;
- $9F9C CP $05        ; }
- $9F9E RET NC        ;
+ $9F9C CP $05        ;
+ $9F9E RET NC        ; }
  $9F9F AND A         ;
  $9FA0 SBC HL,BC     ;
  $9FA2 LD A,(HL)     ;
@@ -3042,14 +3045,15 @@ c$9F60 LD A,($72D9)  ;
 ; Routine at 9FB5
 ;
 ; Used by the routine at #R$9F60.
-c$9FB5 LD A,($7335)  ;
+@ssub=LD A,($7334+$01)
+c$9FB5 LD A,($7335)  ; {RIGHT keypress
  $9FB8 IN A,($FE)    ;
  $9FBA AND $1F       ;
  $9FBC LD D,A        ;
  $9FBD LD A,($7334)  ;
  $9FC0 OR D          ;
  $9FC1 CP $1F        ;
- $9FC3 RET Z         ;
+ $9FC3 RET Z         ; }
  $9FC4 INC HL        ;
  $9FC5 INC HL        ;
  $9FC6 LD A,(HL)     ;

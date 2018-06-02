@@ -74,24 +74,18 @@ D $732C Some possible values (guesses) are given in the table below: #TABLE(defa
 b $732D Current game state
 D $732D Some possible values (guesses) are given in the table below: #TABLE(default,centre,:w) { =h Byte | =h state } { 03 | Redefine keys } { 05 | Select input type } { 06 | Play music } { 0A | Show instructions screen } TABLE#
 @ $732D label=GAME_STATE
-b $732E Keyboard: UP key row address
-b $732F Keyboard: UP key
-@ $732F label=KEY_UP
-b $7330 Keyboard: DOWN key row address
-b $7331 Keyboard: DOWN key
-@ $7331 label=KEY_DOWN
-b $7332 Keyboard: LEFT key row address
-b $7333 Keyboard: LEFT key
-@ $7333 label=KEY_LEFT
-b $7334 Keyboard: RIGHT key row address
-b $7335 Keyboard: RIGHT key
-@ $7335 label=KEY_RIGHT
-b $7336 Keyboard: JUMP key row address
-b $7337 Keyboard: JUMP key
-@ $7337 label=KEY_JUMP
-b $7338 Keyboard: unknown key row address
-b $7339 Keyboard: unknown key
-@ $7339 label=KEY_UNKNOWN
+w $732E Keyboard address for: UP key
+@ $732E label=KEY_UP
+w $7330 Keyboard address for: DOWN key
+@ $7330 label=KEY_DOWN
+w $7332 Keyboard address for: LEFT key
+@ $7332 label=KEY_LEFT
+w $7334 Keyboard address for: RIGHT key
+@ $7334 label=KEY_RIGHT
+w $7336 Keyboard address for: JUMP key
+@ $7336 label=KEY_JUMP
+w $7338 Keyboard address for: Alternative JUMP key
+@ $7338 label=KEY_JUMP_2
 b $733A Total number of players for the current game?
 D $733A Possible values are 1, 2, 3, and 4.
 @ $733A label=NUMBER_OF_PLAYERS
@@ -141,12 +135,15 @@ b $8223 Unknown and unused?
 s $8225 Really unused?
 b $8231 Unknown and unused?
 s $8233 Really unused?
-b $8250 Keyboard input controls type #1
+w $8250 Keyboard Controls #1: 2, W, 9, 0, Z or M.
 @ $8250 label=KEY_INPUT_TYPE_1
-b $825C Keyboard input controls type #2
+  $8250,12,2
+w $825C Keyboard Controls #2: Cursor Keys, 4 or S.
 @ $825C label=KEY_INPUT_TYPE_2
-b $8268 Keyboard input controls type #3
+  $825C,12,2
+w $8268 Keyboard Controls #3: Q, A, O, P, M or 1.
 @ $8268 label=KEY_INPUT_TYPE_3
+  $8268,12,2
 s $8274 Really unused?
 t $8336 Ticker text
 D $8336 'press R to redefine keys * press S to start game * press 1, 2 or 3 to select key type'
@@ -291,9 +288,7 @@ b $90D0 Ostrich sprites data: eating left facing (16x16)
 @ $90D0 label=SPRITES_OSTRICH_EATING_LEFT
 b $90F0 Ostrich sprites data: eating right facing (16x16)
 @ $90F0 label=SPRITES_OSTRICH_EATING_RIGHT
-
 b $9110 Some odd graphics/data...unusued?
-
 c $911E Runs from start of level, after everything has been rendered.
   $9128,9 Increment value stored @736C, then set its MSB(?) to $00
   $9133,4 Jump if BIT 0 of the byte stored at address #REGhl is set.
@@ -373,8 +368,15 @@ c $98E6
   $98FD,2 POKE to 24 (`JR nnnn`) to vanquish giant duck
   $9925,1 POKE to 0 (`NOP`) to get infinite BONUS
   $9938,1 POKE to `0` (NOP) to slow Ostriches
-  $9958,2 JUMP keypress
+@ $9955 ssub=LD A,($7336+$01)
+  $9955,16 JUMP keypress
+@ $9965 ssub=LD A,($7338+$01)
+  $9965,16 KEY_JUMP_2 keypress
   $9975,24 Load bytes into @72D8 + 77, 78, 79, 80, 82, and 125.
+@ $9991 ssub=LD A,($7334+$01)
+  $9991,16 RIGHT keypress
+@ $99A5 ssub=LD A,($7332+$01)
+  $99A5,16 LEFT keypress
 c $99DC Jump point
 c $99DF
 c $9A17
@@ -432,6 +434,10 @@ c $9CEB Get address value from the ADDRESS_LOOKUP_TABLE
   $9D02,3 Set $7373 to $01
 s $9D06 Unused
 c $9D08
+@ $9D36 ssub=LD A,($7332+$01)
+  $9D36,16 LEFT keypress
+@ $9D6F ssub=LD A,($7334+$01)
+  $9D6F,16 RIGHT keypress
 s $9DF1 Unused
 c $9E34
 c $9E57 Unused code?
@@ -441,12 +447,17 @@ c $9E66 Farmer jumping/falling routine
 c $9E8A Reset mid-air farmer routine
 s $9E8D Unused
 c $9E98
-  $9ECA,58 UP keypress
-  $9F04,59 DOWN keypress
+  $9EC7 UP keypress
+@ $9EC7 ssub=LD A,($732E+$01)
+  $9F01 DOWN keypress
+@ $9F01 ssub=LD A,($7330+$01)
 s $9F3F Unused
 c $9F60
-  $9F8D,17 LEFT/RIGHT keypress
+@ $9F8A ssub=LD A,($7332+$01)
+  $9F8A,21 LEFT keypress
 c $9FB5
+@ $9FB5 ssub=LD A,($7334+$01)
+  $9FB5,15 RIGHT keypress
 s $9FDF Unused
 c $A014
 c $A07B Draw the elevator platforms?
