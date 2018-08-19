@@ -56,28 +56,46 @@ b $6EF2 Remaining lives for player 3.
 @ $6EF2 label=P3_LIVES
 b $6EF3 Remaining lives for player 4.
 @ $6EF3 label=P4_LIVES
-s $6EF4 Unused by game.
-s $72A0 Sprite buffer
+s $6EF4 Unused.
+s $72A0 Sprite buffer.
 @ $72A0 label=SPRITE_BUFFER
-b $72D8 Farmer's current position? (perhaps X)
-@ $72D8 label=POSITION_A
-b $72D9 Farmer's current position? (perhaps Y)
-@ $72D9 label=POSITION_B
-b $72DA
-b $72DB
-b $72DC
+b $72D8 X position of the Farmer.
+@ $72D8 label=FARMER_X_POS
+b $72D9 Y position of the Farmer.
+@ $72D9 label=FARMER_Y_POS
+b $72DA Animation frame counter.
+D $72DA Frame values are from 0 to 3
+@ $72DA label=ANIM_FRAME
+b $72DB Direction the Farmer is facing.
+D $72DB #TABLE(default,centre,:w) { =h Byte | =h Direction } { 00 | Right } { 04 | Left } { 0D | Forward (Climbing) } TABLE#
+@ $72DB label=FARMER_DIRECTION
+b $72DC Unknown variable.
 s $72DD Sprite/background composition buffer
 D $72DD Current background tiles are loaded then the sprite data is merged.
 @ $72DD label=SPRITE_BACKGROUND_BUFFER
-b $7325
-b $7326
-b $7327
-b $7328
+b $7325 Farmer is airbourne?
+D $7325 Values: $00=grounded, $02=airbourne.
+@ $7325 label=FARMER_AIRBOURNE
+  $7325,1,1
+b $7326 Farmer jumping direction.
+D $7326 #TABLE(default,centre,:w) { =h Byte | =h Direction } { 00 | Straight up } { 01 | Right } { FF | Left } TABLE#
+@ $7326 label=FARMER_JUMP_DIR
+  $7326,1,1
+b $7327 Variable related to the Farmer jumping.
+  $7327,1,1
+b $7328 Variable related to the Farmer jumping.
+  $7328,1,1
 b $7329 Unused?
-b $732A
-b $732B
-b $732C A variable possibly releated to GAME_STATE below
-D $732C Some possible values (guesses) are given in the table below: #TABLE(default,centre,:w) { =h Byte | =h meaning } { 00 | ?? } { 03 | ?? } { 04 | ?? } { 09 | ?? } { 4E | ?? } { 57 | ?? } { nn+09 | ?? } TABLE#
+  $7329,1,1
+b $732A Direction Farmer is travelling while airbourne.
+D $732A Values: $01=up, $FF=down.
+@ $732A label=FARMER_AIR_DIR
+  $732A,1,1
+b $732B Unknown counter variable, but seems related to the ticker text at bottom of screen.
+D $732B Counts $08 to $01, and loops.
+  $732B,1,1
+b $732C Unknown counter variable.
+  $732C,1,1
 b $732D Current game state
 D $732D Some possible values (guesses) are given in the table below: #TABLE(default,centre,:w) { =h Byte | =h state } { 03 | Redefine keys } { 05 | Select input type } { 06 | Play music } { 0A | Show instructions screen } TABLE#
 @ $732D label=GAME_STATE

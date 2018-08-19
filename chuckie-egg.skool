@@ -124,28 +124,39 @@ b$6EF2 DEFB $00
 @label=P4_LIVES
 b$6EF3 DEFB $00
 
-; Unused by game.
+; Unused.
 s$6EF4 DEFS $03AC
 
-; Sprite buffer
+; Sprite buffer.
 @label=SPRITE_BUFFER
 s$72A0 DEFS $38
 
-; Farmer's current position? (perhaps X)
-@label=POSITION_A
+; X position of the Farmer.
+@label=FARMER_X_POS
 b$72D8 DEFB $00
 
-; Farmer's current position? (perhaps Y)
-@label=POSITION_B
+; Y position of the Farmer.
+@label=FARMER_Y_POS
 b$72D9 DEFB $00
 
-; Data block at 72DA
+; Animation frame counter.
+;
+; Frame values are from 0 to 3
+@label=ANIM_FRAME
 b$72DA DEFB $00
 
-; Data block at 72DB
+; Direction the Farmer is facing.
+;
+; #TABLE(default,centre,:w)
+; { =h Byte | =h Direction }
+; { 00 | Right }
+; { 04 | Left }
+; { 0D | Forward (Climbing) }
+; TABLE#
+@label=FARMER_DIRECTION
 b$72DB DEFB $00
 
-; Data block at 72DC
+; Unknown variable.
 b$72DC DEFB $00
 
 ; Sprite/background composition buffer
@@ -154,40 +165,45 @@ b$72DC DEFB $00
 @label=SPRITE_BACKGROUND_BUFFER
 s$72DD DEFS $48
 
-; Data block at 7325
+; Farmer is airbourne?
+;
+; Values: $00=grounded, $02=airbourne.
+@label=FARMER_AIRBOURNE
 b$7325 DEFB $00
 
-; Data block at 7326
+; Farmer jumping direction.
+;
+; #TABLE(default,centre,:w)
+; { =h Byte | =h Direction }
+; { 00 | Straight up }
+; { 01 | Right }
+; { FF | Left }
+; TABLE#
+@label=FARMER_JUMP_DIR
 b$7326 DEFB $00
 
-; Data block at 7327
+; Variable related to the Farmer jumping.
 b$7327 DEFB $00
 
-; Data block at 7328
+; Variable related to the Farmer jumping.
 b$7328 DEFB $00
 
 ; Unused?
 b$7329 DEFB $00
 
-; Data block at 732A
+; Direction Farmer is travelling while airbourne.
+;
+; Values: $01=up, $FF=down.
+@label=FARMER_AIR_DIR
 b$732A DEFB $00
 
-; Data block at 732B
+; Unknown counter variable, but seems related to the ticker text at bottom of
+; screen.
+;
+; Counts $08 to $01, and loops.
 b$732B DEFB $00
 
-; A variable possibly releated to GAME_STATE below
-;
-; Some possible values (guesses) are given in the table below:
-; #TABLE(default,centre,:w)
-; { =h Byte | =h meaning }
-; { 00 | ?? }
-; { 03 | ?? }
-; { 04 | ?? }
-; { 09 | ?? }
-; { 4E | ?? }
-; { 57 | ?? }
-; { nn+09 | ?? }
-; TABLE#
+; Unknown counter variable.
 b$732C DEFB $00
 
 ; Current game state
