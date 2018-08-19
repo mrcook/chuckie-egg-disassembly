@@ -40,31 +40,27 @@ s$61A8 DEFS $02A0
 ; This area is unused for gameplay, although it was used during game loading.
 s$6448 DEFS $0A80
 
-; 6 bytes: some kind of buffer? Related to ANIMBUF1 or collecting corn!
-b$6EC8 DEFB $00
-
-; Used after a DEC (from $6ECC), and filled from $6EC8
-b$6EC9 DEFB $00
-
-; Used after a DEC (from $6ECC), and filled from $6EC8
-b$6ECA DEFB $00
-
-; Used after a DEC (from $6ECC), and filled from $6EC8
-b$6ECB DEFB $00
-
-; Used when player collects corn?
-b$6ECC DEFB $00
-
-; Filled when buffer is filled starting at $6EC8?
-b$6ECD DEFB $00
-
-; Animation Buffer #1
+; Current player score.
 ;
-; Buffer used for animating a sprite (?)
-@label=ANIMBUF1
-b$6ECE DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $6ED6 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $6EDE DEFB $00,$00,$00,$00,$00,$00,$00,$00
+; Each byte represents one decimal digit of the 6 digit score.
+@label=CURRENT_SCORE
+s$6EC8 DEFS $06
+
+; Saved score for player 1.
+@label=P1_SCORE
+s$6ECE DEFS $06
+
+; Saved score for player 2.
+@label=P2_SCORE
+s$6ED4 DEFS $06
+
+; Saved score for player 3.
+@label=P3_SCORE
+s$6EDA DEFS $06
+
+; Saved score for player 4.
+@label=P4_SCORE
+s$6EE0 DEFS $06
 
 ; Current player cleared eggs counter
 ;
@@ -228,7 +224,7 @@ w$7334 DEFW $0000
 w$7336 DEFW $0000
 
 ; Keyboard address for: Alternative JUMP key
-@label=KEY_ALT_JUMP
+@label=KEY_JUMP_2
 w$7338 DEFW $0000
 
 ; Total number of players for the current game?
@@ -1805,30 +1801,30 @@ b$9630 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $9640 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $9648 DEFB $00,$00,$00,$00
  $964C DEFM "by"                            ; {"by n.alderton"
- $964E DEFB $00
- $964F DEFB $00
+ $964E DEFB $00                             ;
+ $964F DEFB $00                             ;
  $9650 DEFM "n.alderton"                    ; }
  $965A DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $9662 DEFB $00,$00,$00,$00,$00,$00
  $9668 DEFM "1"                             ; {"1 to 4 players"
- $9669 DEFB $00
- $966A DEFM "to"
- $966C DEFB $00
- $966D DEFM "4"
- $966E DEFB $00
+ $9669 DEFB $00                             ;
+ $966A DEFM "to"                            ;
+ $966C DEFB $00                             ;
+ $966D DEFM "4"                             ;
+ $966E DEFB $00                             ;
  $966F DEFM "players"                       ; }
  $9676 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $967E DEFB $00,$00,$00,$00,$00,$00,$00
  $9685 DEFM "of"                            ; {"of skill for"
- $9687 DEFB $00
- $9688 DEFM "skill"
- $968D DEFB $00
+ $9687 DEFB $00                             ;
+ $9688 DEFM "skill"                         ;
+ $968D DEFB $00                             ;
  $968E DEFM "for"                           ; }
  $9691 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $9699 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $96A1 DEFB $00,$00,$00
  $96A4 DEFM "a"                             ; {"a game"
- $96A5 DEFB $00
+ $96A5 DEFB $00                             ;
  $96A6 DEFM "game"                          ; }
  $96AA DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $96B2 DEFB $00,$00,$00,$00,$00,$00,$00,$00
@@ -1854,11 +1850,11 @@ b$9630 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $974D DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $9755 DEFB $00
  $9756 DEFM "A"                             ; {"A & F SOFTWARE"
- $9757 DEFB $00
- $9758 DEFM "&"
- $9759 DEFB $00
- $975A DEFM "F"
- $975B DEFB $00
+ $9757 DEFB $00                             ;
+ $9758 DEFM "&"                             ;
+ $9759 DEFB $00                             ;
+ $975A DEFM "F"                             ;
+ $975B DEFB $00                             ;
  $975C DEFM "SOFTWARE"                      ; }
 
 ; Data block at 9764
@@ -2147,7 +2143,7 @@ c$98E6 LD A,($7347)    ;
  $9961 CP $1F          ;
  $9963 JR NZ,$9975     ; }
 @ssub=LD A,($7338+$01)
- $9965 LD A,($7339)    ; {KEY_ALT_JUMP keypress
+ $9965 LD A,($7339)    ; {KEY_JUMP_2 keypress
  $9968 IN A,($FE)      ;
  $996A AND $1F         ;
  $996C LD C,A          ;
@@ -2633,7 +2629,7 @@ s$9C91 DEFS $0B
 c$9C9C JP $9CC2      ;
 
 ; Unused
-s$9C9F DEFS 5
+s$9C9F DEFS $05
 
 ; This routine produces a sound, formed of a square wave.
 ;
@@ -2704,7 +2700,7 @@ c$9CEB LD B,A        ; Current known values for #REGa are between $01 and $21.
  $9D05 RET           ;
 
 ; Unused
-s$9D06 DEFS 2
+s$9D06 DEFS $02
 
 ; Routine at 9D08
 ;
@@ -3591,8 +3587,8 @@ c$A389 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $A38E LD B,A        ;
 @ssub=LD HL,$A399-$01
  $A38F LD HL,$A398   ; }
-*$A392 INC HL        ; {Increment #REGhl to required address, and assign
- $A393 DJNZ $A392    ; #REGa.
+*$A392 INC HL        ; {Increment #REGhl to required address, and assign #REGa.
+ $A393 DJNZ $A392    ;
  $A395 LD A,(HL)     ; }
  $A396 JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
@@ -4183,15 +4179,15 @@ c$A7BC LD IXh,$02    ;
  $A7CE JR NZ,$A7C8   ;
  $A7D0 LD IXh,$01    ;
  $A7D3 CALL $A929    ;
- $A7D6 LD HL,$6ECE   ; {Increment value in (#REGhl) by $30 for 24 bytes.
- $A7D9 LD B,$18      ;
+ $A7D6 LD HL,$6ECE   ; #REGhl=player 1 score
+ $A7D9 LD B,$18      ; {Increment value in (#REGhl) by $30 for 24 bytes.
 *$A7DB LD A,(HL)     ;
  $A7DC ADD A,$30     ;
  $A7DE LD (HL),A     ;
  $A7DF INC HL        ;
  $A7E0 DJNZ $A7DB    ; }
  $A7E2 LD A,$01      ;
- $A7E4 LD HL,$6ECE   ;
+ $A7E4 LD HL,$6ECE   ; #REGhl=player 1 score
 *$A7E7 ADD A,$30     ;
 @ssub=LD ($AD67+$0B),A ; Change player number in high score text.
  $A7E9 LD ($AD72),A  ;
@@ -4724,8 +4720,8 @@ c$AAE4 LD A,R        ; {Load #REGb with #REGr (related to memory refresh), then
  $AAE9 AND $07       ;
  $AAEB INC A         ;
  $AAEC LD B,A        ; }
-*$AAED INC HL        ; {Increment #REGhl to required address, and assign
- $AAEE DJNZ $AAED    ; #REGa.
+*$AAED INC HL        ; {Increment #REGhl to required address, and assign #REGa.
+ $AAEE DJNZ $AAED    ;
  $AAF0 LD A,(HL)     ; }
  $AAF1 JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 
@@ -5178,7 +5174,7 @@ c$AE9C LD HL,$5AFF     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $AF35 LD HL,$3FFE     ;
  $AF38 LD ($733D),HL   ;
  $AF3B LD A,($733A)    ; Get NUMBER_OF_PLAYERS
- $AF3E LD HL,$6ECE     ; {Copy 6 bytes
+ $AF3E LD HL,$6ECE     ; {Copy current score to player 1 score
 *$AF41 LD DE,$6EC8     ;
  $AF44 LD BC,$0006     ;
  $AF47 LDIR            ; }
@@ -5458,8 +5454,8 @@ c$B14F LD HL,$B15E   ;
  $B154 AND $07       ; after processing #REGb will have a value between 1-8.
  $B156 INC A         ;
  $B157 LD B,A        ; }
-*$B158 INC HL        ; {Increment #REGhl to required address, and assign
- $B159 DJNZ $B158    ; #REGa.
+*$B158 INC HL        ; {Increment #REGhl to required address, and assign #REGa.
+ $B159 DJNZ $B158    ;
  $B15B LD A,(HL)     ; }
  $B15C JP $9CEB      ; GET_LOOKUP_TABLE_ADDRESS
 

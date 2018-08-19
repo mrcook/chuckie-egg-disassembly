@@ -1,24 +1,31 @@
-; SkoolKit disassembly for Chuckie Egg
-; (https://github.com/mrcook/chuckie-egg-disassembly/)
-;
-; Copyright (c) 2018 Michael R. Cook (this disassembly)
-; Copyright (c) 1984 A&F Software (Chuckie Egg)
-; Chuckie Egg was designed and developed by Nigel Alderton
+> $61A8 ; SkoolKit disassembly for Chuckie Egg
+> $61A8 ; (https://github.com/mrcook/chuckie-egg-disassembly/)
+> $61A8 ;
+> $61A8 ; Copyright (c) 2018 Michael R. Cook (this disassembly)
+> $61A8 ; Copyright (c) 1984 A&F Software (Chuckie Egg)
+> $61A8 ; Chuckie Egg was designed and developed by Nigel Alderton
 @ $61A8 start
 @ $61A8 org=$A410
 s $61A8 Level Buffer (empty level)
 D $61A8 Screen map data is copied to this buffer at the start of each new level. Each byte represents a tile ID, with 20 tile GFX in total. #TABLE(default,centre,:w) { =h Byte | =h Tile } { 00 | Blank Tile } { 01 | Ladder #1 (left) } { 02 | Ladder #2 (right) } { 03 | Egg } { 04 | Corn } { 05 | Floor } { A8 | Birdcage: handle #1 } { A9 | Birdcage: handle #2 } { AA | Birdcage: #01 (top) } { AB | Birdcage: #02 (top) } { AC | Birdcage: #03 (top) } { AD | Birdcage: #04 (top) } { AE | Birdcage: #05 (middle) } { AF | Birdcage: #06 (middle) } { B0 | Birdcage: #07 (middle) } { B1 | Birdcage: #08 (middle) } { B2 | Birdcage: #09 (bottom) } { B3 | Birdcage: #10 (bottom) } { B4 | Birdcage: #11 (bottom) } { B5 | Birdcage: #12 (bottom) } TABLE#
 @ $61A8 label=LEVEL_BUFFER
 s $6448 This area is unused for gameplay, although it was used during game loading.
-b $6EC8 6 bytes: some kind of buffer? Related to ANIMBUF1 or collecting corn!
-b $6EC9 Used after a DEC (from $6ECC), and filled from $6EC8
-b $6ECA Used after a DEC (from $6ECC), and filled from $6EC8
-b $6ECB Used after a DEC (from $6ECC), and filled from $6EC8
-b $6ECC Used when player collects corn?
-b $6ECD Filled when buffer is filled starting at $6EC8?
-b $6ECE Animation Buffer #1
-D $6ECE Buffer used for animating a sprite (?)
-@ $6ECE label=ANIMBUF1
+s $6EC8 Current player score.
+D $6EC8 Each byte represents one decimal digit of the 6 digit score.
+@ $6EC8 label=CURRENT_SCORE
+  $6EC8,6,$06
+s $6ECE Saved score for player 1.
+@ $6ECE label=P1_SCORE
+  $6ECE,6,$06
+s $6ED4 Saved score for player 2.
+@ $6ED4 label=P2_SCORE
+  $6ED4,6,$06
+s $6EDA Saved score for player 3.
+@ $6EDA label=P3_SCORE
+  $6EDA,6,$06
+s $6EE0 Saved score for player 4.
+@ $6EE0 label=P4_SCORE
+  $6EE0,6,$06
 b $6EE6 Current player cleared eggs counter
 D $6EE6 Copied from the current player variable on level start, saved to the player variable on dying.
 @ $6EE6 label=CUR_EGG_COUNT
@@ -617,7 +624,9 @@ c $A6FE Farmer has died!
   $A7AA,15 copy LEVEL data to LEVEL_BUFFER
 c $A7BC Related to animation #1
   $A7C2,11 Point #REGhl to DISPLAY_FILE and reset first 18 bytes
-  $A7D6,12 Increment value in (#REGhl) by $30 for 24 bytes.
+  $A7D6,3 #REGhl=player 1 score
+  $A7D9,9 Increment value in (#REGhl) by $30 for 24 bytes.
+  $A7E4,3 #REGhl=player 1 score
 @ $A7E9 ssub=LD ($AD67+$0B),A ; Change player number in high score text.
   $A7FF,10 check if a score has been entered on scoreboard?
 c $A80C Called before loading main screen or highscores?
@@ -755,7 +764,7 @@ c $AE9C Called just before showing new level
   $AF21,3 UPDATE_SCREEN_GFX
   $AF2E,3 UPDATE_SCREEN_GFX
   $AF3B,3 Get NUMBER_OF_PLAYERS
-  $AF3E,11 Copy 6 bytes
+  $AF3E,11 Copy current score to player 1 score
   $AF65,3 Get CURRENT_PLAYER
   $AFB7,3 Get NUMBER_OF_PLAYERS
   $AFCD,3 UPDATE_SCREEN_GFX
