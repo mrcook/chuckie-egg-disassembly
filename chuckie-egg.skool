@@ -206,15 +206,16 @@ b$732b defb $00
 ; Unknown counter variable.
 b$732c defb $00
 
-; Current game state
+; Menu screen ID.
 ;
-; Some possible values (guesses) are given in the table below:
+; ID changes depending on what screen should be displayed, except when on the
+; Instructions screen where the values relate to the selected input type menu.
 ; #TABLE(default,centre,:w)
 ; { =h Byte | =h state }
 ; { 03 | Redefine keys }
 ; { 05 | Select input type }
-; { 06 | Play music }
-; { 0A | Show instructions screen }
+; { 06 | Intro music }
+; { 0A | Instructions: Input type 1=$06, 2=$05, 3=$03 }
 ; TABLE#
 @label=GAME_STATE
 b$732d defb $00
@@ -255,91 +256,110 @@ b$733a defb $00
 @label=CURRENT_PLAYER
 b$733b defb $00
 
-; Data block at 733c
+; Unknown variable the flips between 1 and 2.
 b$733c defb $00
 
-; Data block at 733d
+; Screen address of a 6-digit score for the active player.
+;
+; Position is calculated from the left with the following tile LSB values:
+; P1=$05, P2=$0C, P3=$13, P4=$1A. Note: the MSB is always $40.
 w$733d defw $0000
 
-; Data block at 733f
-b$733f defb $00
+; Bonus: 3 decimal digits.
+;
+; This counts down in 10's, so the 4th digit isn't needed.
+@label=BONUS_TIMER
+b$733f defb $00,$00,$00
 
-; Unused?
-b$7340 defb $00
-
-; Data block at 7341
-b$7341 defb $00
-
-; All three bytes are accessed via an INC
+; Time: 3 decimal digits.
+@label=TIMER
 b$7342 defb $00,$00,$00
 
-; Time remaining for level
+; Timer sub-counter.
 ;
-; This may not be correct!
-@label=TIME_REMAINING
+; The clock ticks about 20 times per second, and this counter ticks 10 times
+; per clock tick - this info needs clarifying!
+@label=TIMER_SUB_COUNT
 b$7345 defb $00
 
-; Bonus remaining for level
+; Bonus clock sub-counter.
 ;
-; This may not be correct!
-@label=BONUS_REMAINING
+; The bonus ticks about 7 times per second, and this counter ticks 64 times per
+; clock tick - this info needs clarifying!
+@label=BONUS_SUB_COUNT
 b$7346 defb $00
 
-; Data block at 7347
+; Unknown variables: seemd to always be $01.
 b$7347 defb $00
 
-; Variable used for the duck
+; Unknown variables: seemd to always be $08.
 b$7348 defb $00
 
-; Data block at 7349
+; Unknown variables: seemd to always be $98.
 b$7349 defb $00
 
-; Data block at 734a
+; Unknown variable. On level start, counts up from $00 to $05, then remains
+; there for the rest of the level.
 b$734a defb $00
 
-; Data block at 734b
+; Unknown variable. On level start, counts down from $F to $FB, then remains
+; there for the rest of the level.
 b$734b defb $00
 
-; Data block at 734c
+; Another counter: counting from $0C to $01.
 b$734c defb $00
 
-; Data block at 734d
+; Bit. Flips from 0 to 1 when the above counter restarts.
 b$734d defb $00
 
-; Data block at 734e
+; Unknown variable, seems to hold 0x0505 for the whole level.
 w$734e defw $0000
 
-; Data block at 7350
+; Unknown variable. Seems to hold $FF the whole level.
 b$7350 defb $00
 
-; Data block at 7351
+; Unknown variable.
 b$7351 defb $00
 
-; Data block at 7352
+; Unknown variable.
 w$7352 defw $0000
 
-; Data block at 7354
+; Unknown variable.
 b$7354 defb $00
 
-; Data block at 7355
+; Unknown variable.
 b$7355 defb $00
 
-; Data block at 7356
+; Unknown variable.
 b$7356 defb $00
 
-; Possibly 20 bytes from this address are used
-b$7357 defb $00
+; Robot Hens.
+;
+; #TABLE(default,centre,:w)
+; { =h Bytes(n) | =h Meaning }
+; { 0 | X position }
+; { 1 | Y position }
+; { 2 | ? }
+; { 3 | Always $00? }
+; TABLE#
+@label=ROBOT_HEN_1
+b$7357 defb $00,$00,$00,$00
+@label=ROBOT_HEN_2
+ $735b defb $00,$00,$00,$00
+@label=ROBOT_HEN_3
+ $735f defb $00,$00,$00,$00
+@label=ROBOT_HEN_4
+ $7363 defb $00,$00,$00,$00
+@label=ROBOT_HEN_5
+ $7367 defb $00,$00,$00,$00
 
-; These bytes are used.
-s$7358 defs $13
-
-; Data block at 736b
+; Another counter: counts from $03 to $01, and loops.
 b$736b defb $00
 
-; Data block at 736c
+; Another counter: counts $00 to $FF, and loops.
 w$736c defw $0000
 
-; Data block at 736e
+; Unknown.
 b$736e defb $00
 
 ; Music play state
@@ -353,32 +373,21 @@ b$736e defb $00
 @label=MUSIC_PLAY_STATE
 b$736f defb $00
 
-; Data block at 7370
+; SFX Timer, when collecting eggs/corn.
+@label=SFX_TIMER
 b$7370 defb $00
 
 ; Unused?
 b$7371 defb $00,$00
 
-; Current player level?
+; State variable for lookup table routine #R$9CEB.
 b$7373 defb $00
 
-; An address related to the current level?
+; Lookup table address saved here by #R$9CEB.
 w$7374 defw $0000
 
-; Unused
-s$7376 defs $0ead
-
-; Unknown and unused?
-b$8223 defb $01,$02
-
-; Really unused?
-s$8225 defs $0c
-
-; Unknown and unused?
-b$8231 defb $a8,$a9
-
-; Really unused?
-s$8233 defs $1d
+; Unused.
+s$7376 defs $0eda
 
 ; Keyboard Controls #1: 2, W, 9, 0, Z or M.
 @label=KEY_INPUT_TYPE_1

@@ -120,8 +120,8 @@ D $732B Counts $08 to $01, and loops.
   $732B,1,1
 b $732C Unknown counter variable.
   $732C,1,1
-b $732D Current game state
-D $732D Some possible values (guesses) are given in the table below: #TABLE(default,centre,:w) { =h Byte | =h state } { 03 | Redefine keys } { 05 | Select input type } { 06 | Play music } { 0A | Show instructions screen } TABLE#
+b $732D Menu screen ID.
+D $732D ID changes depending on what screen should be displayed, except when on the Instructions screen where the values relate to the selected input type menu. #TABLE(default,centre,:w) { =h Byte | =h state } { 03 | Redefine keys } { 05 | Select input type } { 06 | Intro music } { 0A | Instructions: Input type 1=$06, 2=$05, 3=$03 } TABLE#
 @ $732D label=GAME_STATE
   $732D,1,1
 w $732E Keyboard address for: UP key
@@ -150,86 +150,83 @@ b $733B Current active player.
 D $733B Possible values are 1, 2, 3, and 4.
 @ $733B label=CURRENT_PLAYER
   $733B,1,1
-b $733C Data block at 733c
+b $733C Unknown variable the flips between 1 and 2.
   $733C,1,1
-w $733D Data block at 733d
+w $733D Screen address of a 6-digit score for the active player.
+D $733D Position is calculated from the left with the following tile LSB values: P1=$05, P2=$0C, P3=$13, P4=$1A. Note: the MSB is always $40.
   $733D,2,2
-b $733F Data block at 733f
-  $733F,1,1
-b $7340 Unused?
-  $7340,1,1
-b $7341 Data block at 7341
-  $7341,1,1
-b $7342 All three bytes are accessed via an INC
+b $733F Bonus: 3 decimal digits.
+D $733F This counts down in 10's, so the 4th digit isn't needed.
+@ $733F label=BONUS_TIMER
+  $733F,3,3
+b $7342 Time: 3 decimal digits.
+@ $7342 label=TIMER
   $7342,3,3
-b $7345 Time remaining for level
-D $7345 This may not be correct!
-@ $7345 label=TIME_REMAINING
+b $7345 Timer sub-counter.
+D $7345 The clock ticks about 20 times per second, and this counter ticks 10 times per clock tick - this info needs clarifying!
+@ $7345 label=TIMER_SUB_COUNT
   $7345,1,1
-b $7346 Bonus remaining for level
-D $7346 This may not be correct!
-@ $7346 label=BONUS_REMAINING
+b $7346 Bonus clock sub-counter.
+D $7346 The bonus ticks about 7 times per second, and this counter ticks 64 times per clock tick - this info needs clarifying!
+@ $7346 label=BONUS_SUB_COUNT
   $7346,1,1
-b $7347 Data block at 7347
+b $7347 Unknown variables: seemd to always be $01.
   $7347,1,1
-b $7348 Variable used for the duck
+b $7348 Unknown variables: seemd to always be $08.
   $7348,1,1
-b $7349 Data block at 7349
+b $7349 Unknown variables: seemd to always be $98.
   $7349,1,1
-b $734A Data block at 734a
+b $734A Unknown variable. On level start, counts up from $00 to $05, then remains there for the rest of the level.
   $734A,1,1
-b $734B Data block at 734b
+b $734B Unknown variable. On level start, counts down from $F to $FB, then remains there for the rest of the level.
   $734B,1,1
-b $734C Data block at 734c
+b $734C Another counter: counting from $0C to $01.
   $734C,1,1
-b $734D Data block at 734d
+b $734D Bit. Flips from 0 to 1 when the above counter restarts.
   $734D,1,1
-w $734E Data block at 734e
+w $734E Unknown variable, seems to hold 0x0505 for the whole level.
   $734E,2,2
-b $7350 Data block at 7350
+b $7350 Unknown variable. Seems to hold $FF the whole level.
   $7350,1,1
-b $7351 Data block at 7351
+b $7351 Unknown variable.
   $7351,1,1
-w $7352 Data block at 7352
+w $7352 Unknown variable.
   $7352,2,2
-b $7354 Data block at 7354
+b $7354 Unknown variable.
   $7354,1,1
-b $7355 Data block at 7355
+b $7355 Unknown variable.
   $7355,1,1
-b $7356 Data block at 7356
+b $7356 Unknown variable.
   $7356,1,1
-b $7357 Possibly 20 bytes from this address are used
-  $7357,1,1
-s $7358 These bytes are used.
-  $7358,19,$13
-b $736B Data block at 736b
+b $7357 Robot Hens.
+D $7357 #TABLE(default,centre,:w) { =h Bytes(n) | =h Meaning } { 0 | X position } { 1 | Y position } { 2 | ? } { 3 | Always $00? } TABLE#
+@ $7357 label=ROBOT_HEN_1
+@ $735B label=ROBOT_HEN_2
+@ $735F label=ROBOT_HEN_3
+@ $7363 label=ROBOT_HEN_4
+@ $7367 label=ROBOT_HEN_5
+  $7357,20,4
+b $736B Another counter: counts from $03 to $01, and loops.
   $736B,1,1
-w $736C Data block at 736c
+w $736C Another counter: counts $00 to $FF, and loops.
   $736C,2,2
-b $736E Data block at 736e
+b $736E Unknown.
   $736E,1,1
 b $736F Music play state
 D $736F Strange that 00 means "play music" - probably need a more appropriate label. #TABLE(default,centre,:w) { =h Byte | =h state } { 00 | play } { 01 | stopped } TABLE#
 @ $736F label=MUSIC_PLAY_STATE
   $736F,1,1
-b $7370 Data block at 7370
+b $7370 SFX Timer, when collecting eggs/corn.
+@ $7370 label=SFX_TIMER
   $7370,1,1
 b $7371 Unused?
   $7371,2,2
-b $7373 Current player level?
+b $7373 State variable for lookup table routine #R$9CEB.
   $7373,1,1
-w $7374 An address related to the current level?
+w $7374 Lookup table address saved here by #R$9CEB.
   $7374,2,2
-s $7376 Unused
-  $7376,3757,$0ead
-b $8223 Unknown and unused?
-  $8223,2,2
-s $8225 Really unused?
-  $8225,12,$0c
-b $8231 Unknown and unused?
-  $8231,2,2
-s $8233 Really unused?
-  $8233,29,$1d
+s $7376 Unused.
+  $7376,3802,$0eda
 w $8250 Keyboard Controls #1: 2, W, 9, 0, Z or M.
 @ $8250 label=KEY_INPUT_TYPE_1
   $8250,12,2
