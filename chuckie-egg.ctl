@@ -241,80 +241,22 @@ s $8274 Really unused?
 t $8336 Ticker text
 D $8336 'press R to redefine keys * press S to start game * press 1, 2 or 3 to select key type'
 @ $8336 label=msg_ticker
-  $8336,5,5
-B $833B,1,1
-  $833C,1,1
-B $833D,1,1
-  $833E,2,2
-B $8340,1,1
-  $8341,8,8
-B $8349,1,1
-  $834A,4,4
-B $834E,2,1
-  $8350,5,5
-B $8355,1,1
-  $8356,1,1
-B $8357,1,1
-  $8358,2,2
-B $835A,1,1
-  $835B,5,5
-B $8360,1,1
-  $8361,4,4
-B $8365,2,1
-  $8367,5,5
-B $836C,1,1
-  $836D,3,3
-B $8370,1,1
-  $8371,2,2
-B $8373,1,1
-  $8374,1,1
-B $8375,1,1
-  $8376,2,2
-B $8378,1,1
-  $8379,6,6
-B $837F,1,1
-  $8380,3,3
-B $8383,1,1
-  $8384,4,4
-B $8388,8,1
+  $8336,82,5:B1:1:B1:2:B1:8:B1:4:B2,5:B1:1:B1:2:B1:5:B1:4:B2,5:B1:3:B1:2:B1:1:B1:2:B1:6:B1:3:B1:4
+B $8388,8,8
 t $8390 Instructions screen redefine keys text
 D $8390 'key types 1 & 2 are present and' 'cannot be changed but the type 3' 'keys are user defineable.      '
 @ $8390 label=msg_redefine_text
   $8390,31,31
 B $83AF,1,1
-  $83B0,6,6
-B $83B6,1,1
-  $83B7,2,2
-B $83B9,1,1
-  $83BA,7,7
-B $83C1,1,1
-  $83C2,3,3
-B $83C5,1,1
-  $83C6,3,3
-B $83C9,1,1
-  $83CA,4,4
-B $83CE,1,1
-  $83CF,4,4
-B $83D3,1,1
-  $83D4,5,5
-B $83D9,1,1
-  $83DA,1,1
-B $83DB,1,1
-  $83DC,1,1
-B $83DD,1,1
-  $83DE,1,1
-B $83DF,1,1
-  $83E0,3,3
-B $83E3,1,1
-  $83E4,6,6
-B $83EA,1,1
-  $83EB,3,3
-B $83EE,2,1
+  $83B0,30,6:B1:2:B1:7:B1:3:B1:3:B1:4
+B $83CE,34,1,T1:T3:1:T5:1:T1:1:T1:1:T1:1:T3:1:T6:1:T3,2
 t $83F0 Instructions screen key types table
 @ $83F0 label=msg_key_types
   $83F0,96,32
 b $8450 Unused data block?
-  $8450,46,8*5,6
+  $8450,32,8
+s $8470 Unused?
+  $8470,14,$0e
 t $847E Instructions screen KEYS heading
 D $847E 'KEYS'
 @ $847E label=msg_keys_heading
@@ -324,27 +266,17 @@ s $8482 Unused
 t $849B Instructions screen objective text
 D $849B 'objective- to collect eggs from the hen-house.'
 @ $849B label=msg_instructions_objective
-  $849B,3,3
-B $849E,1,1
-  $849F,10,10
-B $84A9,7,1
-  $84B0,10,10
-B $84BA,1,1
-  $84BB,2,2
-B $84BD,1,1
-  $84BE,7,7
-B $84C5,1,1
-  $84C6,4,4
-B $84CA,1,1
-  $84CB,4,4
+  $849B,14,3:B1:10
+B $84A9,7,7
+  $84B0,31,10:B1:2:B1:7:B1:4:B1:4
 s $84CF Unused
   $84CF,11,$0b
 t $84DA Instructions screen heading
 D $84DA 'INSTRUCTIONS'
 @ $84DA label=msg_instructions_heading
   $84DA,12,12
-b $84E6 Data block at 84e6
-  $84E6,10,8,2
+s $84E6 Unused?
+  $84E6,10,$0a
 b $84F0 Blank tile graphic
 D $84F0 address from which the following graphics are accessed.
 @ $84F0 label=gfx_tile_blank
@@ -581,42 +513,17 @@ b $9630 Home screen/high score table text data
 D $9630 As displayed after game load, and game over. Note: the screen is loaded bottom to top.
 @ $9630 label=home_screen
   $9630,28,8*3,4
-M $964C,14 "by n.alderton"
-T $964C,2,2
-  $964E,2,1
-T $9650,10,10
+T $964C,14,2:B2:10
   $965A,14,8,6
-M $9668,14 "1 to 4 players"
-T $9668,1,1
-  $9669,1,1
-T $966A,2,2
-  $966C,1,1
-T $966D,1,1
-  $966E,1,1
-T $966F,7,7
+T $9668,14,1:B1:2:B1:1:B1:7
   $9676,15,8,7
-M $9685,12 "of skill for"
-T $9685,2,2
-  $9687,1,1
-T $9688,5,5
-  $968D,1,1
-T $968E,3,3
+T $9685,12,2:B1:5:B1:3
   $9691,19,8*2,3
-M $96A4,6 "a game"
-T $96A4,1,1
-  $96A5,1,1
-T $96A6,4,4
+T $96A4,6,1:B1:4
   $96AA,147,8*18,3
-T $973D,8,8 "presents"
+T $973D,8,8
   $9745,17,8*2,1
-M $9756 "A & F SOFTWARE"
-T $9756,1,1
-  $9757,1,1
-T $9758,1,1
-  $9759,1,1
-T $975A,1,1
-  $975B,1,1
-T $975C,8,8
+T $9756,14,1:B1:1:B1:1:B1:8
 b $9764 Data block at 9764
   $9764,7,7
 b $976B Data block at 976b
@@ -642,30 +549,8 @@ b $9785 Data block at 9785
 b $9787 Data block at 9787
   $9787,40,8
 t $97AF High score table with name/score columns
-D $97AF Probably ranked here 1-10.
 @ $97AF label=scoreboard
-  $97AF,1,1 start byte?
-B $97B0,8,1
-  $97B8,8,8
-B $97C0,8,1
-  $97C8,8,8
-B $97D0,8,1
-  $97D8,8,8
-B $97E0,8,1
-  $97E8,8,8
-B $97F0,8,1
-  $97F8,8,8
-B $9800,8,1
-t $9808 Bottom five of scoreboard
-  $9808,8,8
-B $9810,8,1
-  $9818,8,8
-B $9820,8,1
-  $9828,8,8
-B $9830,8,1
-  $9838,8,8
-B $9840,8,1
-  $9848,7,7
+B $97AF,160,T1:8:T7
 b $984F Unknown/unused bytes.
   $984F,9,8,1
 c $9858 Routine at 9858
@@ -1118,38 +1003,21 @@ t $AC02 Wizard instructions for redefining the keys
 @ $AC02 label=redefine_keys_wizard_text
   $AC02,82,32,10
 t $AC54 Alphabet characters, but out of order
-B $AC54,2,1
-  $AC56,3,3
-B $AC59,1,1
-  $AC5A,29,29
-B $AC77,1,1
-  $AC78,4,4
+B $AC54,40,2:T3:1:T29:1:T4
 t $AC7C Home screen ticker text
 @ $AC7C label=home_screen_ticker_text
-  $AC7C,1,1
-B $AC7D,1,1
-  $AC7E,22,22
+  $AC7C,24,1:B1:22
 N $AC94 Redefine keys text
-  $AC94,1,1
-B $AC95,1,1
-  $AC96,25,25
+  $AC94,27,1:B1:25
 N $ACAF Instructions text
-  $ACAF,1,1
-B $ACB0,1,1
-  $ACB1,25,25
+  $ACAF,27,1:B1:25
 t $ACCA Instructions screen ticker text
 @ $ACCA label=instructions_screen_ticker_text
-  $ACCA,1,1
-B $ACCB,1,1
-  $ACCC,22,22
+  $ACCA,24,1:B1:22
 N $ACE2 Redefine keys text
-  $ACE2,1,1
-B $ACE3,1,1
-  $ACE4,25,25
+  $ACE2,27,1:B1:25
 N $ACFD Select key type
-  $ACFD,1,1
-B $ACFE,1,1
-  $ACFF,34,34
+  $ACFD,36,1:B1:34
 t $AD21 "1,2,3 or 4 players ?" - choose number of players text data
 @ $AD21 label=choose_number_of_players_text
   $AD21,30,30
@@ -1214,86 +1082,20 @@ N $B14F Does accessing #REGhl instruction before the #REGr have any importance? 
   $B15C,3 GetLookupTableAddress
 b $B15F Small lookup table used by #R$B14F to assign #REGa, for use with GetLookupTableAddress
   $B15F,8,8
-t $B167 Source code remnants
+b $B167 Source code remnants
 D $B167 The source code here corresponds to the code at end of #R$A566...maybe!
-  $B167,9,9
-B $B170,1,1
-B $B171,1,1 is a double quote character
-B $B172,1,1
-  $B173,13,13
-B $B180,1,1
-  $B181,1,1
-B $B182,1,1
-  $B183,11,11
-B $B18E,1,1
-  $B18F,1,1
-B $B190,1,1
-  $B191,10,10
-B $B19B,1,1
-  $B19C,14,14
-B $B1AA,1,1
-  $B1AB,13,13
-B $B1B8,1,1
-  $B1B9,10,10
-B $B1C3,1,1
-  $B1C4,10,10
-B $B1CE,1,1
-  $B1CF,1,1
-B $B1D0,1,1
-  $B1D1,9,9
-B $B1DA,1,1
-  $B1DB,6,6
-B $B1E1,1,1
-  $B1E2,1,1
-B $B1E3,1,1
-  $B1E4,12,12
-B $B1F0,1,1
-  $B1F1,1,1
-B $B1F2,1,1
-  $B1F3,4,4
-B $B1F7,1,1
-  $B1F8,1,1
-B $B1F9,1,1
-  $B1FA,6,6
+  $B167,153,8*19,1
 b $B200 Data block at b200
   $B200,263,8*32,7
-t $B307 Source code remnants
+b $B307 Source code remnants
 D $B307 The source code here corresponds to the code in middle of #R$A59D.
-  $B307,11,11
-B $B312,1,1
-  $B313,1,1
-B $B314,1,1
-  $B315,8,8
-B $B31D,1,1
-  $B31E,1,1
-B $B31F,1,1
-  $B320,16,16
-B $B330,1,1
-  $B331,14,14
-B $B33F,1,1
-  $B340,9,9
-B $B349,1,1
-  $B34A,2,2
+  $B307,69,8*8,5
 c $B34C Note, label added because Pasmo was complaining.
 D $B34C Used by the routine at #R$98e6.
 @ $B34C label=LB34C
-t $B381 Source code remnants
+b $B381 Source code remnants
 D $B381 The source code here corresponds to the code in middle of #R$A59D.
-  $B381,7,7
-B $B388,1,1
-  $B389,1,1
-B $B38A,1,1
-  $B38B,7,7
-B $B392,1,1
-  $B393,1,1
-B $B394,1,1
-  $B395,10,10
-B $B39F,1,1
-  $B3A0,1,1
-B $B3A1,1,1
-  $B3A2,8,8
-B $B3AA,1,1
-  $B3AB,5,5
+  $B381,47,8*5,7
 b $B3B0 Level 1 layout data - see level_buffer for byte map
 @ $B3B0 label=
   $B3B0,672,32
@@ -1318,13 +1120,9 @@ b $C370 Level 7 layout data - see level_buffer for byte map
 b $C610 Level 8 layout data - see level_buffer for byte map
 @ $C610 label=level_8
   $C610,672,32
-t $C8B0 Source code remnants?
+b $C8B0 Source code remnants?
 D $C8B0 The source code here corresponds to the code at ????.
-  $C8B0,9,9
-B $C8B9,1,1
-  $C8BA,1,1
-B $C8BB,1,1
-  $C8BC,12,12
+  $C8B0,24,9,8,7
 w $C8C8 An address lookup table for accessing data blocks.
 @ $C8C8 label=address_lookup_table
   $C8C8,66,2

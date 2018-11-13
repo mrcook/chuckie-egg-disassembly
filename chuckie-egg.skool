@@ -424,51 +424,10 @@ s$8274 defs $c2
 ; 'press R to redefine keys * press S to start game * press 1, 2 or 3 to select
 ; key type'
 @label=msg_ticker
-t$8336 defm "press"
- $833b defb $00
- $833c defm "R"
- $833d defb $00
- $833e defm "to"
- $8340 defb $00
- $8341 defm "redefine"
- $8349 defb $00
- $834a defm "keys"
- $834e defb $00
- $834f defb $00
- $8350 defm "press"
- $8355 defb $00
- $8356 defm "S"
- $8357 defb $00
- $8358 defm "to"
- $835a defb $00
- $835b defm "start"
- $8360 defb $00
- $8361 defm "game"
- $8365 defb $00
- $8366 defb $00
- $8367 defm "press"
- $836c defb $00
- $836d defm "1,2"
- $8370 defb $00
- $8371 defm "or"
- $8373 defb $00
- $8374 defm "3"
- $8375 defb $00
- $8376 defm "to"
- $8378 defb $00
- $8379 defm "select"
- $837f defb $00
- $8380 defm "key"
- $8383 defb $00
- $8384 defm "type"
- $8388 defb $00
- $8389 defb $00
- $838a defb $00
- $838b defb $00
- $838c defb $00
- $838d defb $00
- $838e defb $00
- $838f defb $00
+t$8336 defm "press",$00,"R",$00,"to",$00,"redefine",$00,"keys",$00,$00
+ $8350 defm "press",$00,"S",$00,"to",$00,"start",$00,"game",$00,$00
+ $8367 defm "press",$00,"1,2",$00,"or",$00,"3",$00,"to",$00,"select",$00,"key",$00,"type"
+ $8388 defb $00,$00,$00,$00,$00,$00,$00,$00
 
 ; Instructions screen redefine keys text
 ;
@@ -477,35 +436,10 @@ t$8336 defm "press"
 @label=msg_redefine_text
 t$8390 defm "keys are user defineable.      "
  $83af defb $00
- $83b0 defm "cannot"
- $83b6 defb $00
- $83b7 defm "be"
- $83b9 defb $00
- $83ba defm "changed"
- $83c1 defb $00
- $83c2 defm "but"
- $83c5 defb $00
- $83c6 defm "the"
- $83c9 defb $00
- $83ca defm "type"
+ $83b0 defm "cannot",$00,"be",$00,"changed",$00,"but",$00,"the",$00,"type"
  $83ce defb $00
- $83cf defm "3key"
- $83d3 defb $00
- $83d4 defm "types"
- $83d9 defb $00
- $83da defm "1"
- $83db defb $00
- $83dc defm "&"
- $83dd defb $00
- $83de defm "2"
- $83df defb $00
- $83e0 defm "are"
- $83e3 defb $00
- $83e4 defm "preset"
- $83ea defb $00
- $83eb defm "and"
- $83ee defb $00
- $83ef defb $00
+ $83cf defb "3","key",$00,"types",$00,"1",$00,"&",$00,"2",$00,"are",$00,"preset",$00,"and"
+ $83ee defb $00,$00
 
 ; Instructions screen key types table
 @label=msg_key_types
@@ -518,8 +452,9 @@ b$8450 defb $c8,$c9,$ca,$cb,$20,$b8,$b9,$ba
  $8458 defb $20,$20,$bb,$bc,$bd,$20,$20,$be
  $8460 defb $bf,$c0,$20,$20,$c1,$c2,$c3,$20
  $8468 defb $20,$20,$20,$c4,$c5,$c6,$c7,$20
- $8470 defb $00,$00,$00,$00,$00,$00,$00,$00
- $8478 defb $00,$00,$00,$00,$00,$00
+
+; Unused?
+s$8470 defs $0e
 
 ; Instructions screen KEYS heading
 ;
@@ -534,25 +469,9 @@ s$8482 defs $19
 ;
 ; 'objective- to collect eggs from the hen-house.'
 @label=msg_instructions_objective
-t$849b defm "the"
- $849e defb $00
- $849f defm "hen-house."
- $84a9 defb $00
- $84aa defb $00
- $84ab defb $00
- $84ac defb $00
- $84ad defb $00
- $84ae defb $00
- $84af defb $00
- $84b0 defm "objective-"
- $84ba defb $00
- $84bb defm "to"
- $84bd defb $00
- $84be defm "collect"
- $84c5 defb $00
- $84c6 defm "eggs"
- $84ca defb $00
- $84cb defm "from"
+t$849b defm "the",$00,"hen-house."
+ $84a9 defb $00,$00,$00,$00,$00,$00,$00
+ $84b0 defm "objective-",$00,"to",$00,"collect",$00,"eggs",$00,"from"
 
 ; Unused
 s$84cf defs $0b
@@ -563,9 +482,8 @@ s$84cf defs $0b
 @label=msg_instructions_heading
 t$84da defm "INSTRUCTIONS"
 
-; Data block at 84e6
-b$84e6 defb $00,$00,$00,$00,$00,$00,$00,$00
- $84ee defb $00,$00
+; Unused?
+s$84e6 defs $0a
 
 ; Blank tile graphic
 ;
@@ -1825,32 +1743,17 @@ b$9630 defb $00,$00,$00,$00,$00,$00,$00,$00
  $9638 defb $00,$00,$00,$00,$00,$00,$00,$00
  $9640 defb $00,$00,$00,$00,$00,$00,$00,$00
  $9648 defb $00,$00,$00,$00
- $964c defm "by"                            ; {"by n.alderton"
- $964e defb $00                             ;
- $964f defb $00                             ;
- $9650 defm "n.alderton"                    ; }
+ $964c defm "by",$00,$00,"n.alderton"
  $965a defb $00,$00,$00,$00,$00,$00,$00,$00
  $9662 defb $00,$00,$00,$00,$00,$00
- $9668 defm "1"                             ; {"1 to 4 players"
- $9669 defb $00                             ;
- $966a defm "to"                            ;
- $966c defb $00                             ;
- $966d defm "4"                             ;
- $966e defb $00                             ;
- $966f defm "players"                       ; }
+ $9668 defm "1",$00,"to",$00,"4",$00,"players"
  $9676 defb $00,$00,$00,$00,$00,$00,$00,$00
  $967e defb $00,$00,$00,$00,$00,$00,$00
- $9685 defm "of"                            ; {"of skill for"
- $9687 defb $00                             ;
- $9688 defm "skill"                         ;
- $968d defb $00                             ;
- $968e defm "for"                           ; }
+ $9685 defm "of",$00,"skill",$00,"for"
  $9691 defb $00,$00,$00,$00,$00,$00,$00,$00
  $9699 defb $00,$00,$00,$00,$00,$00,$00,$00
  $96a1 defb $00,$00,$00
- $96a4 defm "a"                             ; {"a game"
- $96a5 defb $00                             ;
- $96a6 defm "game"                          ; }
+ $96a4 defm "a",$00,"game"
  $96aa defb $00,$00,$00,$00,$00,$00,$00,$00
  $96b2 defb $00,$00,$00,$00,$00,$00,$00,$00
  $96ba defb $00,$00,$00,$00,$00,$00,$00,$00
@@ -1870,17 +1773,11 @@ b$9630 defb $00,$00,$00,$00,$00,$00,$00,$00
  $972a defb $00,$00,$00,$00,$00,$00,$00,$00
  $9732 defb $00,$00,$00,$00,$00,$00,$00,$00
  $973a defb $00,$00,$00
- $973d defm "presents"                      ; "presents"
+ $973d defm "presents"
  $9745 defb $00,$00,$00,$00,$00,$00,$00,$00
  $974d defb $00,$00,$00,$00,$00,$00,$00,$00
  $9755 defb $00
- $9756 defm "A"                             ; {"A & F SOFTWARE"
- $9757 defb $00                             ;
- $9758 defm "&"                             ;
- $9759 defb $00                             ;
- $975a defm "F"                             ;
- $975b defb $00                             ;
- $975c defm "SOFTWARE"                      ; }
+ $9756 defm "A",$00,"&",$00,"F",$00,"SOFTWARE"
 
 ; Data block at 9764
 b$9764 defb $0b,$0c,$0d,$0e,$0f,$10,$11
@@ -1923,102 +1820,17 @@ b$9787 defb $05,$05,$ff,$00,$05,$05,$ff,$00
  $97a7 defb $05,$05,$ff,$00,$6e,$73,$00,$00
 
 ; High score table with name/score columns
-;
-; Probably ranked here 1-10.
 @label=scoreboard
-t$97af defm " "        ; start byte?
- $97b0 defb $8f
- $97b1 defb $90
- $97b2 defb $91
- $97b3 defb $92
- $97b4 defb $93
- $97b5 defb $94
- $97b6 defb $95
- $97b7 defb $96
- $97b8 defm " 001000 "
- $97c0 defb $8f
- $97c1 defb $90
- $97c2 defb $91
- $97c3 defb $92
- $97c4 defb $93
- $97c5 defb $94
- $97c6 defb $95
- $97c7 defb $96
- $97c8 defm " 001000 "
- $97d0 defb $8f
- $97d1 defb $90
- $97d2 defb $91
- $97d3 defb $92
- $97d4 defb $93
- $97d5 defb $94
- $97d6 defb $95
- $97d7 defb $96
- $97d8 defm " 001000 "
- $97e0 defb $8f
- $97e1 defb $90
- $97e2 defb $91
- $97e3 defb $92
- $97e4 defb $93
- $97e5 defb $94
- $97e6 defb $95
- $97e7 defb $96
- $97e8 defm " 001000 "
- $97f0 defb $8f
- $97f1 defb $90
- $97f2 defb $91
- $97f3 defb $92
- $97f4 defb $93
- $97f5 defb $94
- $97f6 defb $95
- $97f7 defb $96
- $97f8 defm " 001000 "
- $9800 defb $8f
- $9801 defb $90
- $9802 defb $91
- $9803 defb $92
- $9804 defb $93
- $9805 defb $94
- $9806 defb $95
- $9807 defb $96
-
-; Bottom five of scoreboard
-t$9808 defm " 001000 "
- $9810 defb $8f
- $9811 defb $90
- $9812 defb $91
- $9813 defb $92
- $9814 defb $93
- $9815 defb $94
- $9816 defb $95
- $9817 defb $96
- $9818 defm " 001000 "
- $9820 defb $8f
- $9821 defb $90
- $9822 defb $91
- $9823 defb $92
- $9824 defb $93
- $9825 defb $94
- $9826 defb $95
- $9827 defb $96
- $9828 defm " 001000 "
- $9830 defb $8f
- $9831 defb $90
- $9832 defb $91
- $9833 defb $92
- $9834 defb $93
- $9835 defb $94
- $9836 defb $95
- $9837 defb $96
- $9838 defm " 001000 "
- $9840 defb $8f
- $9841 defb $90
- $9842 defb $91
- $9843 defb $92
- $9844 defb $93
- $9845 defb $94
- $9846 defb $95
- $9847 defb $96
- $9848 defm " 001000"
+t$97af defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
+ $97bf defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
+ $97cf defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
+ $97df defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
+ $97ef defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
+ $97ff defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
+ $980f defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
+ $981f defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
+ $982f defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
+ $983f defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
 
 ; Unknown/unused bytes.
 b$984f defb $06,$03,$03,$07,$03,$04,$06,$07
@@ -2401,8 +2213,7 @@ c$9a4c push af       ;
  $9af4 ex de,hl      ;
  $9af5 ld b,$03      ;
  $9af7 dec c         ;
- $9af8 jr nz,$9aba   ; Jump back until screen_buffer is holds all
-                     ; tile data.
+ $9af8 jr nz,$9aba   ; Jump back until screen_buffer is holds all tile data.
  $9afa pop hl        ;
  $9afb push hl       ;
  $9afc ld a,h        ;
@@ -2411,9 +2222,9 @@ c$9a4c push af       ;
  $9b01 ld h,a        ;
  $9b02 sla a         ;
  $9b04 add a,h       ;
- $9b05 ld c,a        ; {Copy the 48 bytes of screen_buffer to
- $9b06 ld b,$00      ; sprite_buffer, merging with the current sprite data
- $9b08 ld hl,$72dd   ; there.
+ $9b05 ld c,a        ; {Copy the 48 bytes of screen_buffer to sprite_buffer,
+ $9b06 ld b,$00      ; merging with the current sprite data there.
+ $9b08 ld hl,$72dd   ;
  $9b0b ld de,$72a0   ;
  $9b0e add hl,bc     ;
  $9b0f ld b,$30      ;
@@ -3707,8 +3518,7 @@ c$a410 ld hl,$732d   ; {Set game_state to "Play Tune" -- POKE @A411 (the
 
 ; Display the home screen, which includes the scoreboard
 ;
-; Note: this routine is very similar to the DisplayInstructionsScreen
-; routine.
+; Note: this routine is very similar to the DisplayInstructionsScreen routine.
 @label=DisplayHomeScreen
 c$a420 call $ab9e    ; ClearScreen
  $a423 ld h,$02      ;
@@ -3758,8 +3568,7 @@ c$a420 call $ab9e    ; ClearScreen
 
 ; Scroll ticker text for home screen
 ;
-; Note: this routine is very similar to the first half of ScrollText2
-; routine.
+; Note: this routine is very similar to the first half of ScrollText2 routine.
 @label=ScrollText1
 c$a47d ld hl,$50e1   ;
  $a480 call $ab7b    ;
@@ -4963,41 +4772,23 @@ t$ac02 defm "press the key you wish to use to"
  $ac4a defm "jump      "
 
 ; Alphabet characters, but out of order
-t$ac54 defb $97
- $ac55 defb $99
- $ac56 defm "mnb"
- $ac59 defb $9a
- $ac5a defm "lkjhpoiuy0987612345qwertasdfg"
- $ac77 defb $98
- $ac78 defm "zxcv"
+t$ac54 defb $97,$99,"mnb",$9a,"lkjhpoiuy0987612345qwertasdfg",$98,"zxcv"
 
 ; Home screen ticker text
 @label=home_screen_ticker_text
-t$ac7c defm "{"
- $ac7d defb $00
- $ac7e defm "press S to start game "
+t$ac7c defm "{",$00,"press S to start game "
 ; Redefine keys text
- $ac94 defm "{"
- $ac95 defb $00
- $ac96 defm "press R to redefine keys "
+ $ac94 defm "{",$00,"press R to redefine keys "
 ; Instructions text
- $acaf defm "{"
- $acb0 defb $00
- $acb1 defm "press I for instructions "
+ $acaf defm "{",$00,"press I for instructions "
 
 ; Instructions screen ticker text
 @label=instructions_screen_ticker_text
-t$acca defm "{"
- $accb defb $00
- $accc defm "press S to start game "
+t$acca defm "{",$00,"press S to start game "
 ; Redefine keys text
- $ace2 defm "{"
- $ace3 defb $00
- $ace4 defm "press R to redefine keys "
+ $ace2 defm "{",$00,"press R to redefine keys "
 ; Select key type
- $acfd defm "{"
- $acfe defb $00
- $acff defm "press 1,2 or 3 to select key type "
+ $acfd defm "{",$00,"press 1,2 or 3 to select key type "
 
 ; "1,2,3 or 4 players ?" - choose number of players text data
 @label=choose_number_of_players_text
@@ -5491,45 +5282,26 @@ b$b15f defb $02,$08,$0a,$0b,$0c,$11,$11,$02
 ; Source code remnants
 ;
 ; The source code here corresponds to the code at end of #R$A566...maybe!
-t$b167 defm " JR C,C10"
- $b170 defb $0d
- $b171 defb $22              ; is a double quote character
- $b172 defb $90
- $b173 defm "  LD DE,22849"
- $b180 defb $0d
- $b181 defm "#"
- $b182 defb $00
- $b183 defm " C10 LD B,3"
- $b18e defb $0d
- $b18f defm "#"
- $b190 defb $10
- $b191 defm "  LD A,151"
- $b19b defb $0d
- $b19c defm "#   LD (HL),23"
- $b1aa defb $0d
- $b1ab defm "#0  LD (DE),A"
- $b1b8 defb $0d
- $b1b9 defm "#@  INC HL"
- $b1c3 defb $0d
- $b1c4 defm "#P  INC DE"
- $b1ce defb $0d
- $b1cf defm "#"
- $b1d0 defb $60
- $b1d1 defm "  DJNZ -7"
- $b1da defb $0d
- $b1db defm "#p ;  "
- $b1e1 defb $0d
- $b1e2 defm "#"
- $b1e3 defb $80
- $b1e4 defm " C8 JP SCRL2"
- $b1f0 defb $0d
- $b1f1 defm "#"
- $b1f2 defb $90
- $b1f3 defm " ;  "
- $b1f7 defb $0d
- $b1f8 defm "%"
- $b1f9 defb $00
- $b1fa defm " INITG"
+b$b167 defb $20,$4a,$52,$20,$43,$2c,$43,$31
+ $b16f defb $30,$0d,$22,$90,$20,$20,$4c,$44
+ $b177 defb $20,$44,$45,$2c,$32,$32,$38,$34
+ $b17f defb $39,$0d,$23,$00,$20,$43,$31,$30
+ $b187 defb $20,$4c,$44,$20,$42,$2c,$33,$0d
+ $b18f defb $23,$10,$20,$20,$4c,$44,$20,$41
+ $b197 defb $2c,$31,$35,$31,$0d,$23,$20,$20
+ $b19f defb $20,$4c,$44,$20,$28,$48,$4c,$29
+ $b1a7 defb $2c,$32,$33,$0d,$23,$30,$20,$20
+ $b1af defb $4c,$44,$20,$28,$44,$45,$29,$2c
+ $b1b7 defb $41,$0d,$23,$40,$20,$20,$49,$4e
+ $b1bf defb $43,$20,$48,$4c,$0d,$23,$50,$20
+ $b1c7 defb $20,$49,$4e,$43,$20,$44,$45,$0d
+ $b1cf defb $23,$60,$20,$20,$44,$4a,$4e,$5a
+ $b1d7 defb $20,$2d,$37,$0d,$23,$70,$20,$3b
+ $b1df defb $20,$20,$0d,$23,$80,$20,$43,$38
+ $b1e7 defb $20,$4a,$50,$20,$53,$43,$52,$4c
+ $b1ef defb $32,$0d,$23,$90,$20,$3b,$20,$20
+ $b1f7 defb $0d,$25,$00,$20,$49,$4e,$49,$54
+ $b1ff defb $47
 
 ; Data block at b200
 b$b200 defb $9c,$9c,$9c,$9c,$9c,$9c,$9c,$9c
@@ -5569,21 +5341,15 @@ b$b200 defb $9c,$9c,$9c,$9c,$9c,$9c,$9c,$9c
 ; Source code remnants
 ;
 ; The source code here corresponds to the code in middle of #R$A59D.
-t$b307 defm " CALL 40000"
- $b312 defb $0d
- $b313 defm "'"
- $b314 defb $00
- $b315 defm "  LD B,8"
- $b31d defb $0d
- $b31e defm "'"
- $b31f defb $10
- $b320 defm " C15 LD HL,18529"
- $b330 defb $0d
- $b331 defm "'   CALL SCROL"
- $b33f defb $0d
- $b340 defm "'0  DEC C"
- $b349 defb $0d
- $b34a defm "'@"
+b$b307 defb $20,$43,$41,$4c,$4c,$20,$34,$30
+ $b30f defb $30,$30,$30,$0d,$27,$00,$20,$20
+ $b317 defb $4c,$44,$20,$42,$2c,$38,$0d,$27
+ $b31f defb $10,$20,$43,$31,$35,$20,$4c,$44
+ $b327 defb $20,$48,$4c,$2c,$31,$38,$35,$32
+ $b32f defb $39,$0d,$27,$20,$20,$20,$43,$41
+ $b337 defb $4c,$4c,$20,$53,$43,$52,$4f,$4c
+ $b33f defb $0d,$27,$30,$20,$20,$44,$45,$43
+ $b347 defb $20,$43,$0d,$27,$40
 
 ; Note, label added because Pasmo was complaining.
 ;
@@ -5620,21 +5386,12 @@ c$b34c ld a,($72d8)  ;
 ; Source code remnants
 ;
 ; The source code here corresponds to the code in middle of #R$A59D.
-t$b381 defm " AND 15"
- $b388 defb $0d
- $b389 defm "'"
- $b38a defb $90
- $b38b defm "  CP 15"
- $b392 defb $0d
- $b393 defm "("
- $b394 defb $00
- $b395 defm "  JR Z,L41"
- $b39f defb $0d
- $b3a0 defm "("
- $b3a1 defb $10
- $b3a2 defm "  LD B,0"
- $b3aa defb $0d
- $b3ab defm "(  L4"
+b$b381 defb $20,$41,$4e,$44,$20,$31,$35,$0d
+ $b389 defb $27,$90,$20,$20,$43,$50,$20,$31
+ $b391 defb $35,$0d,$28,$00,$20,$20,$4a,$52
+ $b399 defb $20,$5a,$2c,$4c,$34,$31,$0d,$28
+ $b3a1 defb $10,$20,$20,$4c,$44,$20,$42,$2c
+ $b3a9 defb $30,$0d,$28,$20,$20,$4c,$34
 
 ; Level 1 layout data - see level_buffer for byte map
 @label=
@@ -5831,11 +5588,9 @@ b$c610 defb $05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,
 ; Source code remnants?
 ;
 ; The source code here corresponds to the code at ????.
-t$c8b0 defm "ALL CONV1"
- $c8b9 defb $0d
- $c8ba defm "V"
- $c8bb defb $60
- $c8bc defm "  LD A,(2948"
+b$c8b0 defb $41,$4c,$4c,$20,$43,$4f,$4e,$56,$31
+ $c8b9 defb $0d,$56,$60,$20,$20,$4c,$44,$20
+ $c8c1 defb $41,$2c,$28,$32,$39,$34,$38
 
 ; An address lookup table for accessing data blocks.
 @label=address_lookup_table
@@ -6042,3 +5797,4 @@ b$cbb0 defb $06,$39,$08,$3b,$04,$15,$06,$00
 ; Use the same address as with the ORG directive, to tell Pasmo where
 ; to start running the program from here.
 end $A410
+
