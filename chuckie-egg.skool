@@ -34,7 +34,7 @@
 ; { B4 | Birdcage: #11 (bottom) }
 ; { B5 | Birdcage: #12 (bottom) }
 ; TABLE#
-@label=LEVEL_BUFFER
+@label=level_buffer
 s$61a8 defs $02a0
 
 ; This area is unused for gameplay, although it was used during game loading.
@@ -43,106 +43,106 @@ s$6448 defs $0a80
 ; Current player score.
 ;
 ; Each byte represents one decimal digit of the 6 digit score.
-@label=CURRENT_SCORE
+@label=current_score
 s$6ec8 defs $06
 
 ; Saved score for player 1.
-@label=P1_SCORE
+@label=score_p1
 s$6ece defs $06
 
 ; Saved score for player 2.
-@label=P2_SCORE
+@label=score_p2
 s$6ed4 defs $06
 
 ; Saved score for player 3.
-@label=P3_SCORE
+@label=score_p3
 s$6eda defs $06
 
 ; Saved score for player 4.
-@label=P4_SCORE
+@label=score_p4
 s$6ee0 defs $06
 
 ; Current player cleared eggs counter
 ;
 ; Copied from the current player variable on level start, saved to the player
 ; variable on dying.
-@label=CUR_EGG_COUNT
+@label=cleared_eggs
 b$6ee6 defb $00
 
 ; Save cleared eggs count for player 1.
-@label=P1_EGG_COUNT
+@label=egg_count_p1
 b$6ee7 defb $00
 
 ; Save cleared eggs count for player 2.
-@label=P2_EGG_COUNT
+@label=egg_count_p2
 b$6ee8 defb $00
 
 ; Save cleared eggs count for player 3.
-@label=P3_EGG_COUNT
+@label=egg_count_p3
 b$6ee9 defb $00
 
 ; Save cleared eggs count for player 4.
-@label=P4_EGG_COUNT
+@label=egg_count_p4
 b$6eea defb $00
 
 ; Current player cleared levels counter
 ;
 ; Copied from the current player variable on level start, saved to the player
 ; variable on dying.
-@label=CUR_LEVEL_COUNT
+@label=cleared_levels
 b$6eeb defb $00
 
 ; Save levels cleared count for player 1.
-@label=P1_LEVEL_COUNT
+@label=level_count_p1
 b$6eec defb $00
 
 ; Save levels cleared count for player 2.
-@label=P2_LEVEL_COUNT
+@label=level_count_p2
 b$6eed defb $00
 
 ; Save levels cleared count for player 3.
-@label=P3_LEVEL_COUNT
+@label=level_count_p3
 b$6eee defb $00
 
 ; Save levels cleared count for player 4.
-@label=P4_LEVEL_COUNT
+@label=level_count_p4
 b$6eef defb $00
 
 ; Remaining lives for player 1.
-@label=P1_LIVES
+@label=lives_p1
 b$6ef0 defb $00
 
 ; Remaining lives for player 2.
-@label=P2_LIVES
+@label=lives_p2
 b$6ef1 defb $00
 
 ; Remaining lives for player 3.
-@label=P3_LIVES
+@label=lives_p3
 b$6ef2 defb $00
 
 ; Remaining lives for player 4.
-@label=P4_LIVES
+@label=lives_p4
 b$6ef3 defb $00
 
 ; Unused.
 s$6ef4 defs $03ac
 
 ; Sprite buffer.
-@label=SPRITE_BUFFER
+@label=sprite_buffer
 s$72a0 defs $38
 
 ; X position of the Farmer.
-@label=FARMER_X_POS
+@label=farmer_pos_x
 b$72d8 defb $00
 
 ; Y position of the Farmer.
-@label=FARMER_Y_POS
+@label=farmer_pos_y
 b$72d9 defb $00
 
 ; Animation frame counter.
 ;
 ; Frame values are from 0 to 3
-@label=ANIM_FRAME
+@label=anim_frame
 b$72da defb $00
 
 ; Direction the Farmer is facing.
@@ -153,7 +153,7 @@ b$72da defb $00
 ; { 04 | Left }
 ; { 0D | Forward (Climbing) }
 ; TABLE#
-@label=FARMER_DIRECTION
+@label=farmer_direction
 b$72db defb $00
 
 ; Unknown variable.
@@ -162,13 +162,13 @@ b$72dc defb $00
 ; Sprite/background composition buffer
 ;
 ; Current background tiles are loaded then the sprite data is merged.
-@label=SPRITE_BACKGROUND_BUFFER
+@label=screen_buffer
 s$72dd defs $48
 
 ; Farmer is airbourne?
 ;
 ; Values: $00=grounded, $02=airbourne.
-@label=FARMER_AIRBOURNE
+@label=farmer_airbourne
 b$7325 defb $00
 
 ; Farmer jumping direction.
@@ -179,7 +179,7 @@ b$7325 defb $00
 ; { 01 | Right }
 ; { FF | Left }
 ; TABLE#
-@label=FARMER_JUMP_DIR
+@label=farmer_jump_dir
 b$7326 defb $00
 
 ; Variable related to the Farmer jumping.
@@ -194,7 +194,7 @@ b$7329 defb $00
 ; Direction Farmer is travelling while airbourne.
 ;
 ; Values: $01=up, $FF=down.
-@label=FARMER_AIR_DIR
+@label=farmer_air_dir
 b$732a defb $00
 
 ; Unknown counter variable, but seems related to the ticker text at bottom of
@@ -217,43 +217,43 @@ b$732c defb $00
 ; { 06 | Intro music }
 ; { 0A | Instructions: Input type 1=$06, 2=$05, 3=$03 }
 ; TABLE#
-@label=GAME_STATE
+@label=game_state
 b$732d defb $00
 
 ; Keyboard address for: UP key
-@label=KEY_UP
+@label=key_up
 w$732e defw $0000
 
 ; Keyboard address for: DOWN key
-@label=KEY_DOWN
+@label=key_down
 w$7330 defw $0000
 
 ; Keyboard address for: LEFT key
-@label=KEY_LEFT
+@label=key_left
 w$7332 defw $0000
 
 ; Keyboard address for: RIGHT key
-@label=KEY_RIGHT
+@label=key_right
 w$7334 defw $0000
 
 ; Keyboard address for: JUMP key
-@label=KEY_JUMP
+@label=key_jump
 w$7336 defw $0000
 
 ; Keyboard address for: Alternative JUMP key
-@label=KEY_JUMP_2
+@label=key_jump_2
 w$7338 defw $0000
 
 ; Total number of players for the current game?
 ;
 ; Possible values are 1, 2, 3, and 4.
-@label=NUMBER_OF_PLAYERS
+@label=number_of_players
 b$733a defb $00
 
 ; Current active player.
 ;
 ; Possible values are 1, 2, 3, and 4.
-@label=CURRENT_PLAYER
+@label=current_player
 b$733b defb $00
 
 ; Unknown variable the flips between 1 and 2.
@@ -268,25 +268,25 @@ w$733d defw $0000
 ; Bonus: 3 decimal digits.
 ;
 ; This counts down in 10's, so the 4th digit isn't needed.
-@label=BONUS_TIMER
+@label=bonus_timer
 b$733f defb $00,$00,$00
 
 ; Time: 3 decimal digits.
-@label=TIMER
+@label=main_timer
 b$7342 defb $00,$00,$00
 
 ; Timer sub-counter.
 ;
 ; The clock ticks about 20 times per second, and this counter ticks 10 times
 ; per clock tick - this info needs clarifying!
-@label=TIMER_SUB_COUNT
+@label=main_sub_timer
 b$7345 defb $00
 
 ; Bonus clock sub-counter.
 ;
 ; The bonus ticks about 7 times per second, and this counter ticks 64 times per
 ; clock tick - this info needs clarifying!
-@label=BONUS_SUB_COUNT
+@label=bonus_sub_timer
 b$7346 defb $00
 
 ; Unknown variables: seemd to always be $01.
@@ -342,15 +342,15 @@ b$7356 defb $00
 ; { 2 | ? }
 ; { 3 | Always $00? }
 ; TABLE#
-@label=ROBOT_HEN_1
+@label=robot_hen_1
 b$7357 defb $00,$00,$00,$00
-@label=ROBOT_HEN_2
+@label=robot_hen_2
  $735b defb $00,$00,$00,$00
-@label=ROBOT_HEN_3
+@label=robot_hen_3
  $735f defb $00,$00,$00,$00
-@label=ROBOT_HEN_4
+@label=robot_hen_4
  $7363 defb $00,$00,$00,$00
-@label=ROBOT_HEN_5
+@label=robot_hen_5
  $7367 defb $00,$00,$00,$00
 
 ; Another counter: counts from $03 to $01, and loops.
@@ -370,11 +370,11 @@ b$736e defb $00
 ; { 00 | play }
 ; { 01 | stopped }
 ; TABLE#
-@label=MUSIC_PLAY_STATE
+@label=music_play_state
 b$736f defb $00
 
 ; SFX Timer, when collecting eggs/corn.
-@label=SFX_TIMER
+@label=sfx_timer
 b$7370 defb $00
 
 ; Unused?
@@ -390,7 +390,7 @@ w$7374 defw $0000
 s$7376 defs $0eda
 
 ; Keyboard Controls #1: 2, W, 9, 0, Z or M.
-@label=KEY_INPUT_TYPE_1
+@label=key_input_type_1
 w$8250 defw $f71d
  $8252 defw $fb1d
  $8254 defw $ef1d
@@ -399,7 +399,7 @@ w$8250 defw $f71d
  $825a defw $7f1b
 
 ; Keyboard Controls #2: Cursor Keys, 4 or S.
-@label=KEY_INPUT_TYPE_2
+@label=key_input_type_2
 w$825c defw $ef17
  $825e defw $ef0f
  $8260 defw $f70f
@@ -408,7 +408,7 @@ w$825c defw $ef17
  $8266 defw $ef1d
 
 ; Keyboard Controls #3: Q, A, O, P, M or 1.
-@label=KEY_INPUT_TYPE_3
+@label=key_input_type_3
 w$8268 defw $fb1e
  $826a defw $fd1e
  $826c defw $df1d
@@ -423,7 +423,7 @@ s$8274 defs $c2
 ;
 ; 'press R to redefine keys * press S to start game * press 1, 2 or 3 to select
 ; key type'
-@label=MSG_TICKER
+@label=msg_ticker
 t$8336 defm "press"
  $833b defb $00
  $833c defm "R"
@@ -474,7 +474,7 @@ t$8336 defm "press"
 ;
 ; 'key types 1 & 2 are present and' 'cannot be changed but the type 3' 'keys
 ; are user defineable.      '
-@label=MSG_REDEFINE_TEXT
+@label=msg_redefine_text
 t$8390 defm "keys are user defineable.      "
  $83af defb $00
  $83b0 defm "cannot"
@@ -508,7 +508,7 @@ t$8390 defm "keys are user defineable.      "
  $83ef defb $00
 
 ; Instructions screen key types table
-@label=MSG_KEY_TYPES
+@label=msg_key_types
 t$83f0 defm "3     q    a    o    p    m or 1"
  $8410 defm "2     --cursor--keys--    4 or 9"
  $8430 defm "1     2    w    9    0    z or m"
@@ -524,7 +524,7 @@ b$8450 defb $c8,$c9,$ca,$cb,$20,$b8,$b9,$ba
 ; Instructions screen KEYS heading
 ;
 ; 'KEYS'
-@label=MSG_KEYS_HEADING
+@label=msg_keys_heading
 t$847e defm "KEYS"
 
 ; Unused
@@ -533,7 +533,7 @@ s$8482 defs $19
 ; Instructions screen objective text
 ;
 ; 'objective- to collect eggs from the hen-house.'
-@label=MSG_INSTRUCTIONS_OBJECTIVE
+@label=msg_instructions_objective
 t$849b defm "the"
  $849e defb $00
  $849f defm "hen-house."
@@ -560,7 +560,7 @@ s$84cf defs $0b
 ; Instructions screen heading
 ;
 ; 'INSTRUCTIONS'
-@label=MSG_INSTRUCTIONS_HEADING
+@label=msg_instructions_heading
 t$84da defm "INSTRUCTIONS"
 
 ; Data block at 84e6
@@ -570,32 +570,32 @@ b$84e6 defb $00,$00,$00,$00,$00,$00,$00,$00
 ; Blank tile graphic
 ;
 ; address from which the following graphics are accessed.
-@label=GFX_TILE_BLANK
+@label=gfx_tile_blank
 b$84f0 defb $00,$00,$00,$00,$00,$00,$00,$00
 
 ; Ladder tile graphic (16x8)
 ;
 ; #HTML[#UDGARRAY2;$84F8-$8507-8(gfx_tile_ladder)]
-@label=GFX_TILE_LADDER
+@label=gfx_tile_ladder
 b$84f8 defb $30,$30,$30,$3f,$3f,$30,$30,$30
  $8500 defb $0c,$0c,$0c,$fc,$fc,$0c,$0c,$0c
 
 ; Egg item graphic
 ;
 ; #HTML[#UDG$8508(gfx_item_egg)]
-@label=GFX_ITEM_EGG
+@label=gfx_item_egg
 b$8508 defb $38,$7e,$ff,$ff,$ff,$7e,$38,$00
 
 ; Corn item graphic
 ;
 ; #HTML[#UDG$8510(gfx_item_corn)]
-@label=GFX_ITEM_CORN
+@label=gfx_item_corn
 b$8510 defb $00,$00,$00,$10,$28,$54,$aa,$00
 
 ; Floor tile graphic
 ;
 ; #HTML[#UDG$8518(gfx_tile_floor)]
-@label=GFX_TILE_FLOOR
+@label=gfx_tile_floor
 b$8518 defb $fb,$00,$bf,$00,$ef,$00,$00,$00
 
 ; Unknown ad unused?
@@ -608,7 +608,7 @@ b$8520 defb $00,$00,$00,$00,$00,$00,$00,$00
 ; "SCORE" label graphic (24x8)
 ;
 ; #HTML[#UDGARRAY3;$8548-$855F-8(labels_score)]
-@label=GFX_LABEL_SCORE
+@label=gfx_label_score
 b$8548 defb $63,$94,$84,$64,$14,$14,$94,$63
  $8550 defb $19,$a5,$25,$25,$25,$25,$a5,$19
  $8558 defb $cf,$28,$28,$ce,$48,$48,$28,$2f
@@ -616,7 +616,7 @@ b$8548 defb $63,$94,$84,$64,$14,$14,$94,$63
 ; "PLAYER" label graphic (32x8)
 ;
 ; #HTML[#UDGARRAY4;$8560-$857F-8(labels_player)]
-@label=GFX_LABEL_PLAYER
+@label=gfx_label_player
 b$8560 defb $00,$f2,$8a,$8a,$f2,$82,$82,$83
  $8568 defb $00,$0e,$11,$11,$1f,$11,$11,$d1
  $8570 defb $00,$45,$45,$29,$11,$11,$11,$11
@@ -625,7 +625,7 @@ b$8560 defb $00,$f2,$8a,$8a,$f2,$82,$82,$83
 ; "TIME" label graphic (24x8)
 ;
 ; #HTML[#UDGARRAY3;$8580-$8597-8(labels_time)]
-@label=GFX_LABEL_TIME
+@label=gfx_label_time
 b$8580 defb $00,$fb,$20,$20,$20,$20,$20,$23
  $8588 defb $00,$e8,$8c,$8b,$88,$88,$88,$e8
  $8590 defb $00,$5e,$d0,$50,$5e,$50,$50,$5e
@@ -633,7 +633,7 @@ b$8580 defb $00,$fb,$20,$20,$20,$20,$20,$23
 ; "A+F SOFTWARE" logo text (48x8)
 ;
 ; #HTML[#UDGARRAY6;$8598-$85C7-8(labels_af_software)]
-@label=GFX_TEXT_AFSOFTWARE
+@label=gfx_text_afsoftware
 b$8598 defb $00,$00,$00,$e0,$a4,$ee,$a4,$a0
  $85a0 defb $00,$00,$00,$e1,$81,$e1,$80,$81
  $85a8 defb $00,$00,$00,$dd,$15,$d5,$55,$dd
@@ -644,7 +644,7 @@ b$8598 defb $00,$00,$00,$e0,$a4,$ee,$a4,$a0
 ; "BONUS" label graphic (24x8)
 ;
 ; #HTML[#UDGARRAY3;$85C8-$85DF-8(labels_bonus)]
-@label=GFX_LABEL_BONUS
+@label=gfx_label_bonus
 b$85c8 defb $00,$e3,$94,$94,$e4,$94,$94,$e3
  $85d0 defb $00,$25,$a5,$b5,$ad,$a5,$a5,$24
  $85d8 defb $00,$26,$29,$28,$26,$21,$29,$c6
@@ -652,7 +652,7 @@ b$85c8 defb $00,$e3,$94,$94,$e4,$94,$94,$e3
 ; "LE" text (8x8) - unknown usage
 ;
 ; #HTML[#UDGARRAY3;$85E0-$85E7-8(labels_le)]
-@label=GFX_TEXT_LE
+@label=gfx_text_le
 b$85e0 defb $00,$87,$84,$84,$87,$84,$84,$f7
 
 ; Unused?
@@ -662,7 +662,7 @@ b$85e8 defb $00,$00,$00,$00,$00,$00,$00,$00
 ;
 ; #HTML[#FONT:(
 ; !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ)$85F0(font_complete)]
-@label=FONT_ALL
+@label=font_all
 b$85f0 defb $00,$00,$00,$00,$00,$00,$00,$00
  $85f8 defb $08,$08,$08,$08,$08,$08,$00,$08
  $8600 defb $24,$24,$00,$00,$00,$00,$00,$00
@@ -729,7 +729,7 @@ s$87c8 defs $30
 ; Font: A-Z bold
 ;
 ; #HTML[#FONT:(ABCDEFGHIJKLMNOPQRSTUVWXYZ)$87F8(font_az_bold)]
-@label=FONT_AZ_BOLD
+@label=font_az_bold
 b$87f8 defb $00,$3c,$66,$66,$7e,$66,$66,$66
  $8800 defb $00,$7c,$66,$66,$78,$66,$66,$7c
  $8808 defb $00,$3c,$66,$60,$60,$60,$66,$3c
@@ -761,7 +761,7 @@ b$87f8 defb $00,$3c,$66,$66,$7e,$66,$66,$66
 ;
 ; Used to separate the scrolling ticker text: Start, Redefine, Insturctions.
 ; #HTML[#UDG$88C8(font_gfx_bullet)]
-@label=FONT_BULLET_POINT
+@label=font_bullet_point
 b$88c8 defb $00,$08,$1c,$3e,$7f,$3e,$1c,$08
 
 ; Unused font space?
@@ -770,13 +770,13 @@ s$88d0 defs $10
 ; Font: Registered symbol graphic
 ;
 ; #HTML[#UDG$88E0(font_gfx_registered_symbol)]
-@label=FONT_REGISTERED_SYMBOL
+@label=font_registered_symbol
 b$88e0 defb $3c,$42,$b9,$a5,$b9,$a5,$42,$3c
 
 ; Font: Copyright symbol graphic
 ;
 ; #HTML[#UDG$88E8(font_gfx_copyright_symbol)]
-@label=FONT_COPYRIGHT_SYMBOL
+@label=font_copyright_symbol
 b$88e8 defb $3c,$42,$99,$a1,$a1,$99,$42,$3c
 
 ; Used but unknown (graphics?) data
@@ -800,7 +800,7 @@ b$88f0 defb $f0,$f0,$f0,$f0,$00,$00,$00,$00
 ;
 ; Use as the default name in the high score table.
 ; #HTML[#UDGARRAY8;$8968-$89A7-8(text_highscore_default_name)]
-@label=GFX_TEXT_HIGHSCORE_DEFAULT_NAME
+@label=gfx_text_highscore_default_name
 b$8968 defb $00,$00,$f0,$92,$f7,$92,$90,$00
  $8970 defb $00,$00,$70,$40,$70,$40,$40,$00
  $8978 defb $00,$00,$e9,$89,$8f,$89,$e9,$00
@@ -813,7 +813,7 @@ b$8968 defb $00,$00,$f0,$92,$f7,$92,$90,$00
 ; Font: Abbreviations for SP, CS, SS, EN (32x8)
 ;
 ; #HTML[#UDGARRAY4;$89A8-$89C7-8(font_gfx_abbreviations)]
-@label=FONT_ABBREVIATION_SYMBOLS
+@label=font_abbreviation_symbols
 b$89a8 defb $00,$4e,$a9,$89,$4e,$28,$a8,$48
  $89b0 defb $00,$42,$a5,$84,$82,$81,$a5,$42
  $89b8 defb $00,$42,$a5,$84,$42,$21,$a5,$42
@@ -822,7 +822,7 @@ b$89a8 defb $00,$4e,$a9,$89,$4e,$28,$a8,$48
 ; "LEVEL" label graphic (24x8)
 ;
 ; #HTML[#UDGARRAY3;$89C8-$89DF-8(labels_level)]
-@label=GFX_LABEL_LEVEL
+@label=gfx_label_level
 b$89c8 defb $00,$87,$84,$84,$87,$84,$84,$f7
  $89d0 defb $00,$a2,$22,$22,$a2,$22,$14,$88
  $89d8 defb $00,$f4,$84,$84,$f4,$84,$84,$f7
@@ -830,7 +830,7 @@ b$89c8 defb $00,$87,$84,$84,$87,$84,$84,$f7
 ; Font: Numbers bold (used in the scores, level, etc.)
 ;
 ; #HTML[#FONT:(0123456789)$89E0(font_numbers_bold)]
-@label=FONT_NUMBERS_BOLD
+@label=font_numbers_bold
 b$89e0 defb $00,$1e,$21,$23,$25,$29,$31,$1e
  $89e8 defb $00,$04,$0c,$14,$04,$04,$04,$1f
  $89f0 defb $00,$1e,$21,$01,$1e,$20,$20,$3f
@@ -845,14 +845,14 @@ b$89e0 defb $00,$1e,$21,$23,$25,$29,$31,$1e
 ; Birdcage handle graphic tiles (16x8)
 ;
 ; #HTML[#UDGARRAY2;$8A30-$8A3F-8(level_gfx_birdcage_handle)]
-@label=GFX_TILE_BIRDCAGE_HANDLE
+@label=gfx_tile_birdcage_handle
 b$8a30 defb $00,$00,$07,$0c,$08,$0c,$07,$01
  $8a38 defb $00,$00,$c0,$60,$20,$60,$c0,$00
 
 ; Birdcage graphic tiles (32x24)
 ;
 ; #HTML[#UDGARRAY4;$8A40-$8A9F-8(level_gfx_birdcage)]
-@label=GFX_TILE_BIRDCAGE
+@label=gfx_tile_birdcage
 b$8a40 defb $00,$00,$03,$05,$0a,$15,$29,$2a
  $8a48 defb $1f,$e0,$18,$67,$89,$11,$11,$21
  $8a50 defb $f0,$0e,$31,$cc,$22,$11,$11,$08
@@ -869,19 +869,19 @@ b$8a40 defb $00,$00,$03,$05,$0a,$15,$29,$2a
 ; Player "lives" icon graphic
 ;
 ; #HTML[#UDG$8AA0(level_gfx_lives_counter)]
-@label=GFX_ICON_LIVES
+@label=gfx_icon_lives
 b$8aa0 defb $00,$00,$1c,$1c,$7f,$00,$00,$00
 
 ; High score table "cursor" icon graphic
 ;
 ; #HTML[#UDG$8AA8(level_gfx_highscore_cursor)]
-@label=GFX_ICON_HIGHSCORE_CURSOR
+@label=gfx_icon_highscore_cursor
 b$8aa8 defb $18,$3c,$3c,$7e,$7e,$7e,$7e,$3c
 
 ; "UP" heading graphic for instructions screen (24x8)
 ;
 ; #HTML[#UDGARRAY3;$8AB0-$8AC7-8(instructions_heading_up)]
-@label=INSTRUCTIONS_HEADING_UP
+@label=instructions_heading_up
 b$8ab0 defb $00,$02,$02,$02,$02,$03,$00,$03
  $8ab8 defb $00,$27,$24,$27,$24,$e4,$00,$ff
  $8ac0 defb $00,$c0,$40,$c0,$00,$00,$00,$c0
@@ -889,7 +889,7 @@ b$8ab0 defb $00,$02,$02,$02,$02,$03,$00,$03
 ; "DOWN" heading graphic for instructions screen (24x8)
 ;
 ; #HTML[#UDGARRAY3;$8AC8-$8ADF-8(instructions_heading_down)]
-@label=INSTRUCTIONS_HEADING_DOWN
+@label=instructions_heading_down
 b$8ac8 defb $00,$fd,$45,$45,$45,$fd,$00,$ff
  $8ad0 defb $00,$f4,$14,$15,$15,$f7,$00,$ff
  $8ad8 defb $00,$51,$59,$55,$53,$d1,$00,$ff
@@ -897,7 +897,7 @@ b$8ac8 defb $00,$fd,$45,$45,$45,$fd,$00,$ff
 ; "LEFT" heading graphic for instructions screen (24x8)
 ;
 ; #HTML[#UDGARRAY3;$8AE0-$8AF7-8(instructions_heading_left)]
-@label=INSTRUCTIONS_HEADING_LEFT
+@label=instructions_heading_left
 b$8ae0 defb $00,$83,$82,$83,$82,$fb,$00,$ff
  $8ae8 defb $00,$e7,$04,$c7,$04,$e4,$00,$ff
  $8af0 defb $00,$df,$04,$84,$04,$04,$00,$ff
@@ -905,7 +905,7 @@ b$8ae0 defb $00,$83,$82,$83,$82,$fb,$00,$ff
 ; "RIGHT" heading graphic for instructions screen (24x8)
 ;
 ; #HTML[#UDGARRAY3;$8AF8-$8B0F-8(instructions_heading_right)]
-@label=INSTRUCTIONS_HEADING_RIGHT
+@label=instructions_heading_right
 b$8af8 defb $00,$f2,$92,$f2,$a2,$92,$00,$ff
  $8b00 defb $00,$7a,$42,$5b,$4a,$7a,$00,$ff
  $8b08 defb $00,$5f,$44,$c4,$44,$44,$00,$ff
@@ -913,7 +913,7 @@ b$8af8 defb $00,$f2,$92,$f2,$a2,$92,$00,$ff
 ; "JUMP" heading graphic for instructions screen (24x8)
 ;
 ; #HTML[#UDGARRAY4;$8B10-$8B2F-8(instructions_heading_jump)]
-@label=INSTRUCTIONS_HEADING_JUMP
+@label=instructions_heading_jump
 b$8b10 defb $00,$7e,$08,$08,$48,$78,$00,$ff
  $8b18 defb $00,$42,$42,$42,$42,$7e,$00,$ff
  $8b20 defb $00,$7f,$49,$49,$41,$41,$00,$ff
@@ -922,7 +922,7 @@ b$8b10 defb $00,$7e,$08,$08,$48,$78,$00,$ff
 ; "TYPE" heading graphic for instructions screen (32x8)
 ;
 ; #HTML[#UDGARRAY4;$8B30-$8B4F-8(instructions_heading_type)]
-@label=INSTRUCTIONS_HEADING_TYPE
+@label=instructions_heading_type
 b$8b30 defb $00,$fe,$10,$10,$10,$10,$00,$ff
  $8b38 defb $00,$41,$22,$1c,$08,$08,$00,$ff
  $8b40 defb $00,$3f,$21,$3f,$20,$20,$00,$ff
@@ -932,7 +932,7 @@ b$8b30 defb $00,$fe,$10,$10,$10,$10,$00,$ff
 s$8b50 defs $02a0
 
 ; Farmer sprites animation data: right facing
-@label=SPRITES_FARMER_RIGHT
+@label=sprites_farmer_right
 b$8df0 defb $00,$00,$03,$80,$03,$c0,$03,$c0
  $8df8 defb $3f,$fc,$03,$40,$03,$c0,$01,$80
  $8e00 defb $03,$e0,$06,$f0,$06,$f0,$06,$e0
@@ -951,7 +951,7 @@ b$8df0 defb $00,$00,$03,$80,$03,$c0,$03,$c0
  $8e68 defb $03,$c0,$04,$50,$02,$20,$00,$00
 
 ; Farmer sprites animation data: left facing
-@label=SPRITES_FARMER_LEFT
+@label=sprites_farmer_left
 b$8e70 defb $00,$00,$01,$c0,$03,$c0,$03,$c0
  $8e78 defb $3f,$fc,$02,$c0,$03,$c0,$01,$80
  $8e80 defb $07,$c0,$0f,$60,$0f,$60,$07,$60
@@ -970,7 +970,7 @@ b$8e70 defb $00,$00,$01,$c0,$03,$c0,$03,$c0
  $8ee8 defb $03,$c0,$0a,$20,$04,$40,$00,$00
 
 ; Duck sprites animation data: right facing (2 of 16x16)
-@label=SPRITES_DUCK_RIGHT
+@label=sprites_duck_right
 b$8ef0 defb $00,$79,$00,$ee,$00,$fc,$00,$fa
  $8ef8 defb $00,$71,$00,$70,$00,$30,$00,$38
  $8f00 defb $1e,$1c,$7f,$9c,$ff,$fc,$bf,$7c
@@ -981,7 +981,7 @@ b$8ef0 defb $00,$79,$00,$ee,$00,$fc,$00,$fa
  $8f28 defb $7f,$f8,$7f,$f0,$3f,$e0,$0f,$80
 
 ; Duck sprites animation data: left facing (2 of 16x16)
-@label=SPRITES_DUCK_LEFT
+@label=sprites_duck_left
 b$8f30 defb $9e,$00,$77,$00,$3f,$00,$5f,$00
  $8f38 defb $8e,$00,$0e,$00,$0c,$00,$1c,$00
  $8f40 defb $38,$78,$39,$fe,$3f,$ff,$3e,$fd
@@ -998,7 +998,7 @@ b$8f70 defb $00,$00,$00,$00,$00,$00,$00,$00
  $8f88 defb $00,$00,$00,$00,$00,$00,$00,$00
 
 ; Farmer sprites animation data: climbing stairs
-@label=SPRITES_FARMER_CLIMBING
+@label=sprites_farmer_climbing
 b$8f90 defb $00,$00,$02,$40,$03,$c0,$03,$c0
  $8f98 defb $3f,$fc,$03,$c0,$09,$80,$17,$e0
  $8fa0 defb $1f,$f0,$0f,$f8,$07,$e8,$07,$e8
@@ -1017,21 +1017,21 @@ b$8f90 defb $00,$00,$02,$40,$03,$c0,$03,$c0
  $9008 defb $02,$40,$0e,$70,$00,$00,$00,$00
 
 ; Ostrich sprites data: left facing (16x16)
-@label=SPRITES_OSTRICH_LEFT
+@label=sprites_ostrich_left
 b$9010 defb $30,$00,$d0,$00,$30,$00,$20,$00
  $9018 defb $40,$00,$40,$00,$c0,$00,$ce,$00
  $9020 defb $ff,$00,$ff,$00,$7f,$00,$3e,$00
  $9028 defb $08,$00,$08,$00,$08,$00,$18,$00
 
 ; Ostrich sprites data: right facing (16x16)
-@label=SPRITES_OSTRICH_RIGHT
+@label=sprites_ostrich_right
 b$9030 defb $0c,$00,$0b,$00,$0c,$00,$04,$00
  $9038 defb $02,$00,$02,$00,$03,$00,$73,$00
  $9040 defb $ff,$00,$ff,$00,$fe,$00,$7c,$00
  $9048 defb $10,$00,$10,$00,$10,$00,$18,$00
 
 ; Ostrich sprites animation data: climbing (2 of 16x16)
-@label=SPRITES_OSTRICH_CLIMBING
+@label=sprites_ostrich_climbing
 b$9050 defb $01,$80,$03,$c0,$03,$c0,$01,$80
  $9058 defb $01,$80,$01,$80,$07,$e0,$0f,$f0
  $9060 defb $0f,$f0,$0f,$f0,$07,$e0,$02,$40
@@ -1042,28 +1042,28 @@ b$9050 defb $01,$80,$03,$c0,$03,$c0,$01,$80
  $9088 defb $06,$40,$00,$40,$00,$40,$00,$60
 
 ; Ostrich sprites data: left walking (16x16)
-@label=SPRITES_OSTRICH_LEFT_WALK
+@label=sprites_ostrich_left_walk
 b$9090 defb $0b,$00,$05,$00,$0b,$00,$02,$00
  $9098 defb $04,$00,$04,$00,$0c,$00,$0c,$e0
  $90a0 defb $0f,$f0,$0f,$f0,$07,$f0,$03,$e0
  $90a8 defb $01,$80,$0a,$40,$04,$20,$00,$40
 
 ; Ostrich sprites data: right walking (16x16)
-@label=SPRITES_OSTRICH_RIGHT_WALK
+@label=sprites_ostrich_right_walk
 b$90b0 defb $00,$d0,$00,$a0,$00,$d0,$00,$40
  $90b8 defb $00,$20,$00,$20,$00,$30,$07,$30
  $90c0 defb $0f,$f0,$0f,$f0,$0f,$e0,$07,$c0
  $90c8 defb $01,$80,$02,$50,$04,$20,$02,$00
 
 ; Ostrich sprites data: eating left facing (16x16)
-@label=SPRITES_OSTRICH_EATING_LEFT
+@label=sprites_ostrich_eating_left
 b$90d0 defb $00,$00,$00,$00,$00,$00,$00,$00
  $90d8 defb $00,$00,$00,$00,$70,$00,$58,$1e
  $90e0 defb $27,$ff,$51,$ff,$00,$7f,$10,$3e
  $90e8 defb $28,$08,$54,$08,$aa,$08,$00,$18
 
 ; Ostrich sprites data: eating right facing (16x16)
-@label=SPRITES_OSTRICH_EATING_RIGHT
+@label=sprites_ostrich_eating_right
 b$90f0 defb $00,$00,$00,$00,$00,$00,$00,$00
  $90f8 defb $00,$00,$00,$00,$00,$0e,$78,$1a
  $9100 defb $ff,$e4,$ff,$8a,$fe,$00,$7c,$08
@@ -1356,7 +1356,7 @@ c$9265 push bc       ; {Backup registers
 ; Routine to restore (POP) all #REGde, #REGhl, #REGbc registers
 ;
 ; Used by the routine at #R$9265.
-@label=RESTORE_16BIT_REGISTERS
+@label=Restore16bitRegisters
 c$9298 pop de        ;
  $9299 pop hl        ;
  $929a pop bc        ;
@@ -1538,7 +1538,7 @@ c$935f ld ixl,$02    ;
  $9392 sla a         ;
  $9394 sla a         ;
  $9396 sla a         ;
-@ssub=LD HL,$84F0+$07 ; Point #REGhl to last byte of GFX_TILE_BLANK
+@ssub=LD HL,$84F0+$07 ; Point #REGhl to last byte of gfx_tile_blank
  $9398 ld hl,$84f7   ;
  $939b ld b,$00      ;
  $939d ld c,a        ;
@@ -1820,7 +1820,7 @@ s$95c5 defs $6b
 ;
 ; As displayed after game load, and game over. Note: the screen is loaded
 ; bottom to top.
-@label=HOME_SCREEN
+@label=home_screen
 b$9630 defb $00,$00,$00,$00,$00,$00,$00,$00
  $9638 defb $00,$00,$00,$00,$00,$00,$00,$00
  $9640 defb $00,$00,$00,$00,$00,$00,$00,$00
@@ -1925,7 +1925,7 @@ b$9787 defb $05,$05,$ff,$00,$05,$05,$ff,$00
 ; High score table with name/score columns
 ;
 ; Probably ranked here 1-10.
-@label=SCOREBOARD
+@label=scoreboard
 t$97af defm " "        ; start byte?
  $97b0 defb $8f
  $97b1 defb $90
@@ -2168,7 +2168,7 @@ c$98e6 ld a,($7347)    ;
  $9961 cp $1f          ;
  $9963 jr nz,$9975     ; }
 @ssub=LD A,($7338+$01)
- $9965 ld a,($7339)    ; {KEY_JUMP_2 keypress
+ $9965 ld a,($7339)    ; {key_jump_2 keypress
  $9968 in a,($fe)      ;
  $996a and $1f         ;
  $996c ld c,a          ;
@@ -2319,7 +2319,7 @@ c$9a4c push af       ;
  $9a66 rla           ;
  $9a67 ld d,a        ;
  $9a68 add hl,de     ;
- $9a69 ld de,$72a0   ; {Copy current sprite to the SPRITE_BUFFER
+ $9a69 ld de,$72a0   ; {Copy current sprite to the sprite_buffer
  $9a6c ld b,$10      ;
  $9a6e xor a         ;
 *$9a6f ldi           ;
@@ -2333,7 +2333,7 @@ c$9a4c push af       ;
  $9a7b and c         ;
  $9a7c cp $00        ;
  $9a7e jr z,$9a93    ;
-*$9a80 ld b,$10      ; {Rotate bytes in the SPRITE_BUFFER...why?
+*$9a80 ld b,$10      ; {Rotate bytes in the sprite_buffer...why?
  $9a82 ld hl,$72a0   ;
 *$9a85 srl (hl)      ;
  $9a87 inc hl        ;
@@ -2346,9 +2346,9 @@ c$9a4c push af       ;
  $9a91 jr nz,$9a80   ; }
 *$9a93 pop hl        ;
  $9a94 push hl       ;
- $9a95 ld ix,$72dd   ; Point #REGix to beginning of SPRITE_BACKGROUND_BUFFER
+ $9a95 ld ix,$72dd   ; Point #REGix to beginning of screen_buffer
  $9a99 ex de,hl      ;
- $9a9a ld hl,$61a8   ; Point #REGhl to beginning of LEVEL_BUFFER
+ $9a9a ld hl,$61a8   ; Point #REGhl to beginning of level_buffer
  $9a9d ld a,d        ;
  $9a9e and $f8       ;
  $9aa0 ld b,$00      ;
@@ -2368,7 +2368,7 @@ c$9a4c push af       ;
  $9ab7 ld bc,$0303   ;
 *$9aba push bc       ;
  $9abb ld hl,$84f0   ; {Point #REGhl to one of the GFX tiles (offset from
- $9abe ld a,(de)     ; GFX_TILE_BLANK)
+ $9abe ld a,(de)     ; gfx_tile_blank)
  $9abf ld b,$00      ;
  $9ac1 sla a         ;
  $9ac3 rl b          ;
@@ -2379,7 +2379,7 @@ c$9a4c push af       ;
  $9acd ld c,a        ;
  $9ace add hl,bc     ;
  $9acf ld b,$08      ; }
-*$9ad1 ld a,(hl)     ; {Copy GFX tile data to the SPRITE_BACKGROUND_BUFFER
+*$9ad1 ld a,(hl)     ; {Copy GFX tile data to the screen_buffer
  $9ad2 ld (ix+$00),a ;
  $9ad5 inc ix        ;
  $9ad7 inc ix        ;
@@ -2401,7 +2401,7 @@ c$9a4c push af       ;
  $9af4 ex de,hl      ;
  $9af5 ld b,$03      ;
  $9af7 dec c         ;
- $9af8 jr nz,$9aba   ; Jump back until SPRITE_BACKGROUND_BUFFER is holds all
+ $9af8 jr nz,$9aba   ; Jump back until screen_buffer is holds all
                      ; tile data.
  $9afa pop hl        ;
  $9afb push hl       ;
@@ -2411,8 +2411,8 @@ c$9a4c push af       ;
  $9b01 ld h,a        ;
  $9b02 sla a         ;
  $9b04 add a,h       ;
- $9b05 ld c,a        ; {Copy the 48 bytes of SPRITE_BACKGROUND_BUFFER to
- $9b06 ld b,$00      ; SPRITE_BUFFER, merging with the current sprite data
+ $9b05 ld c,a        ; {Copy the 48 bytes of screen_buffer to
+ $9b06 ld b,$00      ; sprite_buffer, merging with the current sprite data
  $9b08 ld hl,$72dd   ; there.
  $9b0b ld de,$72a0   ;
  $9b0e add hl,bc     ;
@@ -2555,7 +2555,7 @@ c$9a4c push af       ;
 ; Calculates current position of sprite in ATTRIBUTE_FILE.
 ;
 ; Used by the routine at #R$9a4c.
-@label=SPRITE_POSITION_IN_ATTR_FILE
+@label=SpritePositionInAttrFile
 c$9bde push af       ;
  $9bdf push de       ;
  $9be0 ld a,$bf      ;
@@ -2585,7 +2585,7 @@ s$9bff defs $41
 ;
 ; Used by the routines at #R$a3a7, #R$a420, #R$a47d, #R$a4c8, #R$a515, #R$a59d,
 ; #R$a828, #R$a9ce, #R$aa49, #R$ab19, #R$abad and #R$ae9c.
-@label=UPDATE_SCREEN_GFX
+@label=UpdateScreenGfx
 c$9c40 nop           ; {Why are these NOPs? Are they ever changed?
  $9c41 nop           ;
  $9c42 nop           ;
@@ -2628,7 +2628,7 @@ c$9c40 nop           ; {Why are these NOPs? Are they ever changed?
  $9c7a rla           ;
  $9c7b ld b,a        ;
  $9c7c ex de,hl      ; Restore #REGhl with value in #REGde
- $9c7d ld hl,$84f0   ; {set #REGhl to GFX_TILE_BLANK, then update this section
+ $9c7d ld hl,$84f0   ; {set #REGhl to gfx_tile_blank, then update this section
  $9c80 add hl,bc     ; of the screen (address of #REGde) with all GFX tiles.
  $9c81 ld b,$08      ;
 *$9c83 ld a,(hl)     ;
@@ -2659,7 +2659,7 @@ s$9c9f defs $05
 ; This routine produces a sound, formed of a square wave.
 ;
 ; Used by the routines at #R$9858, #R$98e6, #R$9d08, #R$9e98 and #R$a62c.
-@label=MAKE_SOUND
+@label=SoundSquareWave
 c$9ca4 ld a,$10      ;
  $9ca6 out ($fe),a   ;
  $9ca8 ld b,h        ;
@@ -2702,16 +2702,16 @@ c$9cc2 push af       ;
  $9ce8 pop af        ;
  $9ce9 reti          ;
 
-; Get address value from the ADDRESS_LOOKUP_TABLE
+; Get address value from the address_lookup_table
 ;
 ; Used by the routines at #R$a389, #R$a420, #R$a4c8, #R$a62c, #R$a828, #R$aae4
 ; and #R$b14f.
-@label=GET_LOOKUP_TABLE_ADDRESS
+@label=GetLookupTableAddress
 c$9ceb ld b,a        ; Current known values for #REGa are between $01 and $21.
  $9cec ld a,($7373)  ;
  $9cef cp $ff        ;
  $9cf1 ret nz        ;
-@ssub=LD HL,$C8C8-$02 ; Point #REGhl to ADDRESS_LOOKUP_TABLE - 2 bytes
+@ssub=LD HL,$C8C8-$02 ; Point #REGhl to address_lookup_table - 2 bytes
  $9cf2 ld hl,$c8c6   ;
 *$9cf5 inc hl        ; {Increment #REGhl until we get the desired address.
  $9cf6 inc hl        ;
@@ -2886,7 +2886,7 @@ s$9e59 defs $0d
 ; Farmer jumping/falling routine
 ;
 ; Used by the routine at #R$9858.
-@label=FARMER_VERTICAL_MOVEMENT
+@label=FarmerVerticalMovement
 c$9e66 push hl       ;
  $9e67 ld hl,$72d8   ;
  $9e6a ld a,e        ;
@@ -3147,7 +3147,7 @@ c$a014 ld a,($7350)  ;
 ; Draw the elevator platforms?
 ;
 ; Used by the routine at #R$a014.
-@label=DRAW_ELEVATOR_PLATFORM
+@label=ElevatorPlatformDraw
 c$a07b push hl       ;
  $a07c dec hl        ;
  $a07d ld (hl),$00   ;
@@ -3171,7 +3171,7 @@ c$a07b push hl       ;
 ; Calculate position of next platform?
 ;
 ; Used by the routine at #R$a07b.
-@label=CALCULATE_ELEVATOR_PLATFORM_POSITION
+@label=ElevatorPlatformCalculatePos
 c$a096 inc h         ;
  $a097 ld a,h        ;
  $a098 and $07       ;
@@ -3191,7 +3191,7 @@ c$a096 inc h         ;
 ; Calculations related to elevator position?
 ;
 ; Used by the routine at #R$a014.
-@label=CALCULATE_EVELVATOR_POSITION
+@label=ElevatorCalculatePos
 c$a0a9 dec h         ;
  $a0aa ld a,h        ;
  $a0ab and $07       ;
@@ -3368,7 +3368,7 @@ c$a1d9 ld (hl),$09   ;
  $a1fb sla a         ;
  $a1fd sla a         ;
  $a1ff sla a         ;
- $a201 ld hl,$89e0   ; {Display a number from FONT_NUMBERS_BOLD
+ $a201 ld hl,$89e0   ; {Display a number from font_numbers_bold
  $a204 push bc       ;
  $a205 ld b,$00      ;
  $a207 ld c,a        ;
@@ -3615,10 +3615,10 @@ c$a389 ld a,r        ; {Load #REGb with #REGr (related to memory refresh), then
 *$a392 inc hl        ; {Increment #REGhl to required address, and assign #REGa.
  $a393 djnz $a392    ;
  $a395 ld a,(hl)     ; }
- $a396 jp $9ceb      ; GET_LOOKUP_TABLE_ADDRESS
+ $a396 jp $9ceb      ; GetLookupTableAddress
 
 ; Small lookup table used by #R$A389 to assign #REGa, for use with
-; GET_LOOKUP_TABLE_ADDRESS
+; GetLookupTableAddress
 b$a399 defb $04,$06,$09,$0d,$12,$16,$04,$0d
 
 ; Data block at a3a1
@@ -3644,7 +3644,7 @@ c$a3a7 ld a,b        ;
  $a3c1 cp (hl)       ;
  $a3c2 jr z,$a3e6    ;
  $a3c4 ld (hl),a     ;
- $a3c5 ld a,($733b)  ; Get CURRENT_PLAYER
+ $a3c5 ld a,($733b)  ; Get current_player
  $a3c8 add a,$ef     ;
  $a3ca ld h,$6e      ;
  $a3cc ld l,a        ;
@@ -3662,7 +3662,7 @@ c$a3a7 ld a,b        ;
  $a3de ld l,a        ;
  $a3df ld h,$16      ;
  $a3e1 ld a,$b6      ;
- $a3e3 call $9c40    ; UPDATE_SCREEN_GFX
+ $a3e3 call $9c40    ; UpdateScreenGfx
 *$a3e6 ld de,($733d) ;
  $a3ea ld bc,$6ec8   ;
  $a3ed ld ixl,$06    ;
@@ -3695,11 +3695,11 @@ b$a40f defb $00
 ; The game has just loaded
 ;
 ; Used by the routine at #R$9858.
-@label=START
-c$a410 ld hl,$732d   ; {Set GAME_STATE to "Play Tune" -- POKE @A411 (the
+@label=GameStart
+c$a410 ld hl,$732d   ; {Set game_state to "Play Tune" -- POKE @A411 (the
  $a413 ld (hl),$06   ; address value) to `003` to mute music notes (on game
                      ; start only)}
- $a415 ld hl,$736f   ; {Set MUSIC_PLAY_STATE to "play"
+ $a415 ld hl,$736f   ; {Set music_play_state to "play"
  $a418 ld (hl),$00   ; }
  $a41a ld a,$b2      ;
  $a41c ld i,a        ;
@@ -3707,15 +3707,15 @@ c$a410 ld hl,$732d   ; {Set GAME_STATE to "Play Tune" -- POKE @A411 (the
 
 ; Display the home screen, which includes the scoreboard
 ;
-; Note: this routine is very similar to the DISPLAY_SCREEN_INSTRUCTIONS
+; Note: this routine is very similar to the DisplayInstructionsScreen
 ; routine.
-@label=DISPLAY_SCREEN_HOME
-c$a420 call $ab9e    ; CLEAR_SCREEN
+@label=DisplayHomeScreen
+c$a420 call $ab9e    ; ClearScreen
  $a423 ld h,$02      ;
  $a425 ld bc,$9630   ;
 *$a428 ld l,$00      ;
 *$a42a ld a,(bc)     ;
- $a42b call $9c40    ; UPDATE_SCREEN_GFX
+ $a42b call $9c40    ; UpdateScreenGfx
  $a42e inc bc        ;
  $a42f inc l         ;
  $a430 ld a,l        ;
@@ -3725,7 +3725,7 @@ c$a420 call $ab9e    ; CLEAR_SCREEN
  $a436 ld a,h        ;
  $a437 cp $18        ;
  $a439 jr nz,$a428   ;
- $a43b call $abad    ; DISPLAY_SCOREBOARD
+ $a43b call $abad    ; DisplayScoreboard
  $a43e ld hl,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
  $a441 ld b,$0e      ;
  $a443 ld c,$04      ; {Print "A & F SOFTWARE" text graphic
@@ -3737,17 +3737,17 @@ c$a420 call $ab9e    ; CLEAR_SCREEN
  $a451 ld c,$0a      ; {Print "a game of skill..." text graphic
  $a453 ld a,$04      ;
  $a455 call $aa37    ; }
- $a458 ld hl,$ae0c   ; Point #REGhl to THEME_TUNE data
- $a45b ld a,($736f)  ; {If MUSIC_PLAY_STATE is "stopped" then Jump
+ $a458 ld hl,$ae0c   ; Point #REGhl to theme_tune data
+ $a45b ld a,($736f)  ; {If music_play_state is "stopped" then Jump
  $a45e and a         ;
  $a45f jr nz,$a46e   ; }
- $a461 call $ab60    ; else PLAY_TUNE
+ $a461 call $ab60    ; else PlayTune
  $a464 ld a,$14      ;
- $a466 call $9ceb    ; GET_LOOKUP_TABLE_ADDRESS
- $a469 ld a,$01      ; {Set MUSIC_PLAY_STATE to "stopped"
+ $a466 call $9ceb    ; GetLookupTableAddress
+ $a469 ld a,$01      ; {Set music_play_state to "stopped"
  $a46b ld ($736f),a  ; }
 ; This entry point is used by the routine at #R$aa49.
-@label=SET_TICKER_TEXT_COLOUR
+@label=SetTickerTextColour
 *$a46e ld hl,$5ae0   ; Point #REGhl to last line of ATTRIBUTE_FILE.
  $a471 ld b,$20      ;
 *$a473 ld (hl),$05   ; Set foreground colour to Cyan, background remains black.
@@ -3758,9 +3758,9 @@ c$a420 call $ab9e    ; CLEAR_SCREEN
 
 ; Scroll ticker text for home screen
 ;
-; Note: this routine is very similar to the first half of SCROLL_TEXT_2
+; Note: this routine is very similar to the first half of ScrollText2
 ; routine.
-@label=SCROLL_TEXT_1
+@label=ScrollText1
 c$a47d ld hl,$50e1   ;
  $a480 call $ab7b    ;
  $a483 ld bc,$01f4   ;
@@ -3769,7 +3769,7 @@ c$a47d ld hl,$50e1   ;
  $a48c dec (hl)      ;
  $a48d jr nz,$a4ab   ;
  $a48f ld (hl),$08   ;
- $a491 ld hl,$ac7c   ; Point #REGhl to HOME_SCREEN_TICKER_TEXT
+ $a491 ld hl,$ac7c   ; Point #REGhl to home_screen_ticker_text
  $a494 ld a,($732c)  ;
  $a497 inc a         ;
  $a498 cp $4e        ;
@@ -3781,7 +3781,7 @@ c$a47d ld hl,$50e1   ;
  $a4a3 add hl,de     ;
  $a4a4 ld a,(hl)     ;
  $a4a5 ld hl,$001e   ;
- $a4a8 call $9c40    ; UPDATE_SCREEN_GFX
+ $a4a8 call $9c40    ; UpdateScreenGfx
 *$a4ab ld a,$fd      ; {Read keyboard and check keypress `S`
  $a4ad in a,($fe)    ;
  $a4af bit 1,a       ;
@@ -3798,14 +3798,14 @@ c$a47d ld hl,$50e1   ;
 
 ; Display the instructions screen
 ;
-; Note: this routine is very similar to the DISPLAY_SCREEN_HOME routine.
-@label=DISPLAY_SCREEN_INSTRUCTIONS
-c$a4c8 call $ab9e    ; CLEAR_SCREEN
+; Note: this routine is very similar to the DisplayHomeScreen routine.
+@label=DisplayInstructionsScreen
+c$a4c8 call $ab9e    ; ClearScreen
  $a4cb ld h,$03      ;
  $a4cd ld bc,$8390   ;
 *$a4d0 ld l,$00      ;
 *$a4d2 ld a,(bc)     ;
- $a4d3 call $9c40    ; UPDATE_SCREEN_GFX
+ $a4d3 call $9c40    ; UpdateScreenGfx
  $a4d6 inc bc        ;
  $a4d7 inc l         ;
  $a4d8 ld a,l        ;
@@ -3832,16 +3832,16 @@ c$a4c8 call $ab9e    ; CLEAR_SCREEN
  $a502 call $aa37    ; }
  $a505 ld hl,$732c   ; {Set $732C to `$57`
  $a508 ld (hl),$57   ; }
- $a50a inc hl        ; {Set GAME_STATE to $0A - Instructions screen?
+ $a50a inc hl        ; {Set game_state to $0A - Instructions screen?
  $a50b ld (hl),$0a   ; }
  $a50d call $a960    ;
  $a510 ld a,$18      ;
- $a512 call $9ceb    ; GET_LOOKUP_TABLE_ADDRESS
+ $a512 call $9ceb    ; GetLookupTableAddress
 
 ; Scroll ticker text for instructions screen
 ;
-; Note: first half of this routine is very similar SCROLL_TEXT_1 routine.
-@label=SCROLL_TEXT_2
+; Note: first half of this routine is very similar ScrollText1 routine.
+@label=ScrollText2
 c$a515 ld hl,$50e1   ;
  $a518 call $ab7b    ;
  $a51b ld bc,$01f4   ;
@@ -3850,7 +3850,7 @@ c$a515 ld hl,$50e1   ;
  $a524 dec (hl)      ;
  $a525 jr nz,$a543   ;
  $a527 ld (hl),$08   ;
- $a529 ld hl,$acca   ; Point #REGhl to INSTRUCTIONS_SCREEN_TICKER_TEXT
+ $a529 ld hl,$acca   ; Point #REGhl to instructions_screen_ticker_text
  $a52c ld a,($732c)  ;
  $a52f inc a         ;
  $a530 cp $57        ;
@@ -3862,7 +3862,7 @@ c$a515 ld hl,$50e1   ;
  $a53b add hl,de     ;
  $a53c ld a,(hl)     ;
  $a53d ld hl,$001e   ;
- $a540 call $9c40    ; UPDATE_SCREEN_GFX
+ $a540 call $9c40    ; UpdateScreenGfx
 *$a543 ld a,($7373)  ;
  $a546 xor $ff       ;
  $a548 jr nz,$a553   ;
@@ -3881,8 +3881,8 @@ c$a515 ld hl,$50e1   ;
  $a564 jr z,$a59a    ; }
 
 ; Highlight the "input type" line # 1, 2, or 3.
-c$a566 ld b,a        ; #REGb also saved to GAME_STATE later, at $A57D
- $a567 ld a,($732d)  ; {Check the current GAME_STATE.
+c$a566 ld b,a        ; #REGb also saved to game_state later, at $A57D
+ $a567 ld a,($732d)  ; {Check the current game_state.
  $a56a cp b          ;
  $a56b jr z,$a59a    ; }
  $a56d ld hl,$5980   ; Input type #2.
@@ -3892,7 +3892,7 @@ c$a566 ld b,a        ; #REGb also saved to GAME_STATE later, at $A57D
  $a577 jr c,$a57c    ;
  $a579 ld hl,$5940   ; Input type #1 (default).
 *$a57c ld a,b        ;
- $a57d ld ($732d),a  ; Update GAME_STATE value.
+ $a57d ld ($732d),a  ; Update game_state value.
  $a580 cp $05        ;
  $a582 ld de,$5980   ; Input type #2.
  $a585 jr z,$a58f    ;
@@ -3912,7 +3912,7 @@ c$a566 ld b,a        ; #REGb also saved to GAME_STATE later, at $A57D
 ; Initialize a new game
 ;
 ; Routine to start a new game, first asking for number of players!
-@label=INIT_GAME
+@label=InitializeGame
 c$a59d ld ixh,$02    ;
  $a5a0 call $a929    ;
  $a5a3 ld hl,$4000   ; {Clear the entire DISPLAY_FILE
@@ -3926,7 +3926,7 @@ c$a59d ld ixh,$02    ;
  $a5b1 ld ixh,$01    ;
  $a5b4 call $a929    ;
  $a5b7 ld c,$e8      ;
- $a5b9 ld de,$ad21   ; Point #REGde to CHOOSE_NUMBER_OF_PLAYERS_TEXT
+ $a5b9 ld de,$ad21   ; Point #REGde to choose_number_of_players_text
  $a5bc ld b,$01      ;
 *$a5be djnz $a5ca    ; {Scroll text onto screen? vertical-middle of
  $a5c0 ld a,(de)     ; DISPLAY_FILE
@@ -3938,26 +3938,26 @@ c$a59d ld ixh,$02    ;
  $a5cd call $ab7b    ;
  $a5d0 dec c         ;
  $a5d1 jr nz,$a5be   ; }
-*$a5d3 ld a,$f7      ; {Input to get NUMBER_OF_PLAYERS for this game
+*$a5d3 ld a,$f7      ; {Input to get number_of_players for this game
  $a5d5 in a,($fe)    ;
  $a5d7 and $0f       ;
  $a5d9 cp $0f        ;
  $a5db jr z,$a5d3    ; }
  $a5dd ld b,$00      ; {INCrement #REGb until it equals #REGa; the
-*$a5df inc b         ; NUMBER_OF_PLAYERS
+*$a5df inc b         ; number_of_players
  $a5e0 srl a         ;
  $a5e2 jr c,$a5df    ; }
- $a5e4 ld l,b        ; NUMBER_OF_PLAYERS (#REGl) = #REGb
- $a5e5 ld h,$01      ; CURRENT_PLAYER (#REGh) = $01
- $a5e7 ld ($733a),hl ; Set total NUMBER_OF_PLAYERS and CURRENT_PLAYER
+ $a5e4 ld l,b        ; number_of_players (#REGl) = #REGb
+ $a5e5 ld h,$01      ; current_player (#REGh) = $01
+ $a5e7 ld ($733a),hl ; Set total number_of_players and current_player
  $a5ea ld b,$f0      ; {scroll text off screen
 *$a5ec ld hl,$4861   ;
  $a5ef call $ab7b    ;
  $a5f2 djnz $a5ec    ; }
  $a5f4 ld a,$05      ;
- $a5f6 ld de,$61a8   ; Load #REGde with LEVEL_BUFFER address.
+ $a5f6 ld de,$61a8   ; Load #REGde with level_buffer address.
 *$a5f9 ld bc,$02a0   ; Load #REGbc with size of level data.
- $a5fc ld hl,$b3b0   ; Point #REGh; to LEVEL_1 address.
+ $a5fc ld hl,$b3b0   ; Point #REGh; to level_1 address.
  $a5ff ldir          ; Copy level data.
  $a601 dec a         ; {Why repeat the copy 5 times?
  $a602 jr nz,$a5f9   ; }
@@ -3986,17 +3986,17 @@ c$a59d ld ixh,$02    ;
 ; Routine at a62c
 ;
 ; Used by the routine at #R$a6fe.
-c$a62c ld a,($733a)  ; Get NUMBER_OF_PLAYERS
+c$a62c ld a,($733a)  ; Get number_of_players
  $a62f dec a         ;
  $a630 jr z,$a653    ;
- $a632 ld a,($733b)  ; Get CURRENT_PLAYER
+ $a632 ld a,($733b)  ; Get current_player
  $a635 add a,$19     ;
- $a637 call $9ceb    ; GET_LOOKUP_TABLE_ADDRESS
+ $a637 call $9ceb    ; GetLookupTableAddress
 @ssub=LD BC,$AD3F+$0A ; Point #REGbc to the address of "p" from "player 1"
  $a63a ld bc,$ad49   ;
- $a63d ld a,($733b)  ; Get CURRENT_PLAYER
+ $a63d ld a,($733b)  ; Get current_player
  $a640 add a,$30     ;
-@ssub=LD ($AD3F+$11),A ; Replace player number in GAME_OVER_TEXT with #REGa.
+@ssub=LD ($AD3F+$11),A ; Replace player number in game_over_text with #REGa.
  $a642 ld ($ad50),a  ;
  $a645 ld c,$08      ;
 @ssub=LD DE,$AD3F+$0A ; Point #REGde to the address of "p" from "player 1"
@@ -4008,7 +4008,7 @@ c$a62c ld a,($733a)  ; Get NUMBER_OF_PLAYERS
  $a656 call $a960    ;
  $a659 ld bc,$0006   ;
  $a65c ld hl,$6ec8   ;
- $a65f ld a,($733b)  ; Get CURRENT_PLAYER
+ $a65f ld a,($733b)  ; Get current_player
 *$a662 add hl,bc     ;
  $a663 dec a         ;
  $a664 jr nz,$a662   ;
@@ -4038,7 +4038,7 @@ c$a62c ld a,($733a)  ; Get NUMBER_OF_PLAYERS
  $a698 call $a968    ;
  $a69b ld bc,$0006   ;
  $a69e ld hl,$6ec8   ;
- $a6a1 ld a,($733b)  ; Get CURRENT_PLAYER
+ $a6a1 ld a,($733b)  ; Get current_player
 *$a6a4 add hl,bc     ;
  $a6a5 dec a         ;
  $a6a6 jr nz,$a6a4   ;
@@ -4072,14 +4072,14 @@ c$a62c ld a,($733a)  ; Get NUMBER_OF_PLAYERS
  $a6d9 ld de,$ad52   ; #REGde is loaded with "level " text
  $a6dc ld c,$08      ;
  $a6de call $a9ce    ;
- $a6e1 ld de,$61a8   ; Load #REGde with LEVEL_BUFFER address
+ $a6e1 ld de,$61a8   ; Load #REGde with level_buffer address
  $a6e4 ld bc,$02a0   ; Load #REGbc with value of 672 (size of level data)
-@ssub=LD HL,$B3B0-$02A0 ; Point #REGhl to LEVEL_1-$02A0 (672 bytes).
+@ssub=LD HL,$B3B0-$02A0 ; Point #REGhl to level_1-$02A0 (672 bytes).
  $a6e7 ld hl,$b110   ;
  $a6ea ld a,($6eeb)  ;
  $a6ed and $07       ;
  $a6ef inc a         ;
-*$a6f0 add hl,bc     ; Add $02A0 (672) to #REGhl, to start read from LEVEL_1
+*$a6f0 add hl,bc     ; Add $02A0 (672) to #REGhl, to start read from level_1
                      ; address.
  $a6f1 dec a         ;
  $a6f2 jr nz,$a6f0   ;
@@ -4091,14 +4091,14 @@ c$a62c ld a,($733a)  ; Get NUMBER_OF_PLAYERS
 ; Farmer has died!
 ;
 ; Used by the routine at #R$a62c.
-@label=KILL_FARMER
+@label=FarmerKill
 c$a6fe ld hl,$ae6a   ;
- $a701 call $ab60    ; PLAY_TUNE
+ $a701 call $ab60    ; PlayTune
  $a704 call $aae4    ;
  $a707 call $a960    ;
  $a70a ld bc,$0000   ;
  $a70d call $a921    ;
- $a710 call $ab9e    ; CLEAR_SCREEN
+ $a710 call $ab9e    ; ClearScreen
  $a713 ld hl,$7342   ;
  $a716 ld a,(hl)     ;
  $a717 cp $ff        ;
@@ -4110,20 +4110,20 @@ c$a6fe ld hl,$ae6a   ;
  $a721 inc hl        ;
  $a722 cp (hl)       ;
  $a723 jr nz,$a72d   ;
- $a725 ld de,$ad5a   ; Point #REGde to OUT_OF_TIME_TEXT
+ $a725 ld de,$ad5a   ; Point #REGde to out_of_time_text
  $a728 ld c,$0d      ;
  $a72a call $a9ce    ;
-*$a72d ld hl,$61a8   ; {copy LEVEL data to LEVEL_BUFFER
+*$a72d ld hl,$61a8   ; {copy LEVEL data to level_buffer
  $a730 ld bc,$02a0   ;
  $a733 push hl       ;
  $a734 pop de        ; }
- $a735 ld a,($733b)  ; Get CURRENT_PLAYER
+ $a735 ld a,($733b)  ; Get current_player
 *$a738 add hl,bc     ;
  $a739 dec a         ;
  $a73a jr nz,$a738   ;
  $a73c ex de,hl      ;
  $a73d ldir          ;
- $a73f ld a,($733b)  ; Get CURRENT_PLAYER
+ $a73f ld a,($733b)  ; Get current_player
  $a742 ld e,a        ;
  $a743 ld d,$00      ;
  $a745 ld hl,$6ee6   ;
@@ -4139,20 +4139,20 @@ c$a6fe ld hl,$ae6a   ;
  $a755 dec (hl)      ; POKE to 182 (`OR (HL)`) to get infinite LIVES
  $a756 jr nz,$a768   ;
  $a758 ld c,$12      ;
- $a75a ld a,($733a)  ; Get NUMBER_OF_PLAYERS
+ $a75a ld a,($733a)  ; Get number_of_players
  $a75d dec a         ;
  $a75e jr nz,$a762   ;
  $a760 ld c,$09      ;
-*$a762 ld de,$ad3f   ; Point #REGde to GAME_OVER_TEXT
+*$a762 ld de,$ad3f   ; Point #REGde to game_over_text
  $a765 call $a9ce    ;
 *$a768 ld b,$05      ;
-*$a76a ld hl,($733a) ; Load #REGhl to NUMBER_OF_PLAYERS and CURRENT_PLAYER
+*$a76a ld hl,($733a) ; Load #REGhl to number_of_players and current_player
  $a76d ld a,h        ;
  $a76e cp l          ;
  $a76f jr nz,$a772   ;
  $a771 xor a         ;
 *$a772 inc a         ;
- $a773 ld ($733b),a  ; Set CURRENT_PLAYER
+ $a773 ld ($733b),a  ; Set current_player
  $a776 ld hl,$6eef   ;
  $a779 ld e,a        ;
  $a77a ld d,$00      ;
@@ -4172,7 +4172,7 @@ c$a6fe ld hl,$ae6a   ;
  $a791 sbc hl,bc     ;
  $a793 ld a,(hl)     ;
  $a794 ld ($6ee6),a  ;
- $a797 ld a,($733b)  ; Get CURRENT_PLAYER
+ $a797 ld a,($733b)  ; Get current_player
  $a79a inc bc        ;
  $a79b ld hl,$6ec8   ;
 *$a79e add hl,bc     ;
@@ -4180,8 +4180,8 @@ c$a6fe ld hl,$ae6a   ;
  $a7a0 jr nz,$a79e   ;
  $a7a2 ld de,$6ec8   ;
  $a7a5 ldir          ;
- $a7a7 ld a,($733b)  ; Get CURRENT_PLAYER
- $a7aa ld hl,$61a8   ; {copy LEVEL data to LEVEL_BUFFER
+ $a7a7 ld a,($733b)  ; Get current_player
+ $a7aa ld hl,$61a8   ; {copy LEVEL data to level_buffer
  $a7ad ld bc,$02a0   ;
 *$a7b0 add hl,bc     ;
  $a7b1 dec a         ;
@@ -4240,7 +4240,7 @@ c$a80c push bc       ;
  $a80d push af       ;
  $a80e push hl       ;
  $a80f ld b,$0a      ;
-@ssub=LD DE,$97AF+$0A ; Point #REGde to first score value ("001000") on SCOREBOARD.
+@ssub=LD DE,$97AF+$0A ; Point #REGde to first score value ("001000") on scoreboard.
  $a811 ld de,$97b9   ;
 *$a814 call $aa0c    ;
  $a817 dec a         ;
@@ -4259,9 +4259,9 @@ c$a80c push bc       ;
 ; Player enters their name on the highscore table?
 ;
 ; Used by the routine at #R$a80c.
-@label=ENTER_NEW_HIGH_SCORE_NAME
+@label=HighScoreEnterName
 c$a828 ld ixh,b      ;
-@ssub=LD HL,$97AF+$90 ; Point #REGhl to last score entry (-1 byte) on SCOREBOARD.
+@ssub=LD HL,$97AF+$90 ; Point #REGhl to last score entry (-1 byte) on scoreboard.
  $a82a ld hl,$983f   ;
  $a82d dec b         ;
  $a82e jr z,$a844    ;
@@ -4290,19 +4290,19 @@ c$a828 ld ixh,b      ;
  $a853 ldir          ;
  $a855 ld c,$0b      ;
  $a857 ld h,$17      ;
- $a859 ld de,$ad67   ; Point #REGde to NEW_HIGH_SCORE_TEXT
+ $a859 ld de,$ad67   ; Point #REGde to new_high_score_text
 *$a85c ld l,$00      ;
  $a85e ld b,$0f      ;
 *$a860 ld a,(de)     ;
  $a861 inc de        ;
- $a862 call $9c40    ; UPDATE_SCREEN_GFX
+ $a862 call $9c40    ; UpdateScreenGfx
  $a865 inc l         ;
  $a866 djnz $a860    ;
  $a868 dec h         ;
  $a869 dec h         ;
  $a86a dec c         ;
  $a86b jr nz,$a85c   ;
- $a86d call $abad    ; DISPLAY_SCOREBOARD
+ $a86d call $abad    ; DisplayScoreboard
  $a870 ld hl,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
  $a873 ld a,$03      ; {Highlight the "Player 1" text in magenta ($03)
  $a875 ld b,$0f      ;
@@ -4315,7 +4315,7 @@ c$a828 ld ixh,b      ;
  $a884 call $aa37    ; }
  $a887 call $a960    ;
  $a88a ld a,$07      ;
- $a88c call $9ceb    ; GET_LOOKUP_TABLE_ADDRESS
+ $a88c call $9ceb    ; GetLookupTableAddress
  $a88f call $a960    ;
  $a892 pop hl        ;
  $a893 ld bc,$000a   ;
@@ -4329,7 +4329,7 @@ c$a828 ld ixh,b      ;
  $a8a0 im 1          ;
  $a8a2 ld l,$10      ;
 *$a8a4 ld a,$b7      ;
- $a8a6 call $9c40    ; UPDATE_SCREEN_GFX
+ $a8a6 call $9c40    ; UpdateScreenGfx
 *$a8a9 ld a,($5c04)  ; reads SYSVAR_KSTATE_4
  $a8ac xor $ff       ;
  $a8ae jr nz,$a8a9   ;
@@ -4348,7 +4348,7 @@ c$a828 ld ixh,b      ;
  $a8c8 xor a         ;
  $a8c9 dec de        ;
  $a8ca ld (de),a     ;
- $a8cb call $9c40    ; UPDATE_SCREEN_GFX
+ $a8cb call $9c40    ; UpdateScreenGfx
  $a8ce dec l         ;
  $a8cf jr $a8a4      ;
 *$a8d1 cp $20        ;
@@ -4359,7 +4359,7 @@ c$a828 ld ixh,b      ;
  $a8d9 jr z,$a8b0    ;
  $a8db ld a,b        ;
  $a8dc ld (de),a     ;
- $a8dd call $9c40    ; UPDATE_SCREEN_GFX
+ $a8dd call $9c40    ; UpdateScreenGfx
  $a8e0 inc l         ;
  $a8e1 inc de        ;
  $a8e2 jr $a8a4      ;
@@ -4373,7 +4373,7 @@ c$a828 ld ixh,b      ;
 ; Animated transition
 ;
 ; Used by the routines at #R$a929, #R$a968 and #R$a9fa.
-@label=TRANSITION_ANIMATION
+@label=TransitionAnimation
 c$a8ec push af       ;
  $a8ed push hl       ;
  $a8ee push bc       ;
@@ -4419,7 +4419,7 @@ c$a8ec push af       ;
 ;
 ; Used by the routines at #R$a47d, #R$a515, #R$a62c, #R$a6fe, #R$a929 and
 ; #R$a968.
-@label=PAUSE_ROUTINE
+@label=PauseRoutine
 c$a921 push af       ;
 *$a922 dec bc        ;
  $a923 ld a,b        ;
@@ -4543,18 +4543,18 @@ c$a9ce ld hl,$5960   ; {Update some attribute colours to $04
  $a9d6 djnz $a9d3    ; }
  $a9d8 ld b,$01      ;
 *$a9da ld hl,$4861   ; Point #REGhl to vertical middle of screen
- $a9dd call $ab7b    ; SCROLL_TICKER_TEXT
+ $a9dd call $ab7b    ; ScrollTickerText
  $a9e0 djnz $a9da    ;
  $a9e2 ld a,(de)     ;
  $a9e3 ld hl,$0c1e   ;
  $a9e6 inc de        ;
- $a9e7 call $9c40    ; UPDATE_SCREEN_GFX
+ $a9e7 call $9c40    ; UpdateScreenGfx
  $a9ea ld b,$08      ;
  $a9ec dec c         ;
  $a9ed jr nz,$a9da   ;
  $a9ef ld b,$00      ;
 *$a9f1 ld hl,$4861   ; Point #REGhl to vertical middle of screen
- $a9f4 call $ab7b    ; SCROLL_TICKER_TEXT
+ $a9f4 call $ab7b    ; ScrollTickerText
  $a9f7 djnz $a9f1    ;
  $a9f9 ret           ;
 
@@ -4613,7 +4613,7 @@ c$aa23 push de       ;
 ; Prints a text block to the screen.
 ;
 ; Used by the routines at #R$a420, #R$a4c8 and #R$a828.
-@label=PRINT_TEXT
+@label=PrintTextBlock
 c$aa37 push bc       ;
  $aa38 ld de,$0020   ;
 *$aa3b push bc       ;
@@ -4632,9 +4632,9 @@ c$aa37 push bc       ;
 ; Redefine keys wizard - read new keys
 ;
 ; Used by the routines at #R$a47d and #R$a515.
-@label=REDEFINE_KEYS_WIZARD
-c$aa49 call $ab9e    ; CLEAR_SCREEN
- $aa4c ld hl,$732d   ; {Set GAME_STATE to $03 (redefine keys)
+@label=RedefineKeysWizard
+c$aa49 call $ab9e    ; ClearScreen
+ $aa4c ld hl,$732d   ; {Set game_state to $03 (redefine keys)
  $aa4f ld (hl),$03   ; }
  $aa51 ld hl,$8268   ; {Clear 10 of the 12 bytes at this address
  $aa54 ld b,$0a      ;
@@ -4643,9 +4643,9 @@ c$aa49 call $ab9e    ; CLEAR_SCREEN
  $aa59 djnz $aa56    ; }
  $aa5b ld hl,$1100   ;
  $aa5e ld b,$20      ;
- $aa60 ld de,$ac02   ; Point #REGde to REDEFINE_KEYS_WIZARD_TEXT
+ $aa60 ld de,$ac02   ; Point #REGde to redefine_keys_wizard_text
 *$aa63 ld a,(de)     ;
- $aa64 call $9c40    ; UPDATE_SCREEN_GFX
+ $aa64 call $9c40    ; UpdateScreenGfx
  $aa67 inc l         ;
  $aa68 inc de        ;
  $aa69 djnz $aa63    ;
@@ -4654,7 +4654,7 @@ c$aa49 call $ab9e    ; CLEAR_SCREEN
 *$aa6f ld b,$0a      ;
  $aa71 ld l,$0a      ;
 *$aa73 ld a,(de)     ;
- $aa74 call $9c40    ; UPDATE_SCREEN_GFX
+ $aa74 call $9c40    ; UpdateScreenGfx
  $aa77 inc de        ;
  $aa78 inc l         ;
  $aa79 djnz $aa73    ;
@@ -4674,7 +4674,7 @@ c$aa49 call $ab9e    ; CLEAR_SCREEN
  $aa91 ld a,$05      ;
  $aa93 ld ix,$8268   ;
  $aa97 ld hl,$592a   ;
-@ssub=LD BC,$83F0+$06 ; Point #REGbc to "q" character in MSG_KEY_TYPES
+@ssub=LD BC,$83F0+$06 ; Point #REGbc to "q" character in msg_key_types
  $aa9a ld bc,$83f6   ;
  $aa9d ld de,$0e16   ;
 *$aaa0 call $ab19    ;
@@ -4698,7 +4698,7 @@ c$aa49 call $ab9e    ; CLEAR_SCREEN
 ; Routine at aaba
 ;
 ; Used by the routine at #R$ab19.
-@ssub=LD HL,$8268-$01 ; Point #REGhl to KEY_INPUT_TYPE_3 - 1 byte
+@ssub=LD HL,$8268-$01 ; Point #REGhl to key_input_type_3 - 1 byte
 c$aaba ld hl,$8267   ;
  $aabd ld b,$00      ;
 *$aabf inc hl        ;
@@ -4748,12 +4748,12 @@ c$aae4 ld a,r        ; {Load #REGb with #REGr (related to memory refresh), then
 *$aaed inc hl        ; {Increment #REGhl to required address, and assign #REGa.
  $aaee djnz $aaed    ;
  $aaf0 ld a,(hl)     ; }
- $aaf1 jp $9ceb      ; GET_LOOKUP_TABLE_ADDRESS
+ $aaf1 jp $9ceb      ; GetLookupTableAddress
 
 ; Redefine keys: get key
 ;
 ; Used by the routines at #R$aa49 and #R$ab19.
-@label=REDEFINE_KEYS_GET_KEY
+@label=RedefineKeysGetKey
 c$aaf4 ld d,$00      ;
  $aaf6 ld hl,$0000   ;
  $aaf9 ld b,$08      ;
@@ -4772,7 +4772,7 @@ c$aaf4 ld d,$00      ;
 ; Redefine keys: print the key you just pressed?
 ;
 ; Used by the routine at #R$aaf4.
-@label=REDEFINE_KEYS_PRINT_KEY
+@label=RedefineKeysPrintKey
 c$ab0d ld d,$01      ;
  $ab0f ld l,a        ;
  $ab10 ld h,c        ;
@@ -4786,7 +4786,7 @@ c$ab0d ld d,$01      ;
 ; Print redefine key direction label?
 ;
 ; Used by the routine at #R$aa49.
-@label=REDEFINE_KEYS_PRINT_DIRECTION
+@label=RedefineKeysPrintDirection
 c$ab19 push af       ;
  $ab1a push hl       ;
  $ab1b push de       ;
@@ -4803,7 +4803,7 @@ c$ab19 push af       ;
  $ab2c ld b,e        ;
  $ab2d ld (ix+$00),l ;
  $ab30 ld (ix+$01),h ;
-@ssub=LD HL,$AC02+$4C ; Point #REGhl to first address after "jump" in REDEFINE_KEYS_WIZARD_TEXT
+@ssub=LD HL,$AC02+$4C ; Point #REGhl to first address after "jump" in redefine_keys_wizard_text
  $ab33 ld hl,$ac4e   ;
  $ab36 ld de,$0005   ;
 *$ab39 add hl,de     ;
@@ -4824,7 +4824,7 @@ c$ab19 push af       ;
  $ab4e pop hl        ;
  $ab4f push hl       ;
  $ab50 push bc       ;
- $ab51 call $9c40    ; UPDATE_SCREEN_GFX
+ $ab51 call $9c40    ; UpdateScreenGfx
 *$ab54 call $aaf4    ;
  $ab57 ld a,l        ;
  $ab58 and a         ;
@@ -4838,7 +4838,7 @@ c$ab19 push af       ;
 ; Play the theme tune.
 ;
 ; Used by the routines at #R$a420, #R$a6fe and #R$ab70.
-@label=PLAY_TUNE
+@label=PlayTune
 c$ab60 ld c,(hl)     ;
  $ab61 inc hl        ;
  $ab62 ld b,(hl)     ;
@@ -4860,12 +4860,12 @@ c$ab70 pop bc        ;
  $ab72 call $2d28    ;
  $ab75 call $03f8    ;
  $ab78 pop hl        ;
- $ab79 jr $ab60      ; PLAY_TUNE
+ $ab79 jr $ab60      ; PlayTune
 
 ; Scroll the ticket text across the screen
 ;
 ; Used by the routines at #R$a47d, #R$a515, #R$a59d and #R$a9ce.
-@label=SCROLL_TICKER_TEXT
+@label=ScrollTickerText
 c$ab7b push de       ;
  $ab7c push bc       ;
  $ab7d push af       ;
@@ -4895,7 +4895,7 @@ c$ab7b push de       ;
 ; Clears the entire screen to black: from bottom to top.
 ;
 ; Used by the routines at #R$a420, #R$a4c8, #R$a6fe and #R$aa49.
-@label=CLEAR_SCREEN
+@label=ClearScreen
 c$ab9e ld hl,$5aff   ;
  $aba1 ld bc,$1b00   ;
 *$aba4 ld (hl),$00   ;
@@ -4909,13 +4909,13 @@ c$ab9e ld hl,$5aff   ;
 ; Displays scoreboard with heading and names/scores list
 ;
 ; Used by the routines at #R$a420 and #R$a828.
-@label=DISPLAY_SCOREBOARD
-c$abad ld de,$abf2   ; Point #REGde to HIGH_SCORE_HEADING_TEXT
+@label=DisplayScoreboard
+c$abad ld de,$abf2   ; Point #REGde to high_score_heading_text
  $abb0 ld h,$17      ;
  $abb2 ld l,$10      ;
  $abb4 ld b,$10      ;
 *$abb6 ld a,(de)     ;
- $abb7 call $9c40    ; UPDATE_SCREEN_GFX
+ $abb7 call $9c40    ; UpdateScreenGfx
  $abba inc l         ;
  $abbb inc de        ;
  $abbc djnz $abb6    ;
@@ -4924,7 +4924,7 @@ c$abad ld de,$abf2   ; Point #REGde to HIGH_SCORE_HEADING_TEXT
 *$abc3 ld l,$10      ;
  $abc5 ld b,$10      ;
 *$abc7 ld a,(de)     ;
- $abc8 call $9c40    ; UPDATE_SCREEN_GFX
+ $abc8 call $9c40    ; UpdateScreenGfx
  $abcb inc l         ;
  $abcc inc de        ;
  $abcd djnz $abc7    ;
@@ -4946,15 +4946,15 @@ c$abad ld de,$abf2   ; Point #REGde to HIGH_SCORE_HEADING_TEXT
  $abe9 ret           ;
 
 ; Small lookup table used by #R$AAE4 to assign #REGa, for use with
-; GET_LOOKUP_TABLE_ADDRESS
+; GetLookupTableAddress
 b$abea defb $01,$10,$13,$17,$1e,$20,$21,$01
 
 ; High score table heading text data
-@label=HIGH_SCORE_HEADING_TEXT
+@label=high_score_heading_text
 t$abf2 defm "high score table"
 
 ; Wizard instructions for redefining the keys
-@label=REDEFINE_KEYS_WIZARD_TEXT
+@label=redefine_keys_wizard_text
 t$ac02 defm "press the key you wish to use to"
  $ac22 defm "move up   "
  $ac2c defm "move down "
@@ -4972,7 +4972,7 @@ t$ac54 defb $97
  $ac78 defm "zxcv"
 
 ; Home screen ticker text
-@label=HOME_SCREEN_TICKER_TEXT
+@label=home_screen_ticker_text
 t$ac7c defm "{"
  $ac7d defb $00
  $ac7e defm "press S to start game "
@@ -4986,7 +4986,7 @@ t$ac7c defm "{"
  $acb1 defm "press I for instructions "
 
 ; Instructions screen ticker text
-@label=INSTRUCTIONS_SCREEN_TICKER_TEXT
+@label=instructions_screen_ticker_text
 t$acca defm "{"
  $accb defb $00
  $accc defm "press S to start game "
@@ -5000,26 +5000,26 @@ t$acca defm "{"
  $acff defm "press 1,2 or 3 to select key type "
 
 ; "1,2,3 or 4 players ?" - choose number of players text data
-@label=CHOOSE_NUMBER_OF_PLAYERS_TEXT
+@label=choose_number_of_players_text
 t$ad21 defm "1,2,3 or 4 players ?          "
 
 ; "game over player 1 " text data
-@label=GAME_OVER_TEXT
+@label=game_over_text
 t$ad3f defm "game over player 1 "
 
 ; "level" text (for current level?)
-@label=LEVEL_TEXT
+@label=level_text
 t$ad52 defm "level "
 
 ; Used as an address.
 w$ad58 defw $9f9e
 
 ; "OUT OF TIME !" text data
-@label=OUT_OF_TIME_TEXT
+@label=out_of_time_text
 t$ad5a defm "OUT OF TIME !"
 
 ; Congratulate player on new high score, and instructions.
-@label=NEW_HIGH_SCORE_TEXT
+@label=new_high_score_text
 t$ad67 defm "   PLAYER  1   "
  $ad76 defm "               "
  $ad85 defm "  well  done!  "
@@ -5035,7 +5035,7 @@ t$ad67 defm "   PLAYER  1   "
 ; Chuckie Egg theme tune
 ;
 ; Notes for the tune; byte 0: length, byte 1: pitch
-@label=THEME_TUNE
+@label=theme_tune
 b$ae0c defb $01,$10
  $ae0e defb $01,$10
  $ae10 defb $01,$12
@@ -5087,7 +5087,7 @@ b$ae0c defb $01,$10
 ; Death tune, played when the farmer, well, dies.
 ;
 ; Notes for the tune; byte 0: length, byte 1: pitch
-@label=DEATH_TUNE
+@label=death_tune
 b$ae6a defb $02,$08
  $ae6c defb $02,$08
  $ae6e defb $02,$08
@@ -5129,7 +5129,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $aead ld h,$00        ;
 *$aeaf ld l,$00        ;
 *$aeb1 ld a,(bc)       ;
- $aeb2 call $9c40      ; UPDATE_SCREEN_GFX
+ $aeb2 call $9c40      ; UpdateScreenGfx
  $aeb5 inc bc          ;
  $aeb6 inc l           ;
  $aeb7 ld a,l          ;
@@ -5178,27 +5178,27 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $af08 ld ($7342),a    ;
  $af0b add a,$9e       ;
  $af0d ld ($9784),a    ;
- $af10 ld a,($733b)    ; Get CURRENT_PLAYER
+ $af10 ld a,($733b)    ; Get current_player
  $af13 add a,$9e       ;
  $af15 ld ($976b),a    ;
  $af18 ld hl,$1700     ;
  $af1b ld de,$9764     ;
  $af1e ld b,$03        ;
 *$af20 ld a,(de)       ;
- $af21 call $9c40      ; UPDATE_SCREEN_GFX
+ $af21 call $9c40      ; UpdateScreenGfx
  $af24 inc l           ;
  $af25 inc de          ;
  $af26 djnz $af20      ;
  $af28 ld hl,$1500     ;
  $af2b ld b,$20        ;
 *$af2d ld a,(de)       ;
- $af2e call $9c40      ; UPDATE_SCREEN_GFX
+ $af2e call $9c40      ; UpdateScreenGfx
  $af31 inc l           ;
  $af32 inc de          ;
  $af33 djnz $af2d      ;
  $af35 ld hl,$3ffe     ;
  $af38 ld ($733d),hl   ;
- $af3b ld a,($733a)    ; Get NUMBER_OF_PLAYERS
+ $af3b ld a,($733a)    ; Get number_of_players
  $af3e ld hl,$6ece     ; {Copy current score to player 1 score
 *$af41 ld de,$6ec8     ;
  $af44 ld bc,$0006     ;
@@ -5217,7 +5217,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $af5d jr nz,$af41     ;
  $af5f ld bc,$0006     ;
  $af62 ld hl,$6ec8     ;
- $af65 ld a,($733b)    ; Get CURRENT_PLAYER
+ $af65 ld a,($733b)    ; Get current_player
 *$af68 add hl,bc       ;
  $af69 dec a           ;
  $af6a jr nz,$af68     ;
@@ -5258,7 +5258,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $afb0 ld ($736b),hl   ;
  $afb3 ld h,$16        ;
  $afb5 ld l,$05        ;
- $afb7 ld a,($733a)    ; Get NUMBER_OF_PLAYERS
+ $afb7 ld a,($733a)    ; Get number_of_players
  $afba ld b,a          ;
  $afbb ld de,$6ef0     ;
 *$afbe push hl         ;
@@ -5271,7 +5271,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $afc8 jr z,$afd4      ;
  $afca ld c,a          ;
  $afcb ld a,$b6        ;
-*$afcd call $9c40      ; UPDATE_SCREEN_GFX
+*$afcd call $9c40      ; UpdateScreenGfx
  $afd0 inc l           ;
  $afd1 dec c           ;
  $afd2 jr nz,$afcd     ;
@@ -5304,7 +5304,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $b008 ld hl,$0005     ;
  $b00b ld bc,$0601     ;
 *$b00e ld d,$0f        ;
- $b010 ld a,($733b)    ; Get CURRENT_PLAYER
+ $b010 ld a,($733b)    ; Get current_player
  $b013 cp c            ;
  $b014 jr nz,$b018     ;
  $b016 ld d,$17        ;
@@ -5314,7 +5314,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $b01d add a,$07       ;
  $b01f ld l,a          ;
  $b020 inc c           ;
- $b021 ld a,($733a)    ; Get NUMBER_OF_PLAYERS
+ $b021 ld a,($733a)    ; Get number_of_players
  $b024 cp c            ;
  $b025 jr nc,$b00e     ;
  $b027 ld hl,$61a8     ;
@@ -5373,7 +5373,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $b09d ld (ix+$6e),a   ;
  $b0a0 ld (ix+$74),a   ;
  $b0a3 ld (ix+$04),a   ;
- $b0a6 ld a,($732d)    ; Set #REGa to current GAME_STATE.
+ $b0a6 ld a,($732d)    ; Set #REGa to current game_state.
  $b0a9 cp $05          ; Is it set to input type selection?
  $b0ab ld hl,$825c     ; {Point #REGhl to input type #2.
  $b0ae jr z,$b0b8      ; }
@@ -5385,7 +5385,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $b0be ldir            ; }
  $b0c0 ld bc,$0007     ;
  $b0c3 ld hl,$3ffe     ;
- $b0c6 ld a,($733b)    ; Get CURRENT_PLAYER
+ $b0c6 ld a,($733b)    ; Get current_player
 *$b0c9 add hl,bc       ;
  $b0ca dec a           ;
  $b0cb jr nz,$b0c9     ;
@@ -5421,7 +5421,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $b10a jr nz,$b107     ; }
  $b10c dec d           ;
  $b10d jr nz,$b104     ;
- $b10f ld a,($733b)    ; Get CURRENT_PLAYER
+ $b10f ld a,($733b)    ; Get current_player
  $b112 ld l,a          ; {Calculate address of lives variable for current
  $b113 ld h,$00        ; player, and assign to #REGhl
  $b115 ld de,$6eef     ;
@@ -5437,7 +5437,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $b126 ld h,$16        ;
  $b128 ld l,a          ;
  $b129 xor a           ;
- $b12a call $9c40      ; UPDATE_SCREEN_GFX
+ $b12a call $9c40      ; UpdateScreenGfx
 *$b12d jp $9858        ;
 
 ; Update colours?
@@ -5482,10 +5482,10 @@ c$b14f ld hl,$b15e   ;
 *$b158 inc hl        ; {Increment #REGhl to required address, and assign #REGa.
  $b159 djnz $b158    ;
  $b15b ld a,(hl)     ; }
- $b15c jp $9ceb      ; GET_LOOKUP_TABLE_ADDRESS
+ $b15c jp $9ceb      ; GetLookupTableAddress
 
 ; Small lookup table used by #R$B14F to assign #REGa, for use with
-; GET_LOOKUP_TABLE_ADDRESS
+; GetLookupTableAddress
 b$b15f defb $02,$08,$0a,$0b,$0c,$11,$11,$02
 
 ; Source code remnants
@@ -5588,7 +5588,7 @@ t$b307 defm " CALL 40000"
 ; Note, label added because Pasmo was complaining.
 ;
 ; Used by the routine at #R$98e6.
-@label=TMP_PASMO_LABEL
+@label=LB34C
 c$b34c ld a,($72d8)  ;
  $b34f and $07       ;
  $b351 ret z         ;
@@ -5636,8 +5636,8 @@ t$b381 defm " AND 15"
  $b3aa defb $0d
  $b3ab defm "(  L4"
 
-; Level 1 layout data - see LEVEL_BUFFER for byte map
-@label=LEVEL_1
+; Level 1 layout data - see level_buffer for byte map
+@label=
 b$b3b0 defb $05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
  $b3d0 defb $00,$00,$00,$00,$04,$00,$03,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$04,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00
  $b3f0 defb $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00
@@ -5660,8 +5660,8 @@ b$b3b0 defb $05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,
  $b610 defb $aa,$ab,$ac,$ad,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
  $b630 defb $00,$a8,$a9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-; Level 2 layout data - see LEVEL_BUFFER for byte map
-@label=LEVEL_2
+; Level 2 layout data - see level_buffer for byte map
+@label=level_2
 b$b650 defb $05,$05,$05,$05,$05,$05,$00,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
  $b670 defb $00,$04,$00,$01,$02,$04,$00,$00,$03,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$03,$00,$00,$00,$00,$04,$00,$01,$02,$00,$00,$00
  $b690 defb $00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
@@ -5684,8 +5684,8 @@ b$b650 defb $05,$05,$05,$05,$05,$05,$00,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,
  $b8b0 defb $aa,$ab,$ac,$ad,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
  $b8d0 defb $00,$a8,$a9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-; Level 3 layout data - see LEVEL_BUFFER for byte map
-@label=LEVEL_3
+; Level 3 layout data - see level_buffer for byte map
+@label=level_3
 b$b8f0 defb $05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$05,$00,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
  $b910 defb $00,$01,$02,$04,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$04,$00,$00,$03,$00,$00,$00,$01,$02,$00
  $b930 defb $00,$01,$02,$00,$00,$00,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00
@@ -5708,8 +5708,8 @@ b$b8f0 defb $05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$05,$05,$00,
  $bb50 defb $aa,$ab,$ac,$ad,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
  $bb70 defb $00,$a8,$a9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-; Level 4 layout data - see LEVEL_BUFFER for byte map
-@label=LEVEL_4
+; Level 4 layout data - see level_buffer for byte map
+@label=level_4
 b$bb90 defb $05,$05,$05,$05,$05,$05,$05,$05,$00,$05,$05,$05,$05,$05,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
  $bbb0 defb $00,$03,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$04,$00,$00,$00,$00,$03,$00,$00,$01,$02,$00,$00,$00,$04,$00,$00
  $bbd0 defb $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00
@@ -5732,8 +5732,8 @@ b$bb90 defb $05,$05,$05,$05,$05,$05,$05,$05,$00,$05,$05,$05,$05,$05,$05,$05,$05,
  $bdf0 defb $aa,$ab,$ac,$ad,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$03,$00,$00,$00,$00,$00
  $be10 defb $00,$a8,$a9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-; Level 5 layout data - see LEVEL_BUFFER for byte map
-@label=LEVEL_5
+; Level 5 layout data - see level_buffer for byte map
+@label=level_5
 b$be30 defb $05,$05,$05,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$00,$00,$05,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$05
  $be50 defb $00,$03,$00,$00,$01,$02,$00,$04,$04,$04,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$04,$01,$02,$04,$00,$00,$00,$00,$04,$00,$00,$00
  $be70 defb $00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -5756,8 +5756,8 @@ b$be30 defb $05,$05,$05,$00,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,
  $c090 defb $aa,$ab,$ac,$ad,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
  $c0b0 defb $00,$a8,$a9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-; Level 6 layout data - see LEVEL_BUFFER for byte map
-@label=LEVEL_6
+; Level 6 layout data - see level_buffer for byte map
+@label=level_6
 b$c0d0 defb $05,$05,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00
  $c0f0 defb $00,$01,$02,$00,$03,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$04,$04,$04,$04,$00,$00,$00,$03,$01,$02,$00,$00,$00
  $c110 defb $00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
@@ -5780,8 +5780,8 @@ b$c0d0 defb $05,$05,$05,$05,$05,$00,$00,$00,$00,$05,$05,$05,$05,$05,$00,$00,$00,
  $c330 defb $aa,$ab,$ac,$ad,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
  $c350 defb $00,$a8,$a9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-; Level 7 layout data - see LEVEL_BUFFER for byte map
-@label=LEVEL_7
+; Level 7 layout data - see level_buffer for byte map
+@label=level_7
 b$c370 defb $00,$00,$00,$00,$00,$05,$05,$05,$05,$00,$00,$00,$05,$05,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
  $c390 defb $00,$01,$02,$00,$00,$01,$02,$00,$00,$05,$05,$05,$00,$00,$00,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$05,$05,$05,$03,$00,$00,$00
  $c3b0 defb $05,$01,$02,$03,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$05,$00,$00,$00,$00,$05,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -5804,8 +5804,8 @@ b$c370 defb $00,$00,$00,$00,$00,$05,$05,$05,$05,$00,$00,$00,$05,$05,$05,$00,$00,
  $c5d0 defb $aa,$ab,$ac,$ad,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
  $c5f0 defb $00,$a8,$a9,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-; Level 8 layout data - see LEVEL_BUFFER for byte map
-@label=LEVEL_8
+; Level 8 layout data - see level_buffer for byte map
+@label=level_8
 b$c610 defb $05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05
  $c630 defb $00,$04,$04,$01,$02,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$04,$01,$02,$04,$04,$00
  $c650 defb $00,$00,$00,$01,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$00,$00,$00
@@ -5838,7 +5838,7 @@ t$c8b0 defm "ALL CONV1"
  $c8bc defm "  LD A,(2948"
 
 ; An address lookup table for accessing data blocks.
-@label=ADDRESS_LOOKUP_TABLE
+@label=address_lookup_table
 w$c8c8 defw $c92c
  $c8ca defw $c938
  $c8cc defw $c94c
