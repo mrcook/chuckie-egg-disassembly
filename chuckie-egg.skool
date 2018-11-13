@@ -909,7 +909,7 @@ b$8f30 defb $9e,$00,$77,$00,$3f,$00,$5f,$00
  $8f60 defb $38,$78,$39,$0e,$3e,$f3,$3e,$fd
  $8f68 defb $1f,$fe,$0f,$fe,$07,$fc,$01,$f0
 
-; Data here is copied to $72A0
+; Data here is copied to 72A0
 b$8f70 defb $00,$00,$00,$00,$00,$00,$00,$00
  $8f78 defb $00,$00,$00,$00,$00,$00,$00,$00
  $8f80 defb $00,$00,$00,$00,$00,$00,$00,$00
@@ -1594,7 +1594,7 @@ b$943e defb $f1,$c9,$e5,$cd,$34,$9e,$e1,$c9
  $944e defb $40,$30,$01,$09,$09,$e6,$38,$4f
  $9456 defb $3e,$38,$91,$cb,$27
 
-; Some of these byte are copied to $7357.
+; Some of these byte are copied to 7357.
 b$945b defb $cb,$27,$06,$00,$4f,$09,$7a,$e6
  $9463 defb $07,$ee,$07,$57,$cb,$3b,$cb,$3b
  $946b defb $cb,$3b,$19,$c1,$d1,$08,$68,$88
@@ -2453,7 +2453,7 @@ c$9c40 nop           ; {Why are these NOPs? Are they ever changed?
  $9c8c pop hl        ; }
  $9c8d ret           ;
 
-; Unused code? Same as last 3 instructions of previous routine, at $9C8B.
+; Unused code? Same as last 3 instructions of previous routine, at 9C8B.
 c$9c8e pop bc        ;
  $9c8f pop hl        ;
  $9c90 ret           ;
@@ -2530,9 +2530,9 @@ c$9ceb ld b,a        ; Current known values for #REGa are between $01 and $21.
  $9cf9 ld e,(hl)     ; {Load #REGde with address from lookup table
  $9cfa inc hl        ;
  $9cfb ld d,(hl)     ; }
- $9cfc ld ($7374),de ; Save address to $7374
+ $9cfc ld ($7374),de ; Save address to 7374
  $9d00 ld a,$01      ;
- $9d02 ld ($7373),a  ; Set $7373 to $01
+ $9d02 ld ($7373),a  ; Set 7373 to $01
  $9d05 ret           ;
 
 ; Unused
@@ -3563,7 +3563,7 @@ c$a420 call $ab9e    ; ClearScreen
 *$a473 ld (hl),$05   ; Set foreground colour to Cyan, background remains black.
  $a475 inc hl        ;
  $a476 djnz $a473    ;
- $a478 ld hl,$732c   ; {Sets $732C to $4E ...whatever that is.
+ $a478 ld hl,$732c   ; {Sets 732C to $4E ...whatever that is.
  $a47b ld (hl),$4e   ; }
 
 ; Scroll ticker text for home screen
@@ -3583,7 +3583,7 @@ c$a47d ld hl,$50e1   ;
  $a497 inc a         ;
  $a498 cp $4e        ;
  $a49a jr c,$a49d    ;
- $a49c xor a         ; {Set $732C to `$00`
+ $a49c xor a         ; {Set 732C to `$00`
 *$a49d ld ($732c),a  ; }
  $a4a0 ld e,a        ;
  $a4a1 ld d,$00      ;
@@ -3639,7 +3639,7 @@ c$a4c8 call $ab9e    ; ClearScreen
  $a4fe ld c,$03      ; {I saw nothing change visually on the screen.
  $a500 ld a,$04      ;
  $a502 call $aa37    ; }
- $a505 ld hl,$732c   ; {Set $732C to `$57`
+ $a505 ld hl,$732c   ; {Set 732C to `$57`
  $a508 ld (hl),$57   ; }
  $a50a inc hl        ; {Set game_state to $0A - Instructions screen?
  $a50b ld (hl),$0a   ; }
@@ -3664,7 +3664,7 @@ c$a515 ld hl,$50e1   ;
  $a52f inc a         ;
  $a530 cp $57        ;
  $a532 jr c,$a535    ;
- $a534 xor a         ; {Set $732C to `$00`
+ $a534 xor a         ; {Set 732C to `$00`
 *$a535 ld ($732c),a  ; }
  $a538 ld e,a        ;
  $a539 ld d,$00      ;
@@ -3690,7 +3690,7 @@ c$a515 ld hl,$50e1   ;
  $a564 jr z,$a59a    ; }
 
 ; Highlight the "input type" line # 1, 2, or 3.
-c$a566 ld b,a        ; #REGb also saved to game_state later, at $A57D
+c$a566 ld b,a        ; #REGb also saved to game_state later, at A57D
  $a567 ld a,($732d)  ; {Check the current game_state.
  $a56a cp b          ;
  $a56b jr z,$a59a    ; }
@@ -3770,20 +3770,20 @@ c$a59d ld ixh,$02    ;
  $a5ff ldir          ; Copy level data.
  $a601 dec a         ; {Why repeat the copy 5 times?
  $a602 jr nz,$a5f9   ; }
- $a604 ld hl,$6ec8   ; {Reset anim buffer data at $6EC8 (6 bytes) + ANIMBUF1
- $a607 ld b,$1e      ; (24 bytes)
+ $a604 ld hl,$6ec8   ; {Reset anim buffer data at 6EC8 (6 bytes) + ANIMBUF1 (24
+ $a607 ld b,$1e      ; bytes)
 *$a609 ld (hl),$00   ;
  $a60b inc hl        ;
  $a60c djnz $a609    ; }
  $a60e ld b,$05      ; {Reset all egg counters to $0C (12...why?): from address
-*$a610 ld (hl),$0c   ; $6EE6 for 5 bytes
+*$a610 ld (hl),$0c   ; 6EE6 for 5 bytes
  $a612 inc hl        ;
  $a613 djnz $a610    ; }
- $a615 ld b,$05      ; {Reset all cleared levels counters: from address $6EEB
+ $a615 ld b,$05      ; {Reset all cleared levels counters: from address 6EEB
 *$a617 ld (hl),$00   ; for 5 bytes
  $a619 inc hl        ;
  $a61a djnz $a617    ; }
- $a61c ld b,$04      ; {Reset all player lives to 5: from address $6EF0 for 4
+ $a61c ld b,$04      ; {Reset all player lives to 5: from address 6EF0 for 4
 *$a61e ld (hl),$05   ; bytes
  $a620 inc hl        ;
  $a621 djnz $a61e    ; }
@@ -4248,7 +4248,7 @@ c$a929 ld hl,$0c0b   ;
  $a935 ld a,$03      ;
 *$a937 inc ixh       ;
  $a939 ld b,$0c      ;
-*$a93b ld ($732c),a  ; Set $732C to `$03`
+*$a93b ld ($732c),a  ; Set 732C to `$03`
  $a93e call $a8ec    ;
  $a941 push bc       ;
  $a942 ld bc,$1388   ;
@@ -4282,7 +4282,7 @@ c$a960 ld a,($7373)  ;
 ;
 ; Used by the routines at #R$a62c and #R$a7bc.
 c$a968 ld ixh,$00    ;
- $a96b ld hl,$732c   ; {Set $732C to `$09`
+ $a96b ld hl,$732c   ; {Set 732C to `$09`
  $a96e ld (hl),$09   ; }
 *$a970 ld hl,$0605   ;
  $a973 ld d,$01      ;
@@ -4336,7 +4336,7 @@ c$a968 ld ixh,$00    ;
  $a9be jr nz,$a9b8   ;
  $a9c0 ld a,ixh      ;
  $a9c2 ld ixh,$01    ;
- $a9c5 ld hl,$732c   ; {Set $732C to `$04`
+ $a9c5 ld hl,$732c   ; {Set 732C to `$04`
  $a9c8 ld (hl),$04   ; }
  $a9ca and a         ;
  $a9cb jr z,$a970    ;
@@ -4373,7 +4373,7 @@ c$a9ce ld hl,$5960   ; {Update some attribute colours to $04
 c$a9fa inc ixh       ;
  $a9fc dec ixh       ;
  $a9fe jr nz,$aa08   ;
- $aa00 ld a,($732c)  ; {Increment value at $732C by `$09`.
+ $aa00 ld a,($732c)  ; {Increment value at 732C by `$09`.
  $aa03 add a,$09     ;
  $aa05 ld ($732c),a  ; }
 *$aa08 call $a8ec    ;
@@ -5797,4 +5797,5 @@ b$cbb0 defb $06,$39,$08,$3b,$04,$15,$06,$00
 ; Use the same address as with the ORG directive, to tell Pasmo where
 ; to start running the program from here.
 end $A410
+
 

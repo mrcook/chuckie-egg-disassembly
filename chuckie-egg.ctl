@@ -421,7 +421,7 @@ b $8EF0 Duck sprites animation data: right facing (2 of 16x16)
 b $8F30 Duck sprites animation data: left facing (2 of 16x16)
 @ $8F30 label=sprites_duck_left
   $8F30,64,8
-b $8F70 Data here is copied to $72A0
+b $8F70 Data here is copied to 72A0
   $8F70,32,8
 b $8F90 Farmer sprites animation data: climbing stairs
 @ $8F90 label=sprites_farmer_climbing
@@ -498,7 +498,7 @@ c $9438 Save/restore #REGhl so routine can be called safely
 D $9438 Used by the routines at #R$9178, #R$91cb, #R$91df, #R$91f3, #R$923b and #R$9250.
 b $943E Data block at 943e
   $943E,29,8*3,5
-b $945B Some of these byte are copied to $7357.
+b $945B Some of these byte are copied to 7357.
   $945B,221,8*27,5
 c $9538 Routine at 9538
 D $9538 Used by the routines at #R$98e6, #R$a0c8, #R$a22a and #R$a2b5.
@@ -620,7 +620,7 @@ D $9C40 Used by the routines at #R$a3a7, #R$a420, #R$a47d, #R$a4c8, #R$a515, #R$
   $9C7C,1 Restore #REGhl with value in #REGde
   $9C7D,12 set #REGhl to gfx_tile_blank, then update this section of the screen (address of #REGde) with all GFX tiles.
   $9C89,4 Restore 16-bit registers and RETurn
-c $9C8E Unused code? Same as last 3 instructions of previous routine, at $9C8B.
+c $9C8E Unused code? Same as last 3 instructions of previous routine, at 9C8B.
 s $9C91 Unused
   $9C91,11,$0b
 c $9C9C INTERUPT jump point
@@ -640,8 +640,8 @@ D $9CEB Used by the routines at #R$a389, #R$a420, #R$a4c8, #R$a62c, #R$a828, #R$
 @ $9CF2 ssub=LD HL,$C8C8-$02 ; Point #REGhl to address_lookup_table - 2 bytes
   $9CF5,4 Increment #REGhl until we get the desired address.
   $9CF9,3 Load #REGde with address from lookup table
-  $9CFC,4 Save address to $7374
-  $9D02,3 Set $7373 to $01
+  $9CFC,4 Save address to 7374
+  $9D02,3 Set 7373 to $01
 s $9D06 Unused
   $9D06,2,$02
 c $9D08 Routine at 9d08
@@ -768,12 +768,12 @@ N $A46E This entry point is used by the routine at #R$aa49.
 @ $A46E label=SetTickerTextColour
   $A46E,3 Point #REGhl to last line of ATTRIBUTE_FILE.
   $A473,2 Set foreground colour to Cyan, background remains black.
-  $A478,5 Sets $732C to $4E ...whatever that is.
+  $A478,5 Sets 732C to $4E ...whatever that is.
 c $A47D Scroll ticker text for home screen
 D $A47D Note: this routine is very similar to the first half of ScrollText2 routine.
 @ $A47D label=ScrollText1
   $A491,3 Point #REGhl to home_screen_ticker_text
-  $A49C,4 Set $732C to `$00`
+  $A49C,4 Set 732C to `$00`
   $A4A8,3 UpdateScreenGfx
   $A4AB,9 Read keyboard and check keypress `S`
   $A4B4,9 Read keyboard and check keypress `R`
@@ -788,20 +788,20 @@ D $A4C8 Note: this routine is very similar to the DisplayHomeScreen routine.
   $A4F0,7 Print "KEYS" box
   $A4F7,7 Print "KEY TYPES" text
   $A4FE,7 I saw nothing change visually on the screen.
-  $A505,5 Set $732C to `$57`
+  $A505,5 Set 732C to `$57`
   $A50A,3 Set game_state to $0A - Instructions screen?
   $A512,3 GetLookupTableAddress
 c $A515 Scroll ticker text for instructions screen
 D $A515 Note: first half of this routine is very similar ScrollText1 routine.
 @ $A515 label=ScrollText2
   $A529,3 Point #REGhl to instructions_screen_ticker_text
-  $A534,4 Set $732C to `$00`
+  $A534,4 Set 732C to `$00`
   $A540,3 UpdateScreenGfx
   $A54A,9 Read keyboard and check keypress (for what?)
   $A553,9 Read keyboard and check keypress (for what?)
   $A55C,10 Read keyboard row 1..5 (on instructions screen?)
 c $A566 Highlight the "input type" line # 1, 2, or 3.
-  $A566,1 #REGb also saved to game_state later, at $A57D
+  $A566,1 #REGb also saved to game_state later, at A57D
   $A567,6 Check the current game_state.
   $A56D,3 Input type #2.
   $A574,3 Input type #3.
@@ -828,10 +828,10 @@ D $A59D Routine to start a new game, first asking for number of players!
   $A5FC,3 Point #REGh; to level_1 address.
   $A5FF,2 Copy level data.
   $A601,3 Why repeat the copy 5 times?
-  $A604,10 Reset anim buffer data at $6EC8 (6 bytes) + ANIMBUF1 (24 bytes)
-  $A60E,7 Reset all egg counters to $0C (12...why?): from address $6EE6 for 5 bytes
-  $A615,7 Reset all cleared levels counters: from address $6EEB for 5 bytes
-  $A61C,7 Reset all player lives to 5: from address $6EF0 for 4 bytes
+  $A604,10 Reset anim buffer data at 6EC8 (6 bytes) + ANIMBUF1 (24 bytes)
+  $A60E,7 Reset all egg counters to $0C (12...why?): from address 6EE6 for 5 bytes
+  $A615,7 Reset all cleared levels counters: from address 6EEB for 5 bytes
+  $A61C,7 Reset all player lives to 5: from address 6EF0 for 4 bytes
 @ $A623 ssub=LD HL,$9F60+$3E ; Address is toward the end of a routine, so we need a big offset.
 c $A62C Routine at a62c
 D $A62C Used by the routine at #R$a6fe.
@@ -909,13 +909,13 @@ D $A921 Used by the routines at #R$a47d, #R$a515, #R$a62c, #R$a6fe, #R$a929 and 
 @ $A921 label=PauseRoutine
 c $A929 Animated transition #1 (1 square)
 D $A929 Used by the routines at #R$a59d and #R$a7bc.
-  $A93B,3 Set $732C to `$03`
+  $A93B,3 Set 732C to `$03`
 c $A960 Called when farmer dies
 D $A960 Used by the routines at #R$a4c8, #R$a59d, #R$a62c, #R$a6fe and #R$a828.
 c $A968 Animated transition #2 (4 squares)
 D $A968 Used by the routines at #R$a62c and #R$a7bc.
-  $A96B,5 Set $732C to `$09`
-  $A9C5,5 Set $732C to `$04`
+  $A96B,5 Set 732C to `$09`
+  $A9C5,5 Set 732C to `$04`
 c $A9CE Prepare to scroll GAME OVER message
 D $A9CE Used by the routines at #R$a62c and #R$a6fe.
   $A9CE,10 Update some attribute colours to $04
@@ -926,7 +926,7 @@ D $A9CE Used by the routines at #R$a62c and #R$a6fe.
   $A9F4,3 ScrollTickerText
 c $A9FA Animated transition after death...related to animation #1
 D $A9FA Used by the routine at #R$a968.
-  $AA00,8 Increment value at $732C by `$09`.
+  $AA00,8 Increment value at 732C by `$09`.
 c $AA0C Routine at aa0c
 D $AA0C Used by the routine at #R$a80c.
 c $AA23 Called during animation #1
@@ -1198,4 +1198,5 @@ b $CBB0 related to address lookup table
 > $CBB0,1 ; Use the same address as with the ORG directive, to tell Pasmo where
 > $CBB0,1 ; to start running the program from here.
 > $CBB0,1 end $A410
+> $CBB0,1
 i $CBC4
