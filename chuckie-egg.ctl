@@ -1396,8 +1396,8 @@ b $CB96 related to address lookup table
   $CB96,26,8*3,2
 b $CBB0 related to address lookup table
   $CBB0,20,8*2,4
-s $CBC4 Unused
-  $CBC4,13140,$3354
-s $FF18 NOTE: snapshot from FUSE has data here.
-  $FF18,64,$40
-i $FF58 RESERVED MEMORY for User defined graphics (UDG)
+> $CBB0,1 ; The Pasmo assembler uses this directive when generating a tape image.
+> $CBB0,1 ; Use the same address as with the ORG directive, to tell Pasmo where
+> $CBB0,1 ; to start running the program from here.
+> $CBB0,1 end $A410
+i $CBC4

@@ -6038,11 +6038,7 @@ b$cbb0 defb $06,$39,$08,$3b,$04,$15,$06,$00
  $cbb8 defb $06,$2d,$05,$1e,$03,$29,$06,$00
  $cbc0 defb $0b,$00,$ff,$ff
 
-; Unused
-s$cbc4 defs $3354
-
-; NOTE: snapshot from FUSE has data here.
-s$ff18 defs $40
-
-; RESERVED MEMORY for User defined graphics (UDG)
-i$ff58
+; The Pasmo assembler uses this directive when generating a tape image.
+; Use the same address as with the ORG directive, to tell Pasmo where
+; to start running the program from here.
+end $A410
