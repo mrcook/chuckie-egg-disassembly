@@ -1,11 +1,22 @@
-> $61A8 ; SkoolKit disassembly for Chuckie Egg
-> $61A8 ; (https://github.com/mrcook/chuckie-egg-disassembly/)
-> $61A8 ;
-> $61A8 ; Copyright (c) 2018 Michael R. Cook (this disassembly)
-> $61A8 ; Copyright (c) 1984 A&F Software (Chuckie Egg)
-> $61A8 ; Chuckie Egg was designed and developed by Nigel Alderton
-@ $61A8 start
-@ $61A8 org=$A410
+> $5EF3 ; SkoolKit disassembly for Chuckie Egg
+> $5EF3 ; (https://github.com/mrcook/chuckie-egg-disassembly/)
+> $5EF3 ;
+> $5EF3 ; Copyright (c) 2018 Michael R. Cook (this disassembly)
+> $5EF3 ; Copyright (c) 1984 A&F Software (Chuckie Egg)
+> $5EF3 ; Chuckie Egg was designed and developed by Nigel Alderton
+> $5EF3 @start=$5ef3
+@ $5EF3 org=$5ef3
+c $5EF3 NOTE: this is a hack to get the game assembling. It is actually part of the tape loader routine, which includes some nice set up code to make the game assemble out-of-the-box.
+  $5EF5,3 Set border (SYSVAR_BORDCR) to $07 (white)
+@ $5EF8 ssub=jp $5fb8       ; NOTE: Replace following opcode
+s $5EFB Ignore the rest of the tape loader code/data.
+  $5EFB,189,$bd
+c $5FB8 Tape loader "start" routine.
+  $5FBB,3 Set SYSVAR_STKBOT variable
+  $5FBE,3 Set SYSVAR_STKEND variable
+  $5FC1,3 Start the game!
+s $5FC4 Ignore the rest of the tape loader code/data.
+  $5FC4,484,$01e4
 s $61A8 Level Buffer (empty level)
 D $61A8 Screen map data is copied to this buffer at the start of each new level. Each byte represents a tile ID, with 20 tile GFX in total. #TABLE(default,centre,:w) { =h Byte | =h Tile } { 00 | Blank Tile } { 01 | Ladder #1 (left) } { 02 | Ladder #2 (right) } { 03 | Egg } { 04 | Corn } { 05 | Floor } { A8 | Birdcage: handle #1 } { A9 | Birdcage: handle #2 } { AA | Birdcage: #01 (top) } { AB | Birdcage: #02 (top) } { AC | Birdcage: #03 (top) } { AD | Birdcage: #04 (top) } { AE | Birdcage: #05 (middle) } { AF | Birdcage: #06 (middle) } { B0 | Birdcage: #07 (middle) } { B1 | Birdcage: #08 (middle) } { B2 | Birdcage: #09 (bottom) } { B3 | Birdcage: #10 (bottom) } { B4 | Birdcage: #11 (bottom) } { B5 | Birdcage: #12 (bottom) } TABLE#
 @ $61A8 label=level_buffer
@@ -241,15 +252,11 @@ s $8274 Really unused?
 t $8336 Ticker text
 D $8336 'press R to redefine keys * press S to start game * press 1, 2 or 3 to select key type'
 @ $8336 label=msg_ticker
-  $8336,82,5:B1:1:B1:2:B1:8:B1:4:B2,5:B1:1:B1:2:B1:5:B1:4:B2,5:B1:3:B1:2:B1:1:B1:2:B1:6:B1:3:B1:4
-B $8388,8,8
+  $8336,90,5:B1:1:B1:2:B1:8:B1:4,B2,5:B1:1:B1:2:B1:5:B1:4,B2:5:B1:3:B1:2:B1:1,B1:2:B1:6:B1:3:B1:4,B8
 t $8390 Instructions screen redefine keys text
 D $8390 'key types 1 & 2 are present and' 'cannot be changed but the type 3' 'keys are user defineable.      '
 @ $8390 label=msg_redefine_text
-  $8390,31,31
-B $83AF,1,1
-  $83B0,30,6:B1:2:B1:7:B1:3:B1:3:B1:4
-B $83CE,34,1,T1:T3:1:T5:1:T1:1:T1:1:T1:1:T3:1:T6:1:T3,2
+  $8390,96,31,B1,6:B1:2:B1:7:B1:3:B1:3:B1:4,B1,1:3:B1:5:B1,1:B1:1:B1:1:B1:3:B1:6:B1:3,B2
 t $83F0 Instructions screen key types table
 @ $83F0 label=msg_key_types
   $83F0,96,32
@@ -479,10 +486,10 @@ D $929C Used by the routines at #R$911e, #R$9178, #R$91f3 and #R$9265.
   $929C,1 POKE to 201 (`RET`) to vanquish Ostriches
 c $92C2 Routine at 92c2
 D $92C2 Used by the routine at #R$929c.
-@ $92F6 ssub=LD HL,$8F90+$7E ; Point #REGhl to end of SPRITES_FARMER_WALK
+@ $92F6 ssub=ld hl,$8f90+$7e ; Point #REGhl to end of SPRITES_FARMER_WALK
 c $935F Routine at 935f
 D $935F Used by the routine at #R$92c2.
-@ $9398 ssub=LD HL,$84F0+$07 ; Point #REGhl to last byte of gfx_tile_blank
+@ $9398 ssub=ld hl,$84f0+$07 ; Point #REGhl to last byte of gfx_tile_blank
 c $93DD Routine at 93dd
 D $93DD Used by the routines at #R$92c2 and #R$935f.
   $93E5,3 Point #REGhl to start of ATTRIBUTE_FILE.
@@ -564,14 +571,14 @@ D $98E6 Used by the routine at #R$9858.
   $98FD,2 POKE to 24 (`JR nnnn`) to vanquish giant duck
   $9925,1 POKE to 0 (`NOP`) to get infinite BONUS
   $9938,1 POKE to `0` (NOP) to slow Ostriches
-@ $9955 ssub=LD A,($7336+$01)
+@ $9955 ssub=ld a,($7336+$01)
   $9955,16 JUMP keypress
-@ $9965 ssub=LD A,($7338+$01)
+@ $9965 ssub=ld a,($7338+$01)
   $9965,16 key_jump_2 keypress
   $9975,24 Load bytes into @72D8 + 77, 78, 79, 80, 82, and 125.
-@ $9991 ssub=LD A,($7334+$01)
+@ $9991 ssub=ld a,($7334+$01)
   $9991,16 RIGHT keypress
-@ $99A5 ssub=LD A,($7332+$01)
+@ $99A5 ssub=ld a,($7332+$01)
   $99A5,16 LEFT keypress
 c $99DC Jump point
 D $99DC Used by the routines at #R$9858 and #R$98e6.
@@ -637,7 +644,7 @@ c $9CEB Get address value from the address_lookup_table
 D $9CEB Used by the routines at #R$a389, #R$a420, #R$a4c8, #R$a62c, #R$a828, #R$aae4 and #R$b14f.
 @ $9CEB label=GetLookupTableAddress
   $9CEB,1 Current known values for #REGa are between $01 and $21.
-@ $9CF2 ssub=LD HL,$C8C8-$02 ; Point #REGhl to address_lookup_table - 2 bytes
+@ $9CF2 ssub=ld hl,$c8c8-$02 ; Point #REGhl to address_lookup_table - 2 bytes
   $9CF5,4 Increment #REGhl until we get the desired address.
   $9CF9,3 Load #REGde with address from lookup table
   $9CFC,4 Save address to 7374
@@ -646,9 +653,9 @@ s $9D06 Unused
   $9D06,2,$02
 c $9D08 Routine at 9d08
 D $9D08 Used by the routine at #R$98e6.
-@ $9D36 ssub=LD A,($7332+$01)
+@ $9D36 ssub=ld a,($7332+$01)
   $9D36,16 LEFT keypress
-@ $9D6F ssub=LD A,($7334+$01)
+@ $9D6F ssub=ld a,($7334+$01)
   $9D6F,16 RIGHT keypress
 s $9DF1 Unused
   $9DF1,67,$43
@@ -666,19 +673,19 @@ s $9E8D Unused
   $9E8D,11,$0b
 c $9E98 Routine at 9e98
 D $9E98 Used by the routine at #R$98e6.
-@ $9EC7 ssub=LD A,($732E+$01)
+@ $9EC7 ssub=ld a,($732e+$01)
   $9EC7,58 UP keypress
-@ $9F01 ssub=LD A,($7330+$01)
+@ $9F01 ssub=ld a,($7330+$01)
   $9F01,62 DOWN keypress
 s $9F3F Unused
   $9F3F,33,$21
 c $9F60 Routine at 9f60
 D $9F60 Used by the routine at #R$98e6.
-@ $9F8A ssub=LD A,($7332+$01)
+@ $9F8A ssub=ld a,($7332+$01)
   $9F8A,21 LEFT keypress
 c $9FB5 Routine at 9fb5
 D $9FB5 Used by the routine at #R$9f60.
-@ $9FB5 ssub=LD A,($7334+$01)
+@ $9FB5 ssub=ld a,($7334+$01)
   $9FB5,15 RIGHT keypress
 s $9FDF Unused
   $9FDF,53,$35
@@ -729,7 +736,7 @@ c $A37F Routine at a37f
 D $A37F Used by the routines at #R$a294 and #R$a30c.
 c $A389 Farmer lands on a platform?
 D $A389 Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
-@ $A38F ssub=LD HL,$A399-$01
+@ $A38F ssub=ld hl,$a399-$01
   $A389,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $A392,4 Increment #REGhl to required address, and assign #REGa.
   $A396,3 GetLookupTableAddress
@@ -832,24 +839,24 @@ D $A59D Routine to start a new game, first asking for number of players!
   $A60E,7 Reset all egg counters to $0C (12...why?): from address 6EE6 for 5 bytes
   $A615,7 Reset all cleared levels counters: from address 6EEB for 5 bytes
   $A61C,7 Reset all player lives to 5: from address 6EF0 for 4 bytes
-@ $A623 ssub=LD HL,$9F60+$3E ; Address is toward the end of a routine, so we need a big offset.
+@ $A623 ssub=ld hl,$9f60+$3e ; Address is toward the end of a routine, so we need a big offset.
 c $A62C Routine at a62c
 D $A62C Used by the routine at #R$a6fe.
   $A62C,3 Get number_of_players
   $A632,3 Get current_player
   $A637,3 GetLookupTableAddress
-@ $A63A ssub=LD BC,$AD3F+$0A ; Point #REGbc to the address of "p" from "player 1"
+@ $A63A ssub=ld bc,$ad3f+$0a ; Point #REGbc to the address of "p" from "player 1"
   $A63D,3 Get current_player
-@ $A642 ssub=LD ($AD3F+$11),A ; Replace player number in game_over_text with #REGa.
-@ $A647 ssub=LD DE,$AD3F+$0A ; Point #REGde to the address of "p" from "player 1"
+@ $A642 ssub=ld ($ad3f+$11),a ; Replace player number in game_over_text with #REGa.
+@ $A647 ssub=ld de,$ad3f+$0a ; Point #REGde to the address of "p" from "player 1"
   $A65F,3 Get current_player
   $A672,3 POKE @A672 to 202 (`JP Z`) to jump to next level on death
   $A6A1,3 Get current_player
-@ $A6CD ssub=LD ($AD58+$01),A ; Update LSB of address.
+@ $A6CD ssub=ld ($ad58+$01),a ; Update LSB of address.
   $A6D9,3 #REGde is loaded with "level " text
   $A6E1,3 Load #REGde with level_buffer address
   $A6E4,3 Load #REGbc with value of 672 (size of level data)
-@ $A6E7 ssub=LD HL,$B3B0-$02A0 ; Point #REGhl to level_1-$02A0 (672 bytes).
+@ $A6E7 ssub=ld hl,$b3b0-$02a0 ; Point #REGhl to level_1-$02A0 (672 bytes).
   $A6F0,1 Add $02A0 (672) to #REGhl, to start read from level_1 address.
 c $A6FE Farmer has died!
 D $A6FE Used by the routine at #R$a62c.
@@ -874,17 +881,17 @@ D $A7BC Used by the routine at #R$a6fe.
   $A7D6,3 #REGhl=player 1 score
   $A7D9,9 Increment value in (#REGhl) by $30 for 24 bytes.
   $A7E4,3 #REGhl=player 1 score
-@ $A7E9 ssub=LD ($AD67+$0B),A ; Change player number in high score text.
+@ $A7E9 ssub=ld ($ad67+$0b),a ; Change player number in high score text.
   $A7FF,10 check if a score has been entered on scoreboard?
 c $A80C Called before loading main screen or highscores?
 D $A80C Used by the routine at #R$a7bc.
-@ $A811 ssub=LD DE,$97AF+$0A ; Point #REGde to first score value ("001000") on scoreboard.
+@ $A811 ssub=ld de,$97af+$0a ; Point #REGde to first score value ("001000") on scoreboard.
 c $A828 Player enters their name on the highscore table?
 D $A828 Used by the routine at #R$a80c.
 @ $A828 label=HighScoreEnterName
-@ $A82A ssub=LD HL,$97AF+$90 ; Point #REGhl to last score entry (-1 byte) on scoreboard.
-@ $A83B ssub=LD DE,$97AF+$9F
-@ $A83E ssub=LD HL,$97AF+$8F
+@ $A82A ssub=ld hl,$97af+$90 ; Point #REGhl to last score entry (-1 byte) on scoreboard.
+@ $A83B ssub=ld de,$97af+$9f
+@ $A83E ssub=ld hl,$97af+$8f
   $A841,2 LDDR decrements HL/DE, unlike LDIR, which increments.
   $A844,7 Does this clear the name for the selected highscore?
   $A859,3 Point #REGde to new_high_score_text
@@ -945,16 +952,16 @@ D $AA49 Used by the routines at #R$a47d and #R$a515.
   $AA64,3 UpdateScreenGfx
   $AA74,3 UpdateScreenGfx
   $AA80,10 Update colour attributes to $04
-@ $AA9A ssub=LD BC,$83F0+$06 ; Point #REGbc to "q" character in msg_key_types
+@ $AA9A ssub=ld bc,$83f0+$06 ; Point #REGbc to "q" character in msg_key_types
 c $AABA Routine at aaba
 D $AABA Used by the routine at #R$ab19.
-@ $AABA ssub=LD HL,$8268-$01 ; Point #REGhl to key_input_type_3 - 1 byte
+@ $AABA ssub=ld hl,$8268-$01 ; Point #REGhl to key_input_type_3 - 1 byte
 N $AAD2 This entry point is used by the routine at #R$aadf.
 c $AADF Some kind of pause routine?
 D $AADF Used by the routine at #R$aaba.
 c $AAE4 Called after death tune
 D $AAE4 Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
-@ $AAE6 ssub=LD HL,$ABEA-$01
+@ $AAE6 ssub=ld hl,$abea-$01
   $AAE4,9 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $AAED,4 Increment #REGhl to required address, and assign #REGa.
   $AAF1,3 GetLookupTableAddress
@@ -970,7 +977,7 @@ N $AB12 This entry point is used by the routine at #R$aaf4.
 c $AB19 Print redefine key direction label?
 D $AB19 Used by the routine at #R$aa49.
 @ $AB19 label=RedefineKeysPrintDirection
-@ $AB33 ssub=LD HL,$AC02+$4C ; Point #REGhl to first address after "jump" in redefine_keys_wizard_text
+@ $AB33 ssub=ld hl,$ac02+$4c ; Point #REGhl to first address after "jump" in redefine_keys_wizard_text
   $AB51,3 UpdateScreenGfx
 c $AB60 Play the theme tune.
 D $AB60 Used by the routines at #R$a420, #R$a6fe and #R$ab70.
@@ -1076,7 +1083,7 @@ D $B130 Used by the routine at #R$ae9c.
 c $B14F After death, screen is redrawn, before ostriches/farmer displayed
 D $B14F Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
 N $B14F Does accessing #REGhl instruction before the #REGr have any importance? (see "R Register" https://www.worldofspectrum.org/faq/reference/z80reference.htm)
-@ $B14F ssub=LD HL,$B15F-$01
+@ $B14F ssub=ld hl,$b15f-$01
   $B152,6 Load #REGb with #REGr (related to memory refresh), then after processing #REGb will have a value between 1-8.
   $B158,4 Increment #REGhl to required address, and assign #REGa.
   $B15C,3 GetLookupTableAddress
@@ -1097,29 +1104,29 @@ b $B381 Source code remnants
 D $B381 The source code here corresponds to the code in middle of #R$A59D.
   $B381,47,8*5,7
 b $B3B0 Level 1 layout data - see level_buffer for byte map
-@ $B3B0 label=
-  $B3B0,672,32
+@ $B3B0 label=level_1
+  $B3B0,672,16
 b $B650 Level 2 layout data - see level_buffer for byte map
 @ $B650 label=level_2
-  $B650,672,32
+  $B650,672,16
 b $B8F0 Level 3 layout data - see level_buffer for byte map
 @ $B8F0 label=level_3
-  $B8F0,672,32
+  $B8F0,672,16
 b $BB90 Level 4 layout data - see level_buffer for byte map
 @ $BB90 label=level_4
-  $BB90,672,32
+  $BB90,672,16
 b $BE30 Level 5 layout data - see level_buffer for byte map
 @ $BE30 label=level_5
-  $BE30,672,32
+  $BE30,672,16
 b $C0D0 Level 6 layout data - see level_buffer for byte map
 @ $C0D0 label=level_6
-  $C0D0,672,32
+  $C0D0,672,16
 b $C370 Level 7 layout data - see level_buffer for byte map
 @ $C370 label=level_7
-  $C370,672,32
+  $C370,672,16
 b $C610 Level 8 layout data - see level_buffer for byte map
 @ $C610 label=level_8
-  $C610,672,32
+  $C610,672,16
 b $C8B0 Source code remnants?
 D $C8B0 The source code here corresponds to the code at ????.
   $C8B0,24,9,8,7
@@ -1197,6 +1204,5 @@ b $CBB0 related to address lookup table
 > $CBB0,1 ; The Pasmo assembler uses this directive when generating a tape image.
 > $CBB0,1 ; Use the same address as with the ORG directive, to tell Pasmo where
 > $CBB0,1 ; to start running the program from here.
-> $CBB0,1 end $A410
-> $CBB0,1
+> $CBB0,1 end $5ef3
 i $CBC4
