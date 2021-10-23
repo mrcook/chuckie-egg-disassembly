@@ -39,8 +39,28 @@ This is very much a **Work In Progress** effort.
 - Many of the routines are either known, or I have a good idea of what they do. Some have detailed annotations, but plenty don't yet.
 
 
+## Skoolkit Instructions
+
+Executing the `.t2s` file will download the tape image and extract the a `.z80`
+snapshot.
+
+    $ tap2sna.py @chuckie-egg.t2s
+
+
+If changes are made to the control file, a new `.skool` can be generated using
+the `sna2skool.py` command.
+
+For the Game Loader:
+
+    $ sna2skool.py -c loader.ctl -Hl chuckie-egg.z80 > loader.skool
+
+And for the main game itself:
+
+    $ sna2skool.py -c chuckie-egg.ctl -Hl chuckie-egg.z80 > chuckie-egg.skool
+
+
 ## Copyright Information
 
 Chuckie Egg is copyright (c) 1984 A&F Software.
 
-This disassembly is copyright (c) 2018 Michael R. Cook.
+This disassembly is copyright (c) 2018-2021 Michael R. Cook.
