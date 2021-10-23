@@ -9,20 +9,16 @@
 c $5EF3 NOTE: this is a hack to get the game assembling. It is actually part of the tape loader routine, which includes some nice set up code to make the game assemble out-of-the-box.
   $5EF5,3 Set border (SYSVAR_BORDCR) to $07 (white)
 @ $5EF8 ssub=jp $5fb8       ; NOTE: Replace following opcode
-s $5EFB Ignore the rest of the tape loader code/data.
-  $5EFB,189,$bd
+i $5EFB Ignore the rest of the tape loader code/data.
 c $5FB8 Tape loader "start" routine.
   $5FBB,3 Set SYSVAR_STKBOT variable
   $5FBE,3 Set SYSVAR_STKEND variable
   $5FC1,3 Start the game!
-s $5FC4 Ignore the rest of the tape loader code/data.
-  $5FC4,484,$01e4
-s $61A8 Level Buffer (empty level)
+i $5FC4 Ignore the rest of the tape loader code/data.
+i $61A8 Level Buffer (empty level): $02A0 bytes in size.
 D $61A8 Screen map data is copied to this buffer at the start of each new level. Each byte represents a tile ID, with 20 tile GFX in total. #TABLE(default,centre,:w) { =h Byte | =h Tile } { 00 | Blank Tile } { 01 | Ladder #1 (left) } { 02 | Ladder #2 (right) } { 03 | Egg } { 04 | Corn } { 05 | Floor } { A8 | Birdcage: handle #1 } { A9 | Birdcage: handle #2 } { AA | Birdcage: #01 (top) } { AB | Birdcage: #02 (top) } { AC | Birdcage: #03 (top) } { AD | Birdcage: #04 (top) } { AE | Birdcage: #05 (middle) } { AF | Birdcage: #06 (middle) } { B0 | Birdcage: #07 (middle) } { B1 | Birdcage: #08 (middle) } { B2 | Birdcage: #09 (bottom) } { B3 | Birdcage: #10 (bottom) } { B4 | Birdcage: #11 (bottom) } { B5 | Birdcage: #12 (bottom) } TABLE#
 @ $61A8 label=level_buffer
-  $61A8,672,$02a0
-s $6448 This area is unused for gameplay, although it was used during game loading.
-  $6448,2688,$0a80
+i $6448 This area is unused for gameplay, although it was used during game loading.
 s $6EC8 Current player score.
 D $6EC8 Each byte represents one decimal digit of the 6 digit score.
 @ $6EC8 label=current_score
@@ -236,8 +232,7 @@ b $7373 State variable for lookup table routine #R$9CEB.
   $7373,1,1
 w $7374 Lookup table address saved here by #R$9CEB.
   $7374,2,2
-s $7376 Unused.
-  $7376,3802,$0eda
+i $7376 Unused.
 w $8250 Keyboard Controls #1: 2, W, 9, 0, Z or M.
 @ $8250 label=key_input_type_1
   $8250,12,2
@@ -252,11 +247,11 @@ s $8274 Really unused?
 t $8336 Ticker text
 D $8336 'press R to redefine keys * press S to start game * press 1, 2 or 3 to select key type'
 @ $8336 label=msg_ticker
-  $8336,90,5:B1:1:B1:2:B1:8:B1:4,B2,5:B1:1:B1:2:B1:5:B1:4,B2:5:B1:3:B1:2:B1:1,B1:2:B1:6:B1:3:B1:4,B8
+  $8336,90,5:h1:1:h1:2:h1:8:h1:4,h2,5:h1:1:h1:2:h1:5:h1:4,h2:5:h1:3:h1:2:h1:1,h1:2:h1:6:h1:3:h1:4,h8
 t $8390 Instructions screen redefine keys text
 D $8390 'key types 1 & 2 are present and' 'cannot be changed but the type 3' 'keys are user defineable.      '
 @ $8390 label=msg_redefine_text
-  $8390,96,31,B1,6:B1:2:B1:7:B1:3:B1:3:B1:4,B1,1:3:B1:5:B1,1:B1:1:B1:1:B1:3:B1:6:B1:3,B2
+  $8390,96,31,h1,6:h1:2:h1:7:h1:3:h1:3:h1:4,h1,1:3:h1:5:h1,1:h1:1:h1:1:h1:3:h1:6:h1:3,h2
 t $83F0 Instructions screen key types table
 @ $83F0 label=msg_key_types
   $83F0,96,32
@@ -273,9 +268,9 @@ s $8482 Unused
 t $849B Instructions screen objective text
 D $849B 'objective- to collect eggs from the hen-house.'
 @ $849B label=msg_instructions_objective
-  $849B,14,3:B1:10
+  $849B,14,3:h1:10
 B $84A9,7,7
-  $84B0,31,10:B1:2:B1:7:B1:4:B1:4
+  $84B0,31,10:h1:2:h1:7:h1:4:h1:4
 s $84CF Unused
   $84CF,11,$0b
 t $84DA Instructions screen heading
@@ -414,8 +409,7 @@ b $8B30 "TYPE" heading graphic for instructions screen (32x8)
 D $8B30 #HTML[#UDGARRAY4;$8B30-$8B4F-8(instructions_heading_type)]
 @ $8B30 label=instructions_heading_type
   $8B30,32,8
-s $8B50 Unknown, unused?
-  $8B50,672,$02a0
+i $8B50 Unknown, unused?
 b $8DF0 Farmer sprites animation data: right facing
 @ $8DF0 label=sprites_farmer_right
   $8DF0,128,8
@@ -520,17 +514,17 @@ b $9630 Home screen/high score table text data
 D $9630 As displayed after game load, and game over. Note: the screen is loaded bottom to top.
 @ $9630 label=home_screen
   $9630,28,8*3,4
-T $964C,14,2:B2:10
+T $964C,14,2:h2:10
   $965A,14,8,6
-T $9668,14,1:B1:2:B1:1:B1:7
+T $9668,14,1:h1:2:h1:1:h1:7
   $9676,15,8,7
-T $9685,12,2:B1:5:B1:3
+T $9685,12,2:h1:5:h1:3
   $9691,19,8*2,3
-T $96A4,6,1:B1:4
+T $96A4,6,1:h1:4
   $96AA,147,8*18,3
 T $973D,8,8
   $9745,17,8*2,1
-T $9756,14,1:B1:1:B1:1:B1:8
+T $9756,14,1:h1:1:h1:1:h1:8
 b $9764 Data block at 9764
   $9764,7,7
 b $976B Data block at 976b
@@ -557,7 +551,7 @@ b $9787 Data block at 9787
   $9787,40,8
 t $97AF High score table with name/score columns
 @ $97AF label=scoreboard
-B $97AF,160,T1:8:T7
+B $97AF,160,c1:8:c7
 b $984F Unknown/unused bytes.
   $984F,9,8,1
 c $9858 Routine at 9858
@@ -1010,21 +1004,21 @@ t $AC02 Wizard instructions for redefining the keys
 @ $AC02 label=redefine_keys_wizard_text
   $AC02,82,32,10
 t $AC54 Alphabet characters, but out of order
-B $AC54,40,2:T3:1:T29:1:T4
+B $AC54,40,2:c3:1:c29:1:c4
 t $AC7C Home screen ticker text
 @ $AC7C label=home_screen_ticker_text
-  $AC7C,24,1:B1:22
+  $AC7C,24,1:h1:22
 N $AC94 Redefine keys text
-  $AC94,27,1:B1:25
+  $AC94,27,1:h1:25
 N $ACAF Instructions text
-  $ACAF,27,1:B1:25
+  $ACAF,27,1:h1:25
 t $ACCA Instructions screen ticker text
 @ $ACCA label=instructions_screen_ticker_text
-  $ACCA,24,1:B1:22
+  $ACCA,24,1:h1:22
 N $ACE2 Redefine keys text
-  $ACE2,27,1:B1:25
+  $ACE2,27,1:h1:25
 N $ACFD Select key type
-  $ACFD,36,1:B1:34
+  $ACFD,36,1:h1:34
 t $AD21 "1,2,3 or 4 players ?" - choose number of players text data
 @ $AD21 label=choose_number_of_players_text
   $AD21,30,30

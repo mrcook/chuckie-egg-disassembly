@@ -16,7 +16,7 @@ c$5ef3 ld a,$07      ;
  $5ef8 ld hl,$5aff   ;
 
 ; Ignore the rest of the tape loader code/data.
-s$5efb defs $bd
+i$5efb
 
 ; Tape loader "start" routine.
 c$5fb8 ld hl,$5dc0   ;
@@ -25,9 +25,9 @@ c$5fb8 ld hl,$5dc0   ;
  $5fc1 jp $a410      ; Start the game!
 
 ; Ignore the rest of the tape loader code/data.
-s$5fc4 defs $01e4
+i$5fc4
 
-; Level Buffer (empty level)
+; Level Buffer (empty level): $02A0 bytes in size.
 ;
 ; Screen map data is copied to this buffer at the start of each new level. Each
 ; byte represents a tile ID, with 20 tile GFX in total.
@@ -55,10 +55,10 @@ s$5fc4 defs $01e4
 ; { B5 | Birdcage: #12 (bottom) }
 ; TABLE#
 @label=level_buffer
-s$61a8 defs $02a0
+i$61a8
 
 ; This area is unused for gameplay, although it was used during game loading.
-s$6448 defs $0a80
+i$6448
 
 ; Current player score.
 ;
@@ -407,7 +407,7 @@ b$7373 defb $00
 w$7374 defw $0000
 
 ; Unused.
-s$7376 defs $0eda
+i$7376
 
 ; Keyboard Controls #1: 2, W, 9, 0, Z or M.
 @label=key_input_type_1
@@ -870,7 +870,7 @@ b$8b30 defb $00,$fe,$10,$10,$10,$10,$00,$ff
  $8b48 defb $00,$3f,$20,$3c,$20,$3f,$00,$ff
 
 ; Unknown, unused?
-s$8b50 defs $02a0
+i$8b50
 
 ; Farmer sprites animation data: right facing
 @label=sprites_farmer_right
