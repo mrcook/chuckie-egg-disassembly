@@ -1,7 +1,7 @@
 > $5EF3 ; SkoolKit disassembly for Chuckie Egg
 > $5EF3 ; (https://github.com/mrcook/chuckie-egg-disassembly/)
 > $5EF3 ;
-> $5EF3 ; Copyright (c) 2018 Michael R. Cook (this disassembly)
+> $5EF3 ; Copyright (c) 2018-2021 Michael R. Cook (this disassembly)
 > $5EF3 ; Copyright (c) 1984 A&F Software (Chuckie Egg)
 > $5EF3 ; Chuckie Egg was designed and developed by Nigel Alderton
 > $5EF3 @start=$5ef3
