@@ -1014,7 +1014,9 @@ b$90f0 defb $00,$00,$00,$00,$00,$00,$00,$00
 b$9110 defb $00,$00,$00,$00,$00,$00,$0c,$00
  $9118 defb $0f,$00,$0f,$80,$1f,$c0
 
-; Runs from start of level, after everything has been rendered.
+; Move the Ostriches
+;
+; Runs from start of level, after everything has been rendered
 ;
 ; Used by the routine at #R$98e6.
 c$911e ld a,($6eeb)  ;
@@ -1256,7 +1258,7 @@ c$9250 push hl       ;
  $9263 ld (de),a     ;
  $9264 ret           ;
 
-; Routine at 9265
+; Check if an Ostrich can eat some corn.
 ;
 ; Used by the routine at #R$9178.
 c$9265 push bc       ; {Backup registers
@@ -1303,7 +1305,7 @@ c$9298 pop de        ;
  $929a pop bc        ;
  $929b ret           ;
 
-; Update Ostriches?
+; Check if player has collided with an Ostrich.
 ;
 ; Used by the routines at #R$911e, #R$9178, #R$91f3 and #R$9265.
 c$929c push bc       ; POKE to 201 (`RET`) to vanquish Ostriches
@@ -1531,9 +1533,13 @@ c$935f ld ixl,$02    ;
  $93d8 ld ix,$72d8   ;
  $93dc ret           ;
 
-; Routine at 93dd
+; Get the screen and attributes address of a sprite
 ;
 ; Used by the routines at #R$92c2 and #R$935f.
+;
+;  Input: HL y/x coordinates
+; Output: DE screen address
+;        HL attribute address
 c$93dd push af       ;
  $93de push de       ;
  $93df ld a,$bf      ;
@@ -1556,17 +1562,17 @@ c$93dd push af       ;
  $93fc pop af        ;
  $93fd ret           ;
 
-; Backup/restore #REGaf, so routine can be called safely.
+; Get room buffer location at the specified coordinate
 ;
-; Used by the routine at #R$935f.
+; Input: HL y/x coordinate Output: HL address inside the room buffer
 c$93fe push af       ;
  $93ff call $9e34    ;
  $9402 pop af        ;
  $9403 ret           ;
 
-; Routine at 9404
+; Get screen address of a sprite
 ;
-; Used by the routines at #R$92c2 and #R$935f.
+; Input: HL y/x coordinates Output: HL screen address
 c$9404 push af       ; {Backup #REGaf, #REGde, #REGbc registers
  $9405 push de       ;
  $9406 push bc       ; }
@@ -1602,7 +1608,7 @@ c$9404 push af       ; {Backup #REGaf, #REGde, #REGbc registers
  $9436 pop af        ; }
  $9437 ret           ;
 
-; Save/restore #REGhl so routine can be called safely
+; Get the gfx at the specified location
 ;
 ; Used by the routines at #R$9178, #R$91cb, #R$91df, #R$91f3, #R$923b and
 ; #R$9250.
@@ -1611,11 +1617,33 @@ c$9438 push hl       ;
  $943c pop hl        ;
  $943d ret           ;
 
-; Data block at 943e
-b$943e defb $f1,$c9,$e5,$cd,$34,$9e,$e1,$c9
- $9446 defb $00,$08,$7a,$fe,$80,$30,$06,$fe
- $944e defb $40,$30,$01,$09,$09,$e6,$38,$4f
- $9456 defb $3e,$38,$91,$cb,$27
+; Unused routine?
+c$943e pop af        ;
+ $943f ret           ;
+
+; Unused routine?
+c$9440 push hl       ;
+ $9441 call $9e34    ;
+ $9444 pop hl        ;
+ $9445 ret           ;
+
+; Data block at 9446
+b$9446 defb $00
+
+; Unused code?
+c$9447 ex af,af'     ;
+ $9448 ld a,d        ;
+ $9449 cp $80        ;
+ $944b jr nc,$9453   ;
+ $944d cp $40        ;
+ $944f jr nc,$9452   ;
+ $9451 add hl,bc     ;
+*$9452 add hl,bc     ;
+*$9453 and $38       ;
+ $9455 ld c,a        ;
+ $9456 ld a,$38      ;
+ $9458 sub c         ;
+ $9459 sla a         ;
 
 ; Some of these byte are copied to 7357.
 b$945b defb $cb,$27,$06,$00,$4f,$09,$7a,$e6
@@ -1647,7 +1675,7 @@ b$945b defb $cb,$27,$06,$00,$4f,$09,$7a,$e6
  $952b defb $00,$00,$00,$00,$00,$00,$00,$00
  $9533 defb $00,$00,$00,$00,$00
 
-; Routine at 9538
+; Redraw the attributes after a sprite moves
 ;
 ; Used by the routines at #R$98e6, #R$a0c8, #R$a22a and #R$a2b5.
 c$9538 push af       ;
@@ -1704,9 +1732,9 @@ c$9538 push af       ;
  $9582 pop af        ;
  $9583 ret           ;
 
-; Routine at 9584
+; Get an attribute address for the given coordinates
 ;
-; Used by the routine at #R$9538.
+; Input: DE coordinates to convert Output: HL attribute address
 c$9584 push af       ;
  $9585 push hl       ;
  $9586 ld a,$bf      ;
@@ -1730,9 +1758,9 @@ c$9584 push af       ;
  $95a4 pop af        ;
  $95a5 ret           ;
 
-; Routine at 95a6
+; Get the location in the room buffer for a coordinate.
 ;
-; Used by the routine at #R$9538.
+; Input: HL y/x coordinates to convert Output: HL location in the buffer
 c$95a6 push af       ;
  $95a7 push de       ;
  $95a8 ex de,hl      ;
@@ -1859,9 +1887,10 @@ t$97af defb " ",$8f,$90,$91,$92,$93,$94,$95,$96," 001000"
 b$984f defb $06,$03,$03,$07,$03,$04,$06,$07
  $9857 defb $07
 
-; Routine at 9858
+; Run the game
 ;
 ; Used by the routines at #R$99dc and #R$ae9c.
+@label=RunGame
 c$9858 ld hl,($5c3d) ; reads SYSVAR_ERR_SP
  $985b dec hl        ;
  $985c ld a,h        ;
@@ -1918,6 +1947,7 @@ c$9858 ld hl,($5c3d) ; reads SYSVAR_ERR_SP
 *$98b7 ld hl,$72dc   ;
  $98ba dec (hl)      ;
  $98bb jp nz,$99dc   ;
+; Pause or abort the game if the appropriate keys are pressed
  $98be ld (hl),$82   ;
  $98c0 ld a,$fe      ;
  $98c2 in a,($fe)    ;
@@ -1964,6 +1994,7 @@ c$98e6 ld a,($7347)    ;
  $990f ld a,($7355)    ;
  $9912 and a           ;
  $9913 jr z,$991f      ;
+; Travel upwards on an elevator
  $9915 ld a,($72d9)    ;
  $9918 inc a           ;
  $9919 ld ($72d9),a    ;
@@ -1990,6 +2021,7 @@ c$98e6 ld a,($7347)    ;
  $9946 call $911e      ;
 *$9949 ld hl,($72d8)   ;
  $994c call $9538      ;
+; Check for user input
  $994f ld a,($7325)    ;
  $9952 and a           ;
  $9953 jr nz,$99c1     ;
@@ -2055,13 +2087,10 @@ c$98e6 ld a,($7347)    ;
  $99d5 and a           ;
  $99d6 call z,$b34c    ;
 *$99d9 call $9e98      ;
+; This entry point is used by the routine at #R$9858.
+*$99dc jp $9858        ; Jump point
 
-; Jump point
-;
-; Used by the routines at #R$9858 and #R$98e6.
-c$99dc jp $9858      ;
-
-; Routine at 99df
+; Checks if the player has picked up an egg or some corn
 ;
 ; Used by the routine at #R$98e6.
 c$99df ld hl,($72d8) ;
@@ -2133,6 +2162,9 @@ b$9a47 defb $00,$00,$00,$00,$00
 ; Fetches and draws a sprite
 ;
 ; Used by the routines at #R$9d08, #R$9e98, #R$a0c8, #R$a278 and #R$a37f.
+;
+;  Input: HL y/x coordinates
+; Output: A is the ID of the sprite to draw
 c$9a4c push af       ;
  $9a4d push bc       ;
  $9a4e push de       ;
@@ -2388,7 +2420,7 @@ c$9a4c push af       ;
 
 ; Calculates current position of sprite in ATTRIBUTE_FILE.
 ;
-; Used by the routine at #R$9a4c.
+; Input: HL y/x coordinates Output: DE attributes address
 @label=SpritePositionInAttrFile
 c$9bde push af       ;
  $9bdf push de       ;
@@ -2415,10 +2447,13 @@ c$9bde push af       ;
 ; Unused
 s$9bff defs $41
 
+; Print a string of UDGs
+;
 ; Called when needing to draw a level...works on 1/3 of screen at a time?
 ;
-; Used by the routines at #R$a3a7, #R$a420, #R$a47d, #R$a4c8, #R$a515, #R$a59d,
-; #R$a828, #R$a9ce, #R$aa49, #R$ab19, #R$abad and #R$ae9c.
+; Input: DE address of gfx
+;       H is the y position
+;       L is the x position
 @label=UpdateScreenGfx
 c$9c40 nop           ; {Why are these NOPs? Are they ever changed?
  $9c41 nop           ;
@@ -2484,15 +2519,18 @@ c$9c8e pop bc        ;
 ; Unused
 s$9c91 defs $0b
 
-; INTERUPT jump point
+; INTERUPT (IM2) jump point
 c$9c9c jp $9cc2      ;
 
 ; Unused
 s$9c9f defs $05
 
+; Play a sound
+;
 ; This routine produces a sound, formed of a square wave.
 ;
-; Used by the routines at #R$9858, #R$98e6, #R$9d08, #R$9e98 and #R$a62c.
+; Input: H is the frequency
+;       L is the length of the sound
 @label=SoundSquareWave
 c$9ca4 ld a,$10      ;
  $9ca6 out ($fe),a   ;
@@ -2509,7 +2547,9 @@ c$9ca4 ld a,$10      ;
 ; Unused
 s$9cb5 defs $0d
 
-; Called from an INTERUPT, and basically every game loop?
+; Play Fuller Orator - called from INTERUPT (IM2)
+;
+; This routine is called every game loop?
 ;
 ; Used by the routine at #R$9c9c.
 c$9cc2 push af       ;
@@ -2536,16 +2576,17 @@ c$9cc2 push af       ;
  $9ce8 pop af        ;
  $9ce9 reti          ;
 
+; Set up a sound to play through the Fuller Orator
+;
 ; Get address value from the address_lookup_table
 ;
-; Used by the routines at #R$a389, #R$a420, #R$a4c8, #R$a62c, #R$a828, #R$aae4
-; and #R$b14f.
+; Input: A sound data
 @label=GetLookupTableAddress
 c$9ceb ld b,a        ; Current known values for #REGa are between $01 and $21.
  $9cec ld a,($7373)  ;
  $9cef cp $ff        ;
  $9cf1 ret nz        ;
-@ssub=ld hl,$c8c8-$02 ; Point #REGhl to address_lookup_table - 2 bytes
+@ssub=ld hl,$c8c8-$02 ; Point #REGhl to address_lookup_table - 2 bytes, to account for increment
  $9cf2 ld hl,$c8c6   ;
 *$9cf5 inc hl        ; {Increment #REGhl until we get the desired address.
  $9cf6 inc hl        ;
@@ -2561,7 +2602,7 @@ c$9ceb ld b,a        ; Current known values for #REGa are between $01 and $21.
 ; Unused
 s$9d06 defs $02
 
-; Routine at 9d08
+; Check for left or right input, and move the player accordingly
 ;
 ; Used by the routine at #R$98e6.
 c$9d08 ld ix,$72d8     ;
@@ -2682,10 +2723,14 @@ c$9d08 ld ix,$72d8     ;
 ; Unused
 s$9df1 defs $43
 
-; Routine at 9e34
+; Get the UDG at the specified location
 ;
 ; Used by the routines at #R$9265, #R$93fe, #R$9438, #R$99df, #R$a30c and
 ; #R$b34c.
+;
+;  Input: HL y/x coordinate
+; Output: HL address in the room buffer
+;        A holds the relevant UDG
 c$9e34 push de       ;
  $9e35 push bc       ;
  $9e36 ex de,hl      ;
@@ -2717,9 +2762,11 @@ c$9e57 pop hl        ;
 ; Unused
 s$9e59 defs $0d
 
-; Farmer jumping/falling routine
+; Checks if there's enough headroom for a jump.
 ;
 ; Used by the routine at #R$9858.
+;
+; Output: A is 1 if there is room, otherwise 0
 @label=FarmerVerticalMovement
 c$9e66 push hl       ;
  $9e67 ld hl,$72d8   ;
@@ -2744,18 +2791,14 @@ c$9e66 push hl       ;
  $9e86 ld a,$01      ;
  $9e88 pop hl        ;
  $9e89 ret           ;
-
-; Reset mid-air farmer routine
-;
-; Used by the routine at #R$9e66.
-c$9e8a xor a         ;
+*$9e8a xor a         ; Reset mid-air farmer routine
  $9e8b pop hl        ;
  $9e8c ret           ;
 
 ; Unused
 s$9e8d defs $0b
 
-; Routine at 9e98
+; Move the player onto a ladder
 ;
 ; Used by the routine at #R$98e6.
 c$9e98 ld ix,$72d8     ;
@@ -2842,7 +2885,7 @@ c$9e98 ld ix,$72d8     ;
 ; Unused
 s$9f3f defs $21
 
-; Routine at 9f60
+; Move the player off a ladder
 ;
 ; Used by the routine at #R$98e6.
 c$9f60 ld a,($72d9)  ;
@@ -2933,7 +2976,7 @@ c$9fb5 ld a,($7335)  ; {RIGHT keypress
 ; Unused
 s$9fdf defs $35
 
-; Routine at a014
+; Move the lifts
 ;
 ; Used by the routine at #R$98e6.
 c$a014 ld a,($7350)  ;
@@ -2978,9 +3021,11 @@ c$a014 ld a,($7350)  ;
  $a077 call $a07b    ;
  $a07a ret           ;
 
-; Draw the elevator platforms?
+; Invalidate a lift
 ;
 ; Used by the routine at #R$a014.
+;
+; Input: HL screen position to invalidate
 @label=ElevatorPlatformDraw
 c$a07b push hl       ;
  $a07c dec hl        ;
@@ -3022,9 +3067,11 @@ c$a096 inc h         ;
  $a0a7 ld h,a        ;
  $a0a8 ret           ;
 
-; Calculations related to elevator position?
+; Calculations related to elevator position? Draw a lift?
 ;
 ; Used by the routine at #R$a014.
+;
+; Input: HL screen position
 @label=ElevatorCalculatePos
 c$a0a9 dec h         ;
  $a0aa ld a,h        ;
@@ -3054,6 +3101,8 @@ c$a0c0 ld a,h        ;
 ; Unused bytes/code?
 b$a0c5 defb $73,$21,$ce
 
+; Move the mother duck
+;
 ; Could be giant duck code or another elevator related routine, called after
 ; bigger movement of platform.
 ;
@@ -3125,6 +3174,8 @@ c$a0c8 ld ix,$72d8     ;
  $a164 sub (ix+$73)    ;
  $a167 ld (ix+$73),$05 ;
 *$a16b ld ($7349),a    ;
+; On level 8 and below, ignore the new position and stick the mother duck to
+; the cage
  $a16e ld a,($6eeb)    ;
  $a171 cp $08          ;
  $a173 jr nc,$a17b     ;
@@ -3147,7 +3198,7 @@ c$a0c8 ld ix,$72d8     ;
 ; Unused
 s$a19a defs $1e
 
-; Routine at a1b8
+; Decreases the timer and bonus
 ;
 ; Used by the routines at #R$98e6 and #R$a62c.
 c$a1b8 ld hl,$7341   ;
@@ -3224,21 +3275,19 @@ c$a1d9 ld (hl),$09   ;
 ; Unused code/bytes? (code would be a RET)
 b$a21a defb $c9,$00
 
-; Farmer jumping/falling related routine.
+; Check if the farmer is falling.
+;
+; See if the player is now in mid-air, and if so, make them fall
 ;
 ; Used by the routine at #R$9858.
-c$a21c ld a,($72dc)  ;
- $a21f dec a         ;
- $a220 jr z,$a22a    ;
- $a222 ld a,($7325)  ;
- $a225 dec a         ;
- $a226 jp nz,$a2b5   ;
- $a229 ret           ;
-
-; Farmer jumping/falling related routine.
-;
-; Used by the routine at #R$a21c.
-c$a22a ld hl,($72d8)   ;
+c$a21c ld a,($72dc)    ;
+ $a21f dec a           ;
+ $a220 jr z,$a22a      ;
+ $a222 ld a,($7325)    ;
+ $a225 dec a           ;
+ $a226 jp nz,$a2b5     ;
+ $a229 ret             ;
+*$a22a ld hl,($72d8)   ;
  $a22d call $9538      ;
  $a230 ld a,l          ;
  $a231 add a,(ix+$4e)  ;
@@ -3256,34 +3305,30 @@ c$a22a ld hl,($72d8)   ;
  $a251 call $a256      ;
  $a254 jr $a294        ;
 
-; Farmer jumping/falling related routine.
+; Move the player up or down after jumping or falling
 ;
 ; Used by the routine at #R$a22a.
-c$a256 ld a,($7350)  ;
- $a259 xor $ff       ;
- $a25b ret z         ;
- $a25c xor $ff       ;
- $a25e sub $09       ;
- $a260 ld b,a        ;
- $a261 ld a,($72d8)  ;
- $a264 cp b          ;
- $a265 ret c         ;
- $a266 sub $13       ;
- $a268 cp b          ;
- $a269 ret nc        ;
- $a26a ld b,$06      ;
- $a26c ld a,(hl)     ;
- $a26d add a,$10     ;
-*$a26f dec a         ;
- $a270 cp (ix+$01)   ;
- $a273 jr z,$a278    ;
- $a275 djnz $a26f    ;
- $a277 ret           ;
-
-; Farmer lands on a platform?
-;
-; Used by the routine at #R$a256.
-c$a278 ld (ix+$7d),$01 ;
+c$a256 ld a,($7350)    ;
+ $a259 xor $ff         ;
+ $a25b ret z           ;
+ $a25c xor $ff         ;
+ $a25e sub $09         ;
+ $a260 ld b,a          ;
+ $a261 ld a,($72d8)    ;
+ $a264 cp b            ;
+ $a265 ret c           ;
+ $a266 sub $13         ;
+ $a268 cp b            ;
+ $a269 ret nc          ;
+ $a26a ld b,$06        ;
+ $a26c ld a,(hl)       ;
+ $a26d add a,$10       ;
+*$a26f dec a           ;
+ $a270 cp (ix+$01)     ;
+ $a273 jr z,$a278      ;
+ $a275 djnz $a26f      ;
+ $a277 ret             ;
+*$a278 ld (ix+$7d),$01 ;
  $a27c ld (ix+$4d),$00 ;
  $a280 ex de,hl        ;
  $a281 ld hl,($72d8)   ;
@@ -3296,7 +3341,7 @@ c$a278 ld (ix+$7d),$01 ;
  $a290 call $a389      ;
  $a293 ret             ;
 
-; Farmer jumping/falling related routine.
+; Make the player fall if in mid-air
 ;
 ; Used by the routine at #R$a22a.
 c$a294 ld a,($7325)    ;
@@ -3314,11 +3359,8 @@ c$a294 ld a,($7325)    ;
  $a2ae ld a,($72da)    ;
  $a2b1 call $a37f      ;
  $a2b4 ret             ;
-
-; Routine at a2b5
-;
-; Used by the routines at #R$a21c and #R$a294.
-c$a2b5 ld hl,$7328     ;
+; This entry point is used by the routine at #R$a21c.
+*$a2b5 ld hl,$7328     ;
  $a2b8 dec (hl)        ;
  $a2b9 ret nz          ;
  $a2ba push hl         ;
@@ -3429,7 +3471,7 @@ c$a30c ld ($72d9),a    ;
  $a37c ld (hl),$00     ;
  $a37e ret             ;
 
-; Routine at a37f
+; Redraw the player's position after moving in mid-air
 ;
 ; Used by the routines at #R$a294 and #R$a30c.
 c$a37f ld hl,($72d8)  ;
@@ -3437,6 +3479,8 @@ c$a37f ld hl,($72d8)  ;
  $a385 call $9a4c     ;
  $a388 ret            ;
 
+; Play a random sound through the Fuller Audiobox
+;
 ; Farmer lands on a platform?
 ;
 ; Note: exactly same as #R$AAE4, #R$B14F, except for #REGhl address.
@@ -3458,9 +3502,13 @@ b$a399 defb $04,$06,$09,$0d,$12,$16,$04,$0d
 ; Data block at a3a1
 b$a3a1 defb $c9,$4f,$04,$c9,$00,$00
 
+; Update the score
+;
 ; Farmer collects an egg/corn...also at start of level.
 ;
 ; Used by the routines at #R$99df, #R$9a17, #R$9a38, #R$a62c and #R$ae9c.
+;
+; Input: R is the type of object that has scored points
 c$a3a7 ld a,b        ;
  $a3a8 and a         ;
  $a3a9 jr z,$a3e6    ;
@@ -3614,6 +3662,7 @@ c$a47d ld hl,$50e1   ;
  $a4a4 ld a,(hl)     ;
  $a4a5 ld hl,$001e   ;
  $a4a8 call $9c40    ; UpdateScreenGfx
+; Respond to keyboard input
 *$a4ab ld a,$fd      ; {Read keyboard and check keypress `S`
  $a4ad in a,($fe)    ;
  $a4af bit 1,a       ;
@@ -3793,6 +3842,7 @@ c$a59d ld ixh,$02    ;
  $a5ff ldir          ; Copy level data.
  $a601 dec a         ; {Why repeat the copy 5 times?
  $a602 jr nz,$a5f9   ; }
+; Initialize the scores and counters
  $a604 ld hl,$6ec8   ; {Reset anim buffer data at 6EC8 (6 bytes) + ANIMBUF1 (24
  $a607 ld b,$1e      ; bytes)
 *$a609 ld (hl),$00   ;
@@ -3836,6 +3886,7 @@ c$a62c ld a,($733a)  ; Get number_of_players
  $a64a call $a9ce    ;
  $a64d ld bc,$0000   ;
  $a650 call $a921    ;
+; Start this level
 *$a653 call $ae9c    ;
  $a656 call $a960    ;
  $a659 ld bc,$0006   ;
@@ -3848,6 +3899,7 @@ c$a62c ld a,($733a)  ; Get number_of_players
  $a667 ld hl,$6ec8   ;
  $a66a ldir          ;
  $a66c im 2          ;
+; Level has had to end. If there are eggs left, lose a life
  $a66e ld a,($6ee6)  ;
  $a671 and a         ;
  $a672 jp nz,$a6fe   ; POKE @A672 to 202 (`JP Z`) to jump to next level on
@@ -3855,6 +3907,7 @@ c$a62c ld a,($733a)  ; Get number_of_players
 *$a675 ld a,($7347)  ;
  $a678 and a         ;
  $a679 jr z,$a68d    ;
+; Level complete - give a bonus
  $a67b ld b,$00      ;
  $a67d call $a1b8    ;
  $a680 ld b,$01      ;
@@ -4247,10 +4300,12 @@ c$a8ec push af       ;
  $a91f pop af        ;
  $a920 ret           ;
 
-; Possible pause routine
+; Pause routine
 ;
 ; Used by the routines at #R$a47d, #R$a515, #R$a62c, #R$a6fe, #R$a929 and
 ; #R$a968.
+;
+; Input: BC time value to pause for
 @label=PauseRoutine
 c$a921 push af       ;
 *$a922 dec bc        ;
@@ -4365,7 +4420,7 @@ c$a968 ld ixh,$00    ;
  $a9cb jr z,$a970    ;
  $a9cd ret           ;
 
-; Prepare to scroll GAME OVER message
+; Prepare to scroll GAME OVER message, and level number?
 ;
 ; Used by the routines at #R$a62c and #R$a6fe.
 c$a9ce ld hl,$5960   ; {Update some attribute colours to $04
@@ -4424,9 +4479,12 @@ c$aa0c push bc       ;
  $aa21 pop bc        ;
  $aa22 ret           ;
 
-; Called during animation #1
+; Get attribute buffer address for a screen coordinate.
 ;
 ; Used by the routine at #R$a8ec.
+;
+;  Input: D coordinate to look up
+; Output: HL attribute address
 c$aa23 push de       ;
  $aa24 push bc       ;
  $aa25 ex de,hl      ;
@@ -4445,6 +4503,10 @@ c$aa23 push de       ;
 ; Prints a text block to the screen.
 ;
 ; Used by the routines at #R$a420, #R$a4c8 and #R$a828.
+;
+; Input: HL base address of the attribute buffer
+;       B width
+;       C height
 @label=PrintTextBlock
 c$aa37 push bc       ;
  $aa38 ld de,$0020   ;
@@ -4560,15 +4622,11 @@ c$aaba ld hl,$8267   ;
  $aada jr nz,$aadf   ;
  $aadc ld b,$01      ;
  $aade ret           ;
-
-; Some kind of pause routine?
-;
-; Used by the routine at #R$aaba.
-c$aadf djnz $aad2    ;
+*$aadf djnz $aad2    ; Some kind of pause routine?
  $aae1 ld b,$00      ;
  $aae3 ret           ;
 
-; Called after death tune
+; Play a random sound - called after death tune
 ;
 ; Note: exactly same as #R$A389, #R$B14F, except for #REGhl address.
 c$aae4 ld a,r        ; {Load #REGb with #REGr (related to memory refresh), then
@@ -4585,6 +4643,10 @@ c$aae4 ld a,r        ; {Load #REGb with #REGr (related to memory refresh), then
 ; Redefine keys: get key
 ;
 ; Used by the routines at #R$aa49 and #R$ab19.
+;
+; Output: H the bitfields key matrix tested (input to port FE), or 0 for none
+;        L the keys pressed, or 0 for none
+;        E the 'nth' key matrix tested (0-9)
 @label=RedefineKeysGetKey
 c$aaf4 ld d,$00      ;
  $aaf6 ld hl,$0000   ;
@@ -4667,9 +4729,11 @@ c$ab19 push af       ;
  $ab5e pop af        ;
  $ab5f ret           ;
 
-; Play the theme tune.
+; Play the theme tune, one note at a time.
 ;
 ; Used by the routines at #R$a420, #R$a6fe and #R$ab70.
+;
+; Input: HL pointer to the pitch and length, or 0 to mark the end
 @label=PlayTune
 c$ab60 ld c,(hl)     ;
  $ab61 inc hl        ;
@@ -4681,22 +4745,21 @@ c$ab60 ld c,(hl)     ;
  $ab67 push hl       ;
  $ab68 push bc       ;
  $ab69 call $2d28    ;
- $ab6c rst $28       ; RST $28 can jump back to AB70
-
-; Probably unused. Looks like code but the RST $28 means it's never reached!
-b$ab6d defb $a4,$05,$38
-
-; The above RST $28 returns here!
-c$ab70 pop bc        ;
+ $ab6c rst $28       ; RST $28 can jump back to AB70 !?!?
+ $ab6d and h         ;
+ $ab6e dec b         ;
+ $ab6f jr c,$ab32    ;
  $ab71 ld a,b        ;
  $ab72 call $2d28    ;
  $ab75 call $03f8    ;
  $ab78 pop hl        ;
- $ab79 jr $ab60      ; PlayTune
+ $ab79 jr $ab60      ; Jump back to PlayTune, and play the next note
 
 ; Scroll the ticket text across the screen
 ;
 ; Used by the routines at #R$a47d, #R$a515, #R$a59d and #R$a9ce.
+;
+; Input: HL screen address to scroll
 @label=ScrollTickerText
 c$ab7b push de       ;
  $ab7c push bc       ;
@@ -4777,6 +4840,8 @@ c$abad ld de,$abf2   ; Point #REGde to high_score_heading_text
  $abe7 jr nz,$abde   ; }
  $abe9 ret           ;
 
+; Sound directives
+;
 ; Small lookup table used by #R$AAE4 to assign #REGa, for use with
 ; GetLookupTableAddress
 b$abea defb $01,$10,$13,$17,$1e,$20,$21,$01
@@ -4928,7 +4993,7 @@ b$ae6a defb $02,$08
  $ae98 defb $02,$09
  $ae9a defb $00,$00
 
-; Called just before showing new level
+; Run the current level until complete or a duck is hit
 ;
 ; Used by the routine at #R$a62c.
 c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
@@ -4939,6 +5004,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $aea6 ld a,b          ;
  $aea7 or c            ;
  $aea8 jr nz,$aea2     ; }
+; Draw the UDGs
  $aeaa ld bc,$61a8     ;
  $aead ld h,$00        ;
 *$aeaf ld l,$00        ;
@@ -4953,6 +5019,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $aebd ld a,h          ;
  $aebe cp $15          ;
  $aec0 jr nz,$aeaf     ;
+; Print the level stats
  $aec2 ld a,($6eeb)    ;
  $aec5 ld b,a          ;
  $aec6 inc b           ;
@@ -5161,6 +5228,7 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $b052 ex de,hl        ;
  $b053 dec c           ;
  $b054 jr nz,$b02f     ;
+; Initialize game flags
  $b056 ld ix,$72d8     ;
  $b05a ld (ix+$00),$64 ;
  $b05e ld (ix+$01),$17 ;
@@ -5254,9 +5322,12 @@ c$ae9c ld hl,$5aff     ; {Point #REGhl to "end" of ATTRIBUTE_FILE, then blank
  $b12a call $9c40      ; UpdateScreenGfx
 *$b12d jp $9858        ;
 
-; Update colours?
+; Update the screen colour for the given coordinate.
 ;
 ; Used by the routine at #R$ae9c.
+;
+; Input: H column
+;       L row
 c$b130 push hl       ;
  $b131 push bc       ;
  $b132 push af       ;
@@ -5279,9 +5350,10 @@ c$b130 push hl       ;
  $b14d pop hl        ;
  $b14e ret           ;
 
-; After death, screen is redrawn, before ostriches/farmer displayed
+; Play a random sound through the Fuller Orator
 ;
-; Note: exactly same as #R$A389, #R$AAE4, except for #REGhl address.
+; After death, screen is redrawn, before ostriches/farmer displayed Note:
+; exactly same as #R$A389, #R$AAE4, except for #REGhl address.
 ;
 ; .
 ;
@@ -5298,6 +5370,8 @@ c$b14f ld hl,$b15e   ;
  $b15b ld a,(hl)     ; }
  $b15c jp $9ceb      ; GetLookupTableAddress
 
+; Fuller Orator allophones
+;
 ; Small lookup table used by #R$B14F to assign #REGa, for use with
 ; GetLookupTableAddress
 b$b15f defb $02,$08,$0a,$0b,$0c,$11,$11,$02
@@ -5326,7 +5400,7 @@ b$b167 defb $20,$4a,$52,$20,$43,$2c,$43,$31
  $b1f7 defb $0d,$25,$00,$20,$49,$4e,$49,$54
  $b1ff defb $47
 
-; Data block at b200
+; IM2 jump vector
 b$b200 defb $9c,$9c,$9c,$9c,$9c,$9c,$9c,$9c
  $b208 defb $9c,$9c,$9c,$9c,$9c,$9c,$9c,$9c
  $b210 defb $9c,$9c,$9c,$9c,$9c,$9c,$9c,$9c
@@ -5374,10 +5448,10 @@ b$b307 defb $20,$43,$41,$4c,$4c,$20,$34,$30
  $b33f defb $0d,$27,$30,$20,$20,$44,$45,$43
  $b347 defb $20,$43,$0d,$27,$40
 
-; Note, label added because Pasmo was complaining.
+; Shunt the player to the end of the platform if they're near it
 ;
 ; Used by the routine at #R$98e6.
-@label=LB34C
+@label=MovePlayerToEndOfPlatform
 c$b34c ld a,($72d8)  ;
  $b34f and $07       ;
  $b351 ret z         ;
@@ -5783,6 +5857,8 @@ b$c8b0 defb $41,$4c,$4c,$20,$43,$4f,$4e,$56,$31
  $c8b9 defb $0d,$56,$60,$20,$20,$4c,$44,$20
  $c8c1 defb $41,$2c,$28,$32,$39,$34,$38
 
+; Fuller Orator data lookup table.
+;
 ; An address lookup table for accessing data blocks.
 @label=address_lookup_table
 w$c8c8 defw $c92c
@@ -5822,93 +5898,97 @@ w$c8c8 defw $c92c
 ; unused?
 s$c90a defs $22
 
-; related to address lookup table
+; Fuller Orator data
+;
+; audio related data, with address stored in lookup table
 b$c92c defb $06,$35,$05,$00,$04,$38,$05,$35
  $c934 defb $02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c938 defb $05,$3d,$07,$35,$05,$00,$05,$28
  $c940 defb $06,$3b,$09,$00,$05,$0c,$05,$0d
  $c948 defb $02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c94c defb $06,$10,$05,$0c,$05,$37,$03,$11
  $c954 defb $02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c958 defb $03,$38,$06,$06,$0e,$37,$05,$2d
  $c960 defb $07,$13,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c966 defb $05,$0b,$06,$07,$05,$29,$07,$37
  $c96e defb $05,$11,$08,$00,$07,$2d,$05,$07
  $c976 defb $05,$23,$03,$1e,$05,$3e,$02,$00
  $c97e defb $ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c980 defb $05,$20,$08,$2b,$09,$1a,$05,$11
  $c988 defb $02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c98c defb $04,$39,$05,$06,$10,$00,$05,$37
  $c994 defb $06,$08,$05,$3a,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c99c defb $03,$3f,$07,$13,$07,$00,$06,$3e
  $c9a4 defb $07,$33,$02,$0d,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c9ac defb $09,$2e,$06,$07,$07,$3e,$09,$00
  $c9b4 defb $06,$21,$02,$1e,$05,$1e,$05,$0b
  $c9bc defb $02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c9c0 defb $05,$39,$05,$1a,$05,$23,$07,$00
  $c9c8 defb $04,$38,$07,$35,$0a,$00,$06,$1d
  $c9d0 defb $06,$2f,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c9d6 defb $05,$3d,$07,$35,$06,$00,$03,$38
  $c9de defb $06,$20,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$c9e4 defb $04,$21,$03,$35,$04,$0b,$07,$11
  $c9ec defb $09,$00,$05,$37,$05,$11,$04,$18
  $c9f4 defb $05,$09,$02,$00,$ff,$ff
 
-; related to address lookup table - when player lands on a platform
+; audio related data, with address stored in lookup table - when player lands
+; on a platform
 b$c9fa defb $05,$22,$05,$35,$05,$2c,$0d,$00
  $ca02 defb $06,$0f,$03,$09,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$ca0a defb $05,$22,$05,$14,$05,$10,$0f,$00
  $ca12 defb $07,$35,$04,$23,$03,$34,$02,$00
  $ca1a defb $ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$ca1c defb $05,$35,$05,$38,$06,$37,$0b,$00
  $ca24 defb $05,$10,$06,$1a,$04,$0b,$02,$00
  $ca2c defb $ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$ca2e defb $06,$27,$05,$17,$05,$2c,$0b,$00
  $ca36 defb $05,$10,$06,$0f,$04,$0b,$05,$1f
  $ca3e defb $07,$23,$09,$33,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$ca46 defb $05,$2d,$07,$29,$04,$00,$02,$1a
  $ca4e defb $04,$35,$04,$11,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$ca56 defb $05,$3d,$02,$18,$05,$11,$08,$00
  $ca5e defb $05,$0c,$04,$11,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$ca66 defb $05,$0d,$05,$1e,$05,$28,$09,$00
  $ca6e defb $05,$2e,$05,$17,$05,$0b,$02,$00
  $ca76 defb $ff,$ff
 
-; related to address lookup table - related to playing music?
+; audio related data, with address stored in lookup table - related to playing
+; music?
 b$ca78 defb $06,$14,$0b,$00,$05,$1a,$05,$2c
  $ca80 defb $05,$15,$09,$00,$05,$07,$05,$28
  $ca88 defb $0a,$00,$04,$37,$04,$37,$05,$17
@@ -5919,67 +5999,67 @@ b$ca78 defb $06,$14,$0b,$00,$05,$1a,$05,$2c
  $cab0 defb $04,$08,$06,$13,$0b,$00,$06,$07
  $cab8 defb $03,$22,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cabe defb $05,$2d,$07,$35,$08,$00,$05,$17
  $cac6 defb $05,$0b,$08,$00,$05,$0d,$05,$06
  $cace defb $07,$10,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cad4 defb $05,$37,$05,$37,$07,$16,$05,$09
  $cadc defb $05,$33,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cae2 defb $05,$39,$06,$35,$05,$09,$05,$2d
  $caea defb $05,$0f,$05,$37,$09,$00,$05,$2a
  $caf2 defb $05,$14,$08,$37,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cafa defb $06,$0c,$06,$0b,$05,$37,$03,$11
  $cb02 defb $04,$27,$03,$0f,$04,$29,$04,$25
  $cb0a defb $0a,$0f,$05,$0b,$06,$37,$02,$00
  $cb12 defb $ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cb14 defb $05,$38,$05,$35,$09,$11,$05,$14
  $cb1c defb $05,$00,$05,$38,$05,$35,$09,$11
  $cb24 defb $05,$14,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cb2a defb $05,$09,$05,$2d,$04,$14,$07,$33
  $cb32 defb $09,$00,$05,$2e,$05,$17,$05,$0b
  $cb3a defb $02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cb3e defb $05,$09,$05,$2d,$04,$14,$07,$33
  $cb46 defb $09,$00,$05,$0d,$05,$1f,$02,$00
  $cb4e defb $ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cb50 defb $05,$09,$05,$2d,$04,$14,$07,$33
  $cb58 defb $09,$00,$05,$1d,$04,$27,$05,$13
  $cb60 defb $02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cb64 defb $05,$09,$05,$2d,$04,$14,$07,$33
  $cb6c defb $09,$00,$05,$28,$05,$3a,$02,$00
  $cb74 defb $ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cb76 defb $06,$35,$09,$00,$05,$05,$02,$00
  $cb7e defb $ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cb80 defb $05,$3b,$09,$00,$05,$19,$07,$1e
  $cb88 defb $08,$00,$06,$27,$09,$07,$02,$21
  $cb90 defb $09,$31,$02,$00,$ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cb96 defb $05,$0b,$07,$17,$06,$11,$09,$00
  $cb9e defb $06,$22,$04,$1e,$04,$21,$09,$00
  $cba6 defb $05,$07,$07,$38,$08,$28,$02,$00
  $cbae defb $ff,$ff
 
-; related to address lookup table
+; audio related data, with address stored in lookup table
 b$cbb0 defb $06,$39,$08,$3b,$04,$15,$06,$00
  $cbb8 defb $06,$2d,$05,$1e,$03,$29,$06,$00
  $cbc0 defb $0b,$00,$ff,$ff

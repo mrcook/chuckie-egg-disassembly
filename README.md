@@ -64,3 +64,6 @@ And for the main game itself:
 Chuckie Egg is copyright (c) 1984 A&F Software.
 
 This disassembly is copyright (c) 2018-2021 Michael R. Cook.
+
+
+Note: some comments (mostly audio related) were taken from [Ritchie Swann's](https://github.com/Ritchie333/chuckie) disassembly project.
