@@ -1,321 +1,340 @@
 ; Game loader disassembly for Chuckie Egg
 ; (https://github.com/mrcook/chuckie-egg-disassembly/)
 ;
-; Copyright (c) 2018 Michael R. Cook (this disassembly)
+; Copyright (c) 2018-2021 Michael R. Cook (this disassembly)
 ; Copyright (c) 1984 A&F Software (Chuckie Egg)
 ; Chuckie Egg was designed and developed by Nigel Alderton
-@start
-@org=$5EF3
+;
 ; This is the disassembly of tape block #3: the machine code loader, along with
 ; the graphics data for populating the loading screen.
-b$5CCB DEFB $00,$0A,$0E,$00,$F9,$C0,$32,$34
- $5CD3 DEFB $33,$30,$37,$0E,$00,$00,$F3,$5E
- $5CDB DEFB $00,$0D,$C1,$43,$06,$01,$40,$06
+@start
+
+@org=$5ef3
+; BASIC
+;
+; 10 RANDOMIZE USR 24307 ($5EF3)
+b$5ccb defb $00,$0a,$0e,$00,$f9,$c0,$32,$34
+ $5cd3 defb $33,$30,$37,$0e,$00,$00,$f3,$5e
+ $5cdb defb $00,$0d
+
+; Data block at 5CDD
+b$5cdd defb $c1,$43,$06,$01,$40,$06
 
 ; Data block at 5CE3
-b$5CE3 DEFB $FF,$FF,$FF,$FF,$00,$00,$00,$00
+b$5ce3 defb $ff,$ff,$ff,$ff,$00,$00,$00,$00
 
 ; The big "A" and "F" displayed at top of screen (32x16)
-b$5CEB DEFB $7F,$FF,$FF,$E1,$E1,$E1,$E1,$FF ; {#HTML[#UDGARRAY2;$5CEB-$5D0A-8(loading_text_big_a)]
- $5CF3 DEFB $84,$CE,$C4,$C0,$C4,$CE,$C4,$C0
- $5CFB DEFB $FF,$FF,$E1,$E1,$E1,$E1,$E1,$00
- $5D03 DEFB $C4,$CE,$C4,$C0,$C4,$CE,$C4,$00 ; }
- $5D0B DEFB $47,$E7,$47,$07,$47,$E7,$47,$07 ; {#HTML[#UDGARRAY2;$5D0B-$5D2A-8(loading_text_big_f)]
- $5D13 DEFB $FF,$FF,$FF,$00,$00,$00,$00,$FC
- $5D1B DEFB $47,$E7,$47,$07,$47,$E7,$47,$00
- $5D23 DEFB $FC,$FC,$00,$00,$00,$00,$00,$00 ; }
+b$5ceb defb $7f,$ff,$ff,$e1,$e1,$e1,$e1,$ff ; {#HTML[#UDGARRAY2;$5CEB-$5D0A-8(loading_text_big_a)]
+ $5cf3 defb $84,$ce,$c4,$c0,$c4,$ce,$c4,$c0 ;
+ $5cfb defb $ff,$ff,$e1,$e1,$e1,$e1,$e1,$00 ;
+ $5d03 defb $c4,$ce,$c4,$c0,$c4,$ce,$c4,$00 ; }
+ $5d0b defb $47,$e7,$47,$07,$47,$e7,$47,$07 ; {#HTML[#UDGARRAY2;$5D0B-$5D2A-8(loading_text_big_f)]
+ $5d13 defb $ff,$ff,$ff,$00,$00,$00,$00,$fc ;
+ $5d1b defb $47,$e7,$47,$07,$47,$e7,$47,$00 ;
+ $5d23 defb $fc,$fc,$00,$00,$00,$00,$00,$00 ; }
 
 ; "A&FSOTWRE" logo font characters
-b$5D2B DEFB $44,$EE,$44,$00,$78,$CC,$CC,$FC ; {#HTML[#UDGARRAY1;$5D2B-$5D3A-8(loading_logo_font_01_a)]
- $5D33 DEFB $CC,$CC,$CC,$00,$44,$EE,$44,$00 ; }
- $5D3B DEFB $44,$EE,$44,$00,$20,$50,$50,$20 ; {#HTML[#UDGARRAY1;$5D3B-$5D4A-8(loading_logo_font_02_ampersand)]
- $5D43 DEFB $54,$88,$74,$00,$44,$EE,$44,$00 ; }
- $5D4B DEFB $44,$EE,$44,$00,$FC,$C0,$C0,$F8 ; {#HTML[#UDGARRAY1;$5D4B-$5D5A-8(loading_logo_font_03_f)]
- $5D53 DEFB $C0,$C0,$C0,$00,$44,$EE,$44,$00 ; }
- $5D5B DEFB $44,$EE,$44,$00,$78,$CC,$C0,$78 ; {#HTML[#UDGARRAY1;$5D5B-$5D6A-8(loading_logo_font_04_s)]
- $5D63 DEFB $0C,$CC,$78,$00,$44,$EE,$44,$00 ; }
- $5D6B DEFB $44,$EE,$44,$00,$78,$CC,$CC,$CC ; {#HTML[#UDGARRAY1;$5D6B-$5D7A-8(loading_logo_font_05_o)]
- $5D73 DEFB $CC,$CC,$78,$00,$44,$EE,$44,$00 ; }
- $5D7B DEFB $44,$EE,$44,$00,$FC,$30,$30,$30 ; {#HTML[#UDGARRAY1;$5D7B-$5D8A-8(loading_logo_font_06_t)]
- $5D83 DEFB $30,$30,$30,$00,$44,$EE,$44,$00 ; }
- $5D8B DEFB $44,$EE,$44,$00,$C6,$C6,$C6,$C6 ; {#HTML[#UDGARRAY1;$5D8B-$5D9A-8(loading_logo_font_07_w)]
- $5D93 DEFB $D6,$EE,$44,$00,$44,$EE,$44,$00 ; }
- $5D9B DEFB $44,$EE,$44,$00,$F8,$CC,$CC,$F0 ; {#HTML[#UDGARRAY1;$5D9B-$5DAA-8(loading_logo_font_08_r)]
- $5DA3 DEFB $CC,$CC,$CC,$00,$44,$EE,$44,$00 ; }
- $5DAB DEFB $44,$EE,$44,$00,$FC,$C0,$C0,$F0 ; {#HTML[#UDGARRAY1;$5DAB-$5DBA-8(loading_logo_font_09_e)]
- $5DB3 DEFB $C0,$C0,$FC,$00,$44,$EE,$44,$00 ; }
- $5DBB DEFB $44,$EE,$44,$00,$00,$00,$00,$00 ; {#HTML[#UDGARRAY1;$5DBB-$5DCA-8(loading_logo_font_10_space)]
- $5DC3 DEFB $00,$00,$00,$00,$44,$EE,$44,$00 ; }
+b$5d2b defb $44,$ee,$44,$00,$78,$cc,$cc,$fc ; {#HTML[#UDGARRAY1;$5D2B-$5D3A-8(loading_logo_font_01_a)]
+ $5d33 defb $cc,$cc,$cc,$00,$44,$ee,$44,$00 ; }
+ $5d3b defb $44,$ee,$44,$00,$20,$50,$50,$20 ; {#HTML[#UDGARRAY1;$5D3B-$5D4A-8(loading_logo_font_02_ampersand)]
+ $5d43 defb $54,$88,$74,$00,$44,$ee,$44,$00 ; }
+ $5d4b defb $44,$ee,$44,$00,$fc,$c0,$c0,$f8 ; {#HTML[#UDGARRAY1;$5D4B-$5D5A-8(loading_logo_font_03_f)]
+ $5d53 defb $c0,$c0,$c0,$00,$44,$ee,$44,$00 ; }
+ $5d5b defb $44,$ee,$44,$00,$78,$cc,$c0,$78 ; {#HTML[#UDGARRAY1;$5D5B-$5D6A-8(loading_logo_font_04_s)]
+ $5d63 defb $0c,$cc,$78,$00,$44,$ee,$44,$00 ; }
+ $5d6b defb $44,$ee,$44,$00,$78,$cc,$cc,$cc ; {#HTML[#UDGARRAY1;$5D6B-$5D7A-8(loading_logo_font_05_o)]
+ $5d73 defb $cc,$cc,$78,$00,$44,$ee,$44,$00 ; }
+ $5d7b defb $44,$ee,$44,$00,$fc,$30,$30,$30 ; {#HTML[#UDGARRAY1;$5D7B-$5D8A-8(loading_logo_font_06_t)]
+ $5d83 defb $30,$30,$30,$00,$44,$ee,$44,$00 ; }
+ $5d8b defb $44,$ee,$44,$00,$c6,$c6,$c6,$c6 ; {#HTML[#UDGARRAY1;$5D8B-$5D9A-8(loading_logo_font_07_w)]
+ $5d93 defb $d6,$ee,$44,$00,$44,$ee,$44,$00 ; }
+ $5d9b defb $44,$ee,$44,$00,$f8,$cc,$cc,$f0 ; {#HTML[#UDGARRAY1;$5D9B-$5DAA-8(loading_logo_font_08_r)]
+ $5da3 defb $cc,$cc,$cc,$00,$44,$ee,$44,$00 ; }
+ $5dab defb $44,$ee,$44,$00,$fc,$c0,$c0,$f0 ; {#HTML[#UDGARRAY1;$5DAB-$5DBA-8(loading_logo_font_09_e)]
+ $5db3 defb $c0,$c0,$fc,$00,$44,$ee,$44,$00 ; }
+ $5dbb defb $44,$ee,$44,$00,$00,$00,$00,$00 ; {#HTML[#UDGARRAY1;$5DBB-$5DCA-8(loading_logo_font_10_space)]
+ $5dc3 defb $00,$00,$00,$00,$44,$ee,$44,$00 ; }
 
 ; Copyright symbol for loading screen
-b$5DCB DEFB $3C,$42,$99,$A1,$A1,$99,$42,$3C ; #HTML[#UDG$5DCB(font_copyright_symbol)]
+b$5dcb defb $3c,$42,$99,$a1,$a1,$99,$42,$3c ; #HTML[#UDG$5DCB(font_copyright_symbol)]
 
 ; "CHUKIEG" logo font characters
-b$5DD3 DEFB $0F,$33,$4F,$5F,$B8,$B0,$F0,$F0 ; {#HTML[#UDGARRAY2;$5DD3-$5DF2-8(loading_logo_font_c)]
- $5DDB DEFB $F8,$FE,$FF,$FF,$1F,$0E,$00,$00
- $5DE3 DEFB $F0,$F0,$F0,$F8,$7F,$7F,$3F,$0F
- $5DEB DEFB $00,$00,$0E,$13,$EF,$FF,$FE,$F8 ; }
- $5DF3 DEFB $70,$98,$B8,$F8,$F8,$F8,$FF,$FF ; {#HTML[#UDGARRAY2;$5DF3-$5E12-8(loading_logo_font_h)]
- $5DFB DEFB $0E,$13,$17,$1F,$1F,$1F,$FF,$FF
- $5E03 DEFB $FF,$FF,$F8,$F8,$F8,$F8,$F8,$70
- $5E0B DEFB $FF,$FF,$1F,$1F,$1F,$1F,$1F,$0E ; }
- $5E13 DEFB $70,$98,$B8,$F8,$F8,$F8,$F8,$F8 ; {#HTML[#UDGARRAY2;$5E13-$5E32-8(loading_logo_font_u)]
- $5E1B DEFB $0E,$19,$1D,$1F,$1F,$1F,$1F,$1F
- $5E23 DEFB $F8,$F8,$FC,$FF,$7F,$7F,$3F,$0F
- $5E2B DEFB $1F,$1F,$3F,$FF,$FE,$FE,$FC,$F0 ; }
- $5E33 DEFB $70,$98,$B8,$F8,$F8,$F9,$FF,$FF ; {#HTML[#UDGARRAY2;$5E33-$5E52-8(loading_logo_font_k)]
- $5E3B DEFB $0E,$13,$37,$7E,$FC,$F8,$F0,$E0
- $5E43 DEFB $FF,$FF,$F9,$F8,$F8,$F8,$F8,$70
- $5E4B DEFB $E0,$F0,$F8,$FC,$7E,$3F,$1F,$0E ; }
- $5E53 DEFB $7F,$9F,$BF,$FF,$7F,$07,$07,$07 ; {#HTML[#UDGARRAY2;$5E53-$5E72-8(loading_logo_font_i)]
- $5E5B DEFB $FE,$FF,$FF,$FF,$FE,$E0,$E0,$E0
- $5E63 DEFB $07,$07,$07,$7F,$9F,$BF,$FF,$7F
- $5E6B DEFB $E0,$E0,$E0,$FE,$FF,$FF,$FF,$FE ; }
- $5E73 DEFB $7F,$CF,$BF,$BF,$F8,$F8,$FF,$FF ; {#HTML[#UDGARRAY2;$5E73-$5E92-8(loading_logo_font_e)]
- $5E7B DEFB $FE,$FF,$FF,$FE,$00,$00,$F8,$FC
- $5E83 DEFB $FF,$FF,$F8,$F8,$FF,$FF,$FF,$7F
- $5E8B DEFB $FC,$F8,$00,$00,$FE,$FF,$FF,$FE ; }
- $5E93 DEFB $0F,$33,$4F,$5F,$B8,$B0,$F0,$F1 ; {#HTML[#UDGARRAY2;$5E93-$5EB2-8(loading_logo_font_g)]
- $5E9B DEFB $FE,$FF,$FF,$FE,$00,$00,$FE,$3F
- $5EA3 DEFB $F1,$F0,$F0,$F8,$7F,$7F,$3F,$0F
- $5EAB DEFB $7F,$FF,$1F,$1F,$FE,$FE,$FC,$F0 ; }
+b$5dd3 defb $0f,$33,$4f,$5f,$b8,$b0,$f0,$f0 ; {#HTML[#UDGARRAY2;$5DD3-$5DF2-8(loading_logo_font_c)]
+ $5ddb defb $f8,$fe,$ff,$ff,$1f,$0e,$00,$00 ;
+ $5de3 defb $f0,$f0,$f0,$f8,$7f,$7f,$3f,$0f ;
+ $5deb defb $00,$00,$0e,$13,$ef,$ff,$fe,$f8 ; }
+ $5df3 defb $70,$98,$b8,$f8,$f8,$f8,$ff,$ff ; {#HTML[#UDGARRAY2;$5DF3-$5E12-8(loading_logo_font_h)]
+ $5dfb defb $0e,$13,$17,$1f,$1f,$1f,$ff,$ff ;
+ $5e03 defb $ff,$ff,$f8,$f8,$f8,$f8,$f8,$70 ;
+ $5e0b defb $ff,$ff,$1f,$1f,$1f,$1f,$1f,$0e ; }
+ $5e13 defb $70,$98,$b8,$f8,$f8,$f8,$f8,$f8 ; {#HTML[#UDGARRAY2;$5E13-$5E32-8(loading_logo_font_u)]
+ $5e1b defb $0e,$19,$1d,$1f,$1f,$1f,$1f,$1f ;
+ $5e23 defb $f8,$f8,$fc,$ff,$7f,$7f,$3f,$0f ;
+ $5e2b defb $1f,$1f,$3f,$ff,$fe,$fe,$fc,$f0 ; }
+ $5e33 defb $70,$98,$b8,$f8,$f8,$f9,$ff,$ff ; {#HTML[#UDGARRAY2;$5E33-$5E52-8(loading_logo_font_k)]
+ $5e3b defb $0e,$13,$37,$7e,$fc,$f8,$f0,$e0 ;
+ $5e43 defb $ff,$ff,$f9,$f8,$f8,$f8,$f8,$70 ;
+ $5e4b defb $e0,$f0,$f8,$fc,$7e,$3f,$1f,$0e ; }
+ $5e53 defb $7f,$9f,$bf,$ff,$7f,$07,$07,$07 ; {#HTML[#UDGARRAY2;$5E53-$5E72-8(loading_logo_font_i)]
+ $5e5b defb $fe,$ff,$ff,$ff,$fe,$e0,$e0,$e0 ;
+ $5e63 defb $07,$07,$07,$7f,$9f,$bf,$ff,$7f ;
+ $5e6b defb $e0,$e0,$e0,$fe,$ff,$ff,$ff,$fe ; }
+ $5e73 defb $7f,$cf,$bf,$bf,$f8,$f8,$ff,$ff ; {#HTML[#UDGARRAY2;$5E73-$5E92-8(loading_logo_font_e)]
+ $5e7b defb $fe,$ff,$ff,$fe,$00,$00,$f8,$fc ;
+ $5e83 defb $ff,$ff,$f8,$f8,$ff,$ff,$ff,$7f ;
+ $5e8b defb $fc,$f8,$00,$00,$fe,$ff,$ff,$fe ; }
+ $5e93 defb $0f,$33,$4f,$5f,$b8,$b0,$f0,$f1 ; {#HTML[#UDGARRAY2;$5E93-$5EB2-8(loading_logo_font_g)]
+ $5e9b defb $fe,$ff,$ff,$fe,$00,$00,$fe,$3f ;
+ $5ea3 defb $f1,$f0,$f0,$f8,$7f,$7f,$3f,$0f ;
+ $5eab defb $7f,$ff,$1f,$1f,$fe,$fe,$fc,$f0 ; }
 
 ; Broken egg shell graphics data for loading screen
-b$5EB3 DEFB $00,$05,$2A,$50,$80,$C0,$E0,$F5 ; {#HTML[#UDGARRAY2;$5EB3-$5ED2-8(loading_screen_broken_egg_up)]
- $5EBB DEFB $80,$40,$28,$14,$02,$47,$EF,$FF
- $5EC3 DEFB $FF,$7F,$7F,$3F,$1F,$0F,$03,$00
- $5ECB DEFB $FF,$FE,$FE,$FC,$F8,$F0,$C0,$00 ; }
- $5ED3 DEFB $01,$07,$0F,$1F,$3F,$3F,$7F,$7F ; {#HTML[#UDGARRAY2;$5ED3-$5EF2-8(loading_screen_broken_egg_right)]
- $5EDB DEFB $F0,$E8,$C4,$88,$04,$82,$04,$82
- $5EE3 DEFB $7F,$7F,$3F,$3F,$1F,$0F,$07,$01
- $5EEB DEFB $C1,$E2,$C4,$88,$C4,$E8,$F0,$E0 ; }
+b$5eb3 defb $00,$05,$2a,$50,$80,$c0,$e0,$f5 ; {#HTML[#UDGARRAY2;$5EB3-$5ED2-8(loading_screen_broken_egg_up)]
+ $5ebb defb $80,$40,$28,$14,$02,$47,$ef,$ff ;
+ $5ec3 defb $ff,$7f,$7f,$3f,$1f,$0f,$03,$00 ;
+ $5ecb defb $ff,$fe,$fe,$fc,$f8,$f0,$c0,$00 ; }
+ $5ed3 defb $01,$07,$0f,$1f,$3f,$3f,$7f,$7f ; {#HTML[#UDGARRAY2;$5ED3-$5EF2-8(loading_screen_broken_egg_right)]
+ $5edb defb $f0,$e8,$c4,$88,$04,$82,$04,$82 ;
+ $5ee3 defb $7f,$7f,$3f,$3f,$1f,$0f,$07,$01 ;
+ $5eeb defb $c1,$e2,$c4,$88,$c4,$e8,$f0,$e0 ; }
 
 ; Display the loading screen
-c$5EF3 LD A,$07      ;
- $5EF5 LD ($5C48),A  ; Set border (SYSVAR_BORDCR) to $07 (white)
- $5EF8 LD HL,$5AFF   ; Point #REGhl to the end of ATTRIBUTE_FILE
- $5EFB LD BC,$1B00   ; Set #REGbc to $6912 (size of DISPLAY + ATTR)
-*$5EFE LD (HL),$00   ; {Blank the entire screen
- $5F00 DEC HL        ;
- $5F01 DEC BC        ;
- $5F02 LD A,B        ;
- $5F03 OR C          ;
- $5F04 JR NZ,$5EFE   ; }
- $5F06 XOR A         ;
- $5F07 OUT ($FE),A   ;
- $5F09 LD H,$17      ;
- $5F0B LD C,$18      ;
- $5F0D LD DE,$601C   ; Point #REGde to start of LOADING_SCREEN_DATA area
-*$5F10 LD B,$20      ;
- $5F12 LD L,$00      ;
-*$5F14 LD A,(DE)     ;
- $5F15 INC DE        ;
- $5F16 CALL $5FC9    ;
- $5F19 INC L         ;
- $5F1A DJNZ $5F14    ;
- $5F1C DEC H         ;
- $5F1D DEC C         ;
- $5F1E JR NZ,$5F10   ;
- $5F20 LD HL,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
- $5F23 LD C,$02      ;
-*$5F25 LD A,$07      ;
- $5F27 LD B,$08      ;
- $5F29 CALL $5FC4    ;
- $5F2C LD A,$05      ;
- $5F2E LD B,$10      ;
- $5F30 CALL $5FC4    ;
- $5F33 LD A,$07      ;
- $5F35 LD B,$08      ;
- $5F37 CALL $5FC4    ;
- $5F3A DEC C         ;
- $5F3B JR NZ,$5F25   ;
- $5F3D LD A,$06      ;
- $5F3F LD B,$60      ;
- $5F41 CALL $5FC4    ;
- $5F44 LD A,$07      ;
- $5F46 LD B,$2B      ;
- $5F48 CALL $5FC4    ;
- $5F4B LD A,$85      ;
- $5F4D LD B,$0A      ;
- $5F4F CALL $5FC4    ;
- $5F52 LD A,$07      ;
- $5F54 LD B,$0C      ;
- $5F56 CALL $5FC4    ;
- $5F59 LD A,$10      ;
- $5F5B LD B,$1E      ;
- $5F5D CALL $5FC4    ;
- $5F60 INC HL        ;
- $5F61 LD A,$17      ;
- $5F63 LD C,$05      ;
-*$5F65 LD B,$1E      ;
- $5F67 INC HL        ;
- $5F68 CALL $5FC4    ;
- $5F6B INC HL        ;
- $5F6C DEC C         ;
- $5F6D JR NZ,$5F65   ;
- $5F6F LD A,$02      ;
- $5F71 LD B,$1E      ;
- $5F73 INC HL        ;
- $5F74 CALL $5FC4    ;
- $5F77 INC HL        ;
- $5F78 LD A,$05      ;
- $5F7A LD B,$A0      ;
- $5F7C CALL $5FC4    ;
- $5F7F INC HL        ;
- $5F80 LD A,$10      ;
- $5F82 LD B,$1E      ;
- $5F84 CALL $5FC4    ;
- $5F87 LD C,$03      ;
-*$5F89 INC HL        ;
- $5F8A INC HL        ;
- $5F8B LD A,$17      ;
- $5F8D LD B,$1E      ;
- $5F8F CALL $5FC4    ;
- $5F92 DEC C         ;
- $5F93 JR NZ,$5F89   ;
- $5F95 INC HL        ;
- $5F96 INC HL        ;
- $5F97 LD A,$02      ;
- $5F99 LD B,$1E      ;
- $5F9B CALL $5FC4    ;
- $5F9E LD IX,$5C3D   ; Set #REGix to SYSVAR_ERR_SP address
- $5FA2 LD DE,$0002   ;
- $5FA5 SCF           ;
- $5FA6 LD A,$FF      ;
- $5FA8 CALL $0556    ;
- $5FAB LD IX,$8214   ;
- $5FAF LD DE,$49D4   ;
- $5FB2 SCF           ;
- $5FB3 LD A,$FF      ;
+c$5ef3 ld a,$07      ;
+ $5ef5 ld ($5c48),a  ; Set border (SYSVAR_BORDCR) to $07 (white)
+ $5ef8 ld hl,$5aff   ; Point #REGhl to the end of ATTRIBUTE_FILE
+ $5efb ld bc,$1b00   ; Set #REGbc to $6912 (size of DISPLAY + ATTR)
+*$5efe ld (hl),$00   ; {Blank the entire screen
+ $5f00 dec hl        ;
+ $5f01 dec bc        ;
+ $5f02 ld a,b        ;
+ $5f03 or c          ;
+ $5f04 jr nz,$5efe   ; }
+ $5f06 xor a         ;
+ $5f07 out ($fe),a   ;
+; Display the loading screen text
+ $5f09 ld h,$17      ;
+ $5f0b ld c,$18      ;
+ $5f0d ld de,$601c   ; Point #REGde to start of LOADING_SCREEN_DATA area
+*$5f10 ld b,$20      ;
+ $5f12 ld l,$00      ;
+*$5f14 ld a,(de)     ;
+ $5f15 inc de        ;
+ $5f16 call $5fc9    ;
+ $5f19 inc l         ;
+ $5f1a djnz $5f14    ;
+ $5f1c dec h         ;
+ $5f1d dec c         ;
+ $5f1e jr nz,$5f10   ;
+; Add the loading screen colour attributes
+ $5f20 ld hl,$5800   ; Point #REGhl to start of ATTRIBUTE_FILE.
+ $5f23 ld c,$02      ;
+*$5f25 ld a,$07      ;
+ $5f27 ld b,$08      ;
+ $5f29 call $5fc4    ;
+ $5f2c ld a,$05      ;
+ $5f2e ld b,$10      ;
+ $5f30 call $5fc4    ;
+ $5f33 ld a,$07      ;
+ $5f35 ld b,$08      ;
+ $5f37 call $5fc4    ;
+ $5f3a dec c         ;
+ $5f3b jr nz,$5f25   ;
+ $5f3d ld a,$06      ;
+ $5f3f ld b,$60      ;
+ $5f41 call $5fc4    ;
+ $5f44 ld a,$07      ;
+ $5f46 ld b,$2b      ;
+ $5f48 call $5fc4    ;
+ $5f4b ld a,$85      ;
+ $5f4d ld b,$0a      ;
+ $5f4f call $5fc4    ;
+ $5f52 ld a,$07      ;
+ $5f54 ld b,$0c      ;
+ $5f56 call $5fc4    ;
+ $5f59 ld a,$10      ;
+ $5f5b ld b,$1e      ;
+ $5f5d call $5fc4    ;
+ $5f60 inc hl        ;
+ $5f61 ld a,$17      ;
+ $5f63 ld c,$05      ;
+*$5f65 ld b,$1e      ;
+ $5f67 inc hl        ;
+ $5f68 call $5fc4    ;
+ $5f6b inc hl        ;
+ $5f6c dec c         ;
+ $5f6d jr nz,$5f65   ;
+ $5f6f ld a,$02      ;
+ $5f71 ld b,$1e      ;
+ $5f73 inc hl        ;
+ $5f74 call $5fc4    ;
+ $5f77 inc hl        ;
+ $5f78 ld a,$05      ;
+ $5f7a ld b,$a0      ;
+ $5f7c call $5fc4    ;
+ $5f7f inc hl        ;
+ $5f80 ld a,$10      ;
+ $5f82 ld b,$1e      ;
+ $5f84 call $5fc4    ;
+ $5f87 ld c,$03      ;
+*$5f89 inc hl        ;
+ $5f8a inc hl        ;
+ $5f8b ld a,$17      ;
+ $5f8d ld b,$1e      ;
+ $5f8f call $5fc4    ;
+ $5f92 dec c         ;
+ $5f93 jr nz,$5f89   ;
+ $5f95 inc hl        ;
+ $5f96 inc hl        ;
+ $5f97 ld a,$02      ;
+ $5f99 ld b,$1e      ;
+ $5f9b call $5fc4    ;
+
+; Load the error jump routine
+c$5f9e ld ix,$5c3d   ; Set #REGix to SYSVAR_ERR_SP address
+ $5fa2 ld de,$0002   ;
+ $5fa5 scf           ;
+ $5fa6 ld a,$ff      ;
+ $5fa8 call $0556    ;
 
 ; Load the rest of the tape and start the game.
-;
+c$5fab ld ix,$8214   ;
+ $5faf ld de,$49d4   ;
+ $5fb2 scf           ;
+ $5fb3 ld a,$ff      ;
 ; Interesting Note: POKE loaders run the game from here
-c$5FB5 CALL $0556    ; Continue loading the game from TAPE?
- $5FB8 LD HL,$5DC0   ;
- $5FBB LD ($5C63),HL ; Updates SYSVAR_STKBOT with address $5DC0
- $5FBE LD ($5C65),HL ; Updates SYSVAR_STKEND with address $5DC0
- $5FC1 JP $A410      ; START the game!
+ $5fb5 call $0556    ; Continue loading the game from TAPE?
+
+; Run the game
+c$5fb8 ld hl,$5dc0   ;
+ $5fbb ld ($5c63),hl ; Updates SYSVAR_STKBOT with address $5DC0
+ $5fbe ld ($5c65),hl ; Updates SYSVAR_STKEND with address $5DC0
+ $5fc1 jp $a410      ; START the game!
 
 ; Fill screen area pointed to by #REGhl with value in #REGa
 ;
 ; Used by the routine at #R$5EF3.
-c$5FC4 LD (HL),A     ;
- $5FC5 INC HL        ;
- $5FC6 DJNZ $5FC4    ;
- $5FC8 RET           ;
+;
+; Input: HL attribute address
+;       A attribute value used for fill
+;       B length
+c$5fc4 ld (hl),a     ;
+ $5fc5 inc hl        ;
+ $5fc6 djnz $5fc4    ;
+ $5fc8 ret           ;
 
+; Print a character
+;
 ; Routine at 5FC9
 ;
 ; Used by the routine at #R$5EF3.
-c$5FC9 PUSH HL       ;
- $5FCA PUSH BC       ;
- $5FCB PUSH DE       ;
- $5FCC PUSH AF       ;
- $5FCD EX DE,HL      ;
- $5FCE LD A,D        ;
- $5FCF LD HL,$4000   ; Point #REGhl to DISPLAY_FILE
- $5FD2 LD BC,$0800   ; Set #REGbc to 2048 (1/3 of screen)
- $5FD5 CP $10        ;
- $5FD7 JR NC,$5FDF   ;
- $5FD9 CP $08        ;
- $5FDB JR NC,$5FDE   ;
- $5FDD ADD HL,BC     ;
-*$5FDE ADD HL,BC     ;
-*$5FDF AND $07       ;
- $5FE1 XOR $07       ;
- $5FE3 SLA A         ;
- $5FE5 SLA A         ;
- $5FE7 SLA A         ;
- $5FE9 SLA A         ;
- $5FEB SLA A         ;
- $5FED LD C,A        ;
- $5FEE LD B,$00      ;
- $5FF0 ADD HL,BC     ;
- $5FF1 LD C,E        ;
- $5FF2 ADD HL,BC     ;
- $5FF3 POP AF        ;
- $5FF4 PUSH AF       ;
- $5FF5 LD DE,$3C00   ;
- $5FF8 CP $5F        ;
- $5FFA JR C,$6001    ;
- $5FFC LD DE,$5CE3   ;
- $5FFF SUB $60       ;
-*$6001 LD C,A        ;
- $6002 XOR A         ;
- $6003 SLA C         ;
- $6005 RLA           ;
- $6006 SLA C         ;
- $6008 RLA           ;
- $6009 SLA C         ;
- $600B RLA           ;
- $600C LD B,A        ;
- $600D EX DE,HL      ;
- $600E ADD HL,BC     ;
- $600F LD B,$08      ;
-*$6011 LD A,(HL)     ;
- $6012 LD (DE),A     ;
- $6013 INC HL        ;
- $6014 INC D         ;
- $6015 DJNZ $6011    ;
- $6017 POP AF        ;
- $6018 POP DE        ;
- $6019 POP BC        ;
- $601A POP HL        ;
- $601B RET           ;
+c$5fc9 push hl       ;
+ $5fca push bc       ;
+ $5fcb push de       ;
+ $5fcc push af       ;
+ $5fcd ex de,hl      ;
+ $5fce ld a,d        ;
+ $5fcf ld hl,$4000   ; Point #REGhl to DISPLAY_FILE
+ $5fd2 ld bc,$0800   ; Set #REGbc to 2048 (1/3 of screen)
+ $5fd5 cp $10        ;
+ $5fd7 jr nc,$5fdf   ;
+ $5fd9 cp $08        ;
+ $5fdb jr nc,$5fde   ;
+ $5fdd add hl,bc     ;
+*$5fde add hl,bc     ;
+*$5fdf and $07       ;
+ $5fe1 xor $07       ;
+ $5fe3 sla a         ;
+ $5fe5 sla a         ;
+ $5fe7 sla a         ;
+ $5fe9 sla a         ;
+ $5feb sla a         ;
+ $5fed ld c,a        ;
+ $5fee ld b,$00      ;
+ $5ff0 add hl,bc     ;
+ $5ff1 ld c,e        ;
+ $5ff2 add hl,bc     ;
+ $5ff3 pop af        ;
+ $5ff4 push af       ;
+ $5ff5 ld de,$3c00   ;
+ $5ff8 cp $5f        ;
+ $5ffa jr c,$6001    ;
+ $5ffc ld de,$5ce3   ;
+ $5fff sub $60       ;
+*$6001 ld c,a        ;
+ $6002 xor a         ;
+ $6003 sla c         ;
+ $6005 rla           ;
+ $6006 sla c         ;
+ $6008 rla           ;
+ $6009 sla c         ;
+ $600b rla           ;
+ $600c ld b,a        ;
+ $600d ex de,hl      ;
+ $600e add hl,bc     ;
+ $600f ld b,$08      ;
+*$6011 ld a,(hl)     ;
+ $6012 ld (de),a     ;
+ $6013 inc hl        ;
+ $6014 inc d         ;
+ $6015 djnz $6011    ;
+ $6017 pop af        ;
+ $6018 pop de        ;
+ $6019 pop bc        ;
+ $601a pop hl        ;
+ $601b ret           ;
 
 ; Start of data for the loading screen
 @label=LOADING_SCREEN_DATA
-b$601C DEFB $20,$20,$20,$9A,$9B,$20,$20,$20,$61,$62,$69,$6B,$6D,$7B,$6F,$71
- $602C DEFB $6D,$73,$75,$69,$77,$79,$65,$66,$20,$20,$20,$9E,$9F,$20,$20,$20
- $603C DEFB $20,$20,$20,$9C,$9D,$20,$20,$20,$63,$64,$6A,$6C,$6E,$7C,$70,$72
- $604C DEFB $6E,$74,$76,$6A,$78,$7A,$67,$68,$20,$20,$20,$A0,$A1,$20,$20,$20
- $605C DEFB $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
- $606C DEFB $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
- $607C DEFB $20,$7E,$7F,$20,$82,$83,$20,$86,$87,$20,$7E,$7F,$20,$8A,$8B,$20
- $608C DEFB $8E,$8F,$20,$92,$93,$20,$20,$92,$93,$20,$96,$97,$20,$96,$97,$20
- $609C DEFB $20,$80,$81,$20,$84,$85,$20,$88,$89,$20,$80,$81,$20,$8C,$8D,$20
- $60AC DEFB $90,$91,$20,$94,$95,$20,$20,$94,$95,$20,$98,$99,$20,$98,$99,$20
+b$601c defb $20,$20,$20,$9a,$9b,$20,$20,$20,$61,$62,$69,$6b,$6d,$7b,$6f,$71
+ $602c defb $6d,$73,$75,$69,$77,$79,$65,$66,$20,$20,$20,$9e,$9f,$20,$20,$20
+ $603c defb $20,$20,$20,$9c,$9d,$20,$20,$20,$63,$64,$6a,$6c,$6e,$7c,$70,$72
+ $604c defb $6e,$74,$76,$6a,$78,$7a,$67,$68,$20,$20,$20,$a0,$a1,$20,$20,$20
+ $605c defb $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
+ $606c defb $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
+ $607c defb $20,$7e,$7f,$20,$82,$83,$20,$86,$87,$20,$7e,$7f,$20,$8a,$8b,$20
+ $608c defb $8e,$8f,$20,$92,$93,$20,$20,$92,$93,$20,$96,$97,$20,$96,$97,$20
+ $609c defb $20,$80,$81,$20,$84,$85,$20,$88,$89,$20,$80,$81,$20,$8c,$8d,$20
+ $60ac defb $90,$91,$20,$94,$95,$20,$20,$94,$95,$20,$98,$99,$20,$98,$99,$20
 
 ; "IS LOADING" text message
-t$60BC DEFM "                                "
- $60DC DEFM "           IS LOADING           "
+t$60bc defm "                                "
+ $60dc defm "           IS LOADING           "
 
 ; Data block at 60FC
-b$60FC DEFB $20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
- $610C DEFB $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20
+b$60fc defb $20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
+ $610c defb $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20
 
 ; Instructions for direction keys
-t$611C DEFM "  USE FOUR DIRECTION KEYS WITH  "
- $613C DEFM "                                "
- $615C DEFM "  A JUMP KEY TO GUIDE YOUR MAN  "
- $617C DEFM "                                "
- $619C DEFM "    AND COLLECT A DOZEN EGGS    "
+t$611c defm "  USE FOUR DIRECTION KEYS WITH  "
+ $613c defm "                                "
+ $615c defm "  A JUMP KEY TO GUIDE YOUR MAN  "
+ $617c defm "                                "
+ $619c defm "    AND COLLECT A DOZEN EGGS    "
 
 ; Data block at 61BC
-b$61BC DEFB $20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
- $61CC DEFB $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20
+b$61bc defb $20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
+ $61cc defb $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20
 
 ; Instructions about redefining keys
-t$61DC DEFM "  YOU MAY CHANGE THE DIRECTION  "
- $61FC DEFM "                                "
- $621C DEFM " AND JUMP KEYS.  THERE ARE ALSO "
- $623C DEFM "                                "
- $625C DEFM "    THE FOLLOWING FIXED KEYS    "
+t$61dc defm "  YOU MAY CHANGE THE DIRECTION  "
+ $61fc defm "                                "
+ $621c defm " AND JUMP KEYS.  THERE ARE ALSO "
+ $623c defm "                                "
+ $625c defm "    THE FOLLOWING FIXED KEYS    "
 
 ; Data block at 627C
-b$627C DEFB $20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
- $628C DEFB $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20
+b$627c defb $20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
+ $628c defb $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20
 
 ; Instructions for hold/abort keys
-t$629C DEFM "   CAPS SHIFT & H........HOLD   "
- $62BC DEFM "                                "
- $62DC DEFM "   CAPS SHIFT & A.......ABORT   "
+t$629c defm "   CAPS SHIFT & H........HOLD   "
+ $62bc defm "                                "
+ $62dc defm "   CAPS SHIFT & A.......ABORT   "
 
 ; Data block at 62FC
-b$62FC DEFB $20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
- $630C DEFB $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20
+b$62fc defb $20,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60
+ $630c defb $60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$20
 
 ; Data block at 631C
-b$631C DEFB $20,$20,$20,$20,$20,$20,$20
+b$631c defb $20,$20,$20,$20,$20,$20,$20
 
